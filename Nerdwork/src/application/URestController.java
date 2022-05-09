@@ -16,7 +16,6 @@ public class URestController {
     	 isAuthenticated = false;
     	 requestComponent = new URestRequest(this);
      }
-    
      public FLoginResponse doLogin(String username, String password) throws IOException, ParseException {
     	 JSONObject obj = new JSONObject();
     	 obj.put("username", username);
@@ -28,13 +27,20 @@ public class URestController {
     		 data = (JSONObject)data.get("triggerResults");
     		 isAuthenticated = true;
     		 userId = (String) data.get("id");
-    		 System.out.println(data);
     		 authCookie = r.responseHeaders.get("set-cookie").get(0).split(";")[0];
     		 this.username = username;
     		 return new FLoginResponse(true, userId, (String)data.get("displayName"), username, ((Number)data.get("accountType")).intValue());
     	 }
-    	 System.out.println(r.statusCode);
     	 return new FLoginResponse(false);
+     }
+     public boolean doRegister(String username, String password, String displayName, String email) throws IOException{
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("username", username);
+	     obj.put("password", password);
+	     obj.put("displayName", displayName);
+	     obj.put("email", email);
+    	 FRestResponse r = requestComponent.Post("/api/auth/register/", obj);
+    	 return r.statusCode==200;
      }
      public String getBaseUrl() {
     	 return baseUrl;
