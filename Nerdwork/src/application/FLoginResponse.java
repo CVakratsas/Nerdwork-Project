@@ -1,4 +1,4 @@
-
+package application;
 public class FLoginResponse{
 	public boolean isSuccess;
 	public String userId;
