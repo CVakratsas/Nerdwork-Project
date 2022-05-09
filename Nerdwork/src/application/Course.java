@@ -60,24 +60,12 @@ public class Course {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getOrientation() {
 		return orientation;
 	}
 
-	public void setOrientation(String orientation) {
-		this.orientation = orientation;
-	}
-
 	public int getSemester() {
 		return semester;
-	}
-
-	public void setSemester(int semester) {
-		this.semester = semester;
 	}
 
 	public ArrayList<Professor> getProfessors() {
