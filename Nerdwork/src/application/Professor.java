@@ -25,13 +25,17 @@ public class Professor extends User {
 		ratingCounter++;
 	}
 
-	/*Student Getters and Setters methods are here*/
-	
-	public Double getRating() {
-		return (double) (rating/ratingCounter);
-	}
-
 	public Calendar getMyCalendar() {
+		return myCalendar;
+	}
+	
+	/*Professor class Getters and Setters: */
+	
+	public int getRating() {
+		return rating;
+	}
+	
+	public Calendar getCalendar() {
 		return myCalendar;
 	}
 	

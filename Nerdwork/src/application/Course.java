@@ -2,21 +2,44 @@ package application;
 
 import java.util.ArrayList;
 
-public class Subject {
+public class Course {
+	
+	/* Course class properties: */
+	
 	private String name;
 	private String orientation;
+	private String description;
 	private int semester;
-	private ArrayList<Professor> teachers;
+	private int credit;
+	private double rating;
+	private ArrayList<Professor> professors;
 	
-	public Subject(String name, String orientation, int semester) {
+	/* Course class property initialization: */
+	
+	public Course(String name, String orientation, String description, int semester, int credit) {
 		this.name = name;
 		this.orientation = orientation;
+		this.description = description;
 		this.semester = semester;
+		this.credit = credit;
 	}
 	
+	/* Methods of Course class */
+	
 	public void addProfessor(Professor p) {
-		teachers.add(p);
-		p.getSubjects().add(this);
+		professors.add(p);
+		//p.getCourses().add(this);
+	}
+	
+	public void removeProfessor(Professor p) {
+		int pIndex;
+		//int courseIndex;
+		
+		pIndex = professors.indexOf(p);
+		professors.remove(pIndex);
+		
+		//courseIndex = p.getCourses().indexOf(this);
+		//p.getCourses().remove(courseIndex);
 	}
 	
 	public String toString(){
@@ -26,6 +49,8 @@ public class Subject {
 		return str;
 	}
 
+	/* Getter and Setter methods of the Course class: */
+	
 	public String getName() {
 		return name;
 	}
@@ -50,7 +75,7 @@ public class Subject {
 		this.semester = semester;
 	}
 
-	public ArrayList<Professor> getTeachers() {
-		return teachers;
+	public ArrayList<Professor> getProfessors() {
+		return professors;
 	}
 }
