@@ -1,47 +1,38 @@
 package application;
 
-public class Student {
-	private String id;
-	private String name;
-	private int semester;
+import java.util.ArrayList;
+
+public class Student extends User {
+	
+	/*Student properties are here*/
+	
+	private Double gpa;
 	private String orientation;
+	private ArrayList<Double> courseGrades;
 	
-	public Student(String id, String name, int semester, String orientation) {
-		this.id = id;
-		this.name = name;
-		this.semester = semester;
+	/*Student Constructor is here*/
+	
+	public Student(String id, String password, String name, String email, String description, Double gpa, String orientation) {
+		super(id, password, name, email, description);
+		this.gpa = gpa;
 		this.orientation = orientation;
+		courseGrades = new ArrayList<>();
 	}
 	
-	public String toString() {
-		String str = "Student: " + name + " (" + id + ")\n"
-				+ "Semester: " + semester + "\n" + orientation;
-		return str;
+	/*Student methods (except getters and setters) are here*/
+	
+	public void requestAppointment(Timeslot timeslot) {
+		
 	}
-
-	public String getId() {
-		return id;
+	public void rateCourse(Course course, Integer stars) {
+		course.addRate(stars);
 	}
-
-	public void setId(String id) {
-		this.id = id;
+	
+	public void rateProfessor(Professor professor, Integer stars) {
+		professor.addRate(stars);
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getSemester() {
-		return semester;
-	}
-
-	public void setSemester(int semester) {
-		this.semester = semester;
-	}
+	
+	/*User Getters and Setters methods are here*/
 
 	public String getOrientation() {
 		return orientation;
@@ -50,4 +41,13 @@ public class Student {
 	public void setOrientation(String orientation) {
 		this.orientation = orientation;
 	}
+
+	public Double getGpa() {
+		return gpa;
+	}
+
+	public ArrayList<Double> getCourseGrades() {
+		return courseGrades;
+	}
+
 }
