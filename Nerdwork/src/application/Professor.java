@@ -18,7 +18,7 @@ public class Professor extends User {
 		ratingCounter = 0;
 	}
 	
-	/*Student methods (except getters and setters) are here*/
+	/*Professor methods (except getters and setters) are here*/
 	
 	public void addRate(Integer star) {
 		rating += star;
@@ -31,8 +31,8 @@ public class Professor extends User {
 	
 	/*Professor class Getters and Setters: */
 	
-	public int getRating() {
-		return rating;
+	public Double getRating() {
+		return (double) (rating/ratingCounter);
 	}
 	
 	public Calendar getCalendar() {

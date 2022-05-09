@@ -11,7 +11,8 @@ public class Course {
 	private String description;
 	private int semester;
 	private int credit;
-	private double rating;
+	private Integer rating;
+	private Integer ratingCounter;
 	private ArrayList<Professor> professors;
 	
 	/* Course class property initialization: */
@@ -27,7 +28,9 @@ public class Course {
 	/* Methods of Course class */
 	
 	public void addProfessor(Professor p) {
-		professors.add(p);
+		if(!professors.contains(p)) {
+			professors.add(p);
+		}
 		//p.getCourses().add(this);
 	}
 	
@@ -42,11 +45,13 @@ public class Course {
 		//p.getCourses().remove(courseIndex);
 	}
 	
+	public void addRate(Integer star) {
+		rating += star;
+		ratingCounter++;
+	}
+	
 	public String toString(){
-		String str = "Subject name: " + name + "\n"
-				+ "Semester: " + semester + "\n"
-				+ "orientation: " + orientation;
-		return str;
+		return name;
 	}
 
 	/* Getter and Setter methods of the Course class: */
@@ -77,5 +82,9 @@ public class Course {
 
 	public ArrayList<Professor> getProfessors() {
 		return professors;
+	}
+	
+	public Double getRating() {
+		return (double) (rating/ratingCounter);
 	}
 }
