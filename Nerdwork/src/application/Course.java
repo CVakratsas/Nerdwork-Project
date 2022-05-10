@@ -9,15 +9,15 @@ public class Course {
 	private String name;
 	private String orientation;
 	private String description;
-	private int semester;
-	private int credit;
+	private Integer semester;
+	private Integer credit;
 	private Integer rating;
 	private Integer ratingCounter;
 	private ArrayList<Professor> professors;
 	
 	/* Course class property initialization: */
 	
-	public Course(String name, String orientation, String description, int semester, int credit) {
+	public Course(String name, String orientation, String description, Integer semester, Integer credit) {
 		this.name = name;
 		this.orientation = orientation;
 		this.description = description;
@@ -38,9 +38,11 @@ public class Course {
 		int pIndex;
 		//int courseIndex;
 		
-		pIndex = professors.indexOf(p);
-		professors.remove(pIndex);
-		
+		if(professors.contains(p)) {
+			pIndex = professors.indexOf(p);	
+			professors.remove(pIndex);
+		}
+			
 		//courseIndex = p.getCourses().indexOf(this);
 		//p.getCourses().remove(courseIndex);
 	}
@@ -64,7 +66,7 @@ public class Course {
 		return orientation;
 	}
 
-	public int getSemester() {
+	public Integer getSemester() {
 		return semester;
 	}
 
