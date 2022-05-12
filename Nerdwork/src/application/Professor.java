@@ -9,6 +9,7 @@ public class Professor extends User {
 	private Integer rating;
 	private Integer ratingCounter;
 	private Calendar myCalendar;
+	private ArrayList<Timeslot> requestedAppointments;
 	
 	/*Professor Constructor is here*/
 	
@@ -16,6 +17,7 @@ public class Professor extends User {
 		super(id, password, name, email, description);
 		rating = 0;
 		ratingCounter = 0;
+		requestedAppointments = new ArrayList<>();
 	}
 	
 	/*Professor methods (except getters and setters) are here*/
@@ -25,8 +27,13 @@ public class Professor extends User {
 		ratingCounter++;
 	}
 
-	public Calendar getMyCalendar() {
-		return myCalendar;
+	public void addAppointmentRequest(Timeslot timeslot) {
+		requestedAppointments.add(timeslot);
+	}
+	
+	public void acceptAppointment(Student student, Timeslot timeslot) {
+		myCalendar.addAppointment(student, timeslot);
+		requestedAppointments.remove(timeslot);
 	}
 	
 	/*Professor class Getters and Setters: */
@@ -37,6 +44,10 @@ public class Professor extends User {
 	
 	public Calendar getCalendar() {
 		return myCalendar;
+	}
+	
+	public ArrayList<Timeslot> getRequestedAppointments() {
+		return requestedAppointments;
 	}
 	
 }

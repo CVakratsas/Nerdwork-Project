@@ -1,5 +1,6 @@
 package application;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class Student extends User {
@@ -21,9 +22,14 @@ public class Student extends User {
 	
 	/*Student methods (except getters and setters) are here*/
 	
-	public void requestAppointment(Timeslot timeslot) {
+	public void requestAppointment(Professor professor, Date date) {
+		professor.addAppointmentRequest(new Timeslot(date, this));
+	}
+	
+	public void cancelAppointment(Professor professor, Timeslot timeslot) {
 		
 	}
+
 	public void rateCourse(Course course, Integer stars) {
 		course.addRate(stars);
 	}

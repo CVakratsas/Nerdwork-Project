@@ -25,11 +25,6 @@ public class Timeslot {
 	
 	/* Timeslot methods: */
 	
-	public void setStudent(Student student, Availability availability) {
-		this.student = student;
-		this.availability = availability;
-	}
-	
 	public void clearTimeslot() {
 		date = null;
 	}
@@ -44,13 +39,18 @@ public class Timeslot {
 		return availability;
 	}
 	
+	public void setStudent(Student student, Availability availability) {
+		this.student = student;
+		this.availability = availability;
+	}
+	
 	public Student getStudent() {
 		return student;
 	}
 	
 	/* Enumeration Class: */
 
-	enum Availability{
+	enum Availability {
 		AVAILABLE,
 		PENDING,
 		RESERVED
