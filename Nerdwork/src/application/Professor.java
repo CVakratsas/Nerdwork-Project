@@ -2,6 +2,8 @@ package application;
 
 import java.util.ArrayList;
 
+import application.Timeslot.Availability;
+
 public class Professor extends User {
 	
 	/*Professor properties are here*/
@@ -9,7 +11,7 @@ public class Professor extends User {
 	private Integer rating;
 	private Integer ratingCounter;
 	private Calendar myCalendar;
-	private ArrayList<Timeslot> requestedAppointments;
+	private ArrayList<Timeslot> pendingAppointments;
 	
 	/*Professor Constructor is here*/
 	
@@ -17,23 +19,59 @@ public class Professor extends User {
 		super(id, password, name, email, description);
 		rating = 0;
 		ratingCounter = 0;
-		requestedAppointments = new ArrayList<>();
+		pendingAppointments = new ArrayList<>();
 	}
 	
-	/*Professor methods (except getters and setters) are here*/
+	/*Professor methods regarding courses are here*/
 	
 	public void addRate(Integer star) {
 		rating += star;
 		ratingCounter++;
 	}
-
-	public void addAppointmentRequest(Timeslot timeslot) {
-		requestedAppointments.add(timeslot);
+	
+	public void editCourseName(Course course, String name) {
+		course.setName(name);
 	}
 	
-	public void acceptAppointment(Student student, Timeslot timeslot) {
-		myCalendar.addAppointment(student, timeslot);
-		requestedAppointments.remove(timeslot);
+	public void editCourseOrientation(Course course, String orientation) {
+		course.setOrientation(orientation);
+	}
+	
+	public void editCourseDescription(Course course, String description) {
+		course.setDescription(description);
+	}
+	
+	public void editCourseSemester(Course course, Integer semester) {
+		course.setSemester(semester);
+	}
+	
+	public void editCourseCredit(Course course, Integer credit) {
+		course.setCredit(credit);
+	}
+	
+	/*Professor methods regarding appointments are here*/
+
+	public void addAppointmentRequest(Student student, Timeslot timeslot) {
+		timeslot.setStudent(student);
+		pendingAppointments.add(timeslot);
+	}
+	
+	public void acceptAppointment(Timeslot timeslot) {
+		myCalendar.reserveTimeslot(timeslot);
+		pendingAppointments.remove(timeslot);
+	}
+	
+	public void denyAppointment(Timeslot timeslot) {
+		myCalendar.freeTimeslot(timeslot);
+		pendingAppointments.remove(timeslot);
+	}
+	
+	public void cancelAppointment(Timeslot timeslot) {
+		Integer pIndex;
+		
+		pIndex = myCalendar.getTimeslots().indexOf(timeslot);
+		myCalendar.getTimeslots().get(pIndex).setStudent(null);
+		myCalendar.getTimeslots().get(pIndex).setAvailability(Availability.AVAILABLE);
 	}
 	
 	/*Professor class Getters and Setters: */
@@ -47,7 +85,7 @@ public class Professor extends User {
 	}
 	
 	public ArrayList<Timeslot> getRequestedAppointments() {
-		return requestedAppointments;
+		return pendingAppointments;
 	}
 	
 }

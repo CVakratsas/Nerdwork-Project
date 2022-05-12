@@ -1,6 +1,5 @@
 package application;
 
-import java.sql.Date;
 import java.util.ArrayList;
 
 public class Student extends User {
@@ -13,22 +12,14 @@ public class Student extends User {
 	
 	/*Student Constructor is here*/
 	
-	public Student(String id, String password, String name, String email, String description, Double gpa, String orientation) {
+	public Student(String id, String password, String name, String email, String description, String orientation) {
 		super(id, password, name, email, description);
-		this.gpa = gpa;
+		this.gpa = null;
 		this.orientation = orientation;
 		courseGrades = new ArrayList<>();
 	}
 	
-	/*Student methods (except getters and setters) are here*/
-	
-	public void requestAppointment(Professor professor, Date date) {
-		professor.addAppointmentRequest(new Timeslot(date, this));
-	}
-	
-	public void cancelAppointment(Professor professor, Timeslot timeslot) {
-		
-	}
+	/*Student methods regarding courses are here*/
 
 	public void rateCourse(Course course, Integer stars) {
 		course.addRate(stars);
@@ -36,6 +27,36 @@ public class Student extends User {
 	
 	public void rateProfessor(Professor professor, Integer stars) {
 		professor.addRate(stars);
+	}
+	
+	public void addGrade(Course course, Double grade) {
+		Integer pIndex;
+		
+		pIndex = myCourses.indexOf(course);
+		courseGrades.set(pIndex, grade);
+	}
+	
+	public void addCourse(Course course) {
+		super.addCourse(course);
+		courseGrades.add(null);
+	}
+	
+	public void removeCourse(Course course) {
+		Integer pIndex;
+		
+		pIndex = myCourses.indexOf(course);
+		courseGrades.remove(pIndex);
+		super.removeCourse(course);
+	}
+	
+	/*Student methods regarding appointments are here*/
+	
+	public void requestAppointment(Professor professor, Timeslot timeslot) {
+		professor.addAppointmentRequest(this, timeslot);
+	}
+	
+	public void cancelAppointment(Professor professor, Timeslot timeslot) {
+		professor.cancelAppointment(timeslot);
 	}
 	
 	/*User Getters and Setters methods are here*/

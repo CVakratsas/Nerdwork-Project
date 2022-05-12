@@ -17,24 +17,21 @@ public class Calendar {
 	
 	/* Calendar methods: */
 	
-	public void addAppointment(Student student, Timeslot timeslot) {
-		int pIndex;
-		
-		pIndex = timeslots.indexOf(timeslot);
-		timeslots.get(pIndex).setStudent(student, Availability.AVAILABLE);
+	public void reserveTimeslot(Timeslot timeslot) {
+		timeslot.setAvailability(Availability.RESERVED);
 	}
 	
-	public void addAvailableDate(Timeslot t) {
-		timeslots.add(t);
+	public void freeTimeslot(Timeslot timeslot) {
+		timeslot.setStudent(null);
+		timeslot.setAvailability(Availability.AVAILABLE);
+	}
+	
+	public void addAvailableDate(String date) {
+		timeslots.add(new Timeslot(date));
 	}
 		
 	public void removeAvailableDate(Timeslot t) {
-		int tIndex;
-		tIndex = timeslots.indexOf(t);
-		
-		if(tIndex!=-1) {
-			timeslots.remove(tIndex);
-		}
+		timeslots.remove(t);
 	}
 	
 	/* Calendar class Getters and Setters: */

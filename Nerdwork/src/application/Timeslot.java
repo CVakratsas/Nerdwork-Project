@@ -21,12 +21,8 @@ public class Timeslot {
 		catch(ParseException pe){
 			System.out.println("Parsing exception");
 		}
-	}
-	
-	/* Timeslot methods: */
-	
-	public void clearTimeslot() {
-		date = null;
+		
+		this.availability = Availability.AVAILABLE;
 	}
 	
 	/* Timeslot class Getters and Setters: */
@@ -35,13 +31,17 @@ public class Timeslot {
 		return date;
 	}
 	
+	public void setAvailability(Availability a) {
+		this.availability = a;
+	}
+	
 	public Availability getAvailability() {
 		return availability;
 	}
 	
-	public void setStudent(Student student, Availability availability) {
+	public void setStudent(Student student) {
 		this.student = student;
-		this.availability = availability;
+		availability = Availability.PENDING;
 	}
 	
 	public Student getStudent() {

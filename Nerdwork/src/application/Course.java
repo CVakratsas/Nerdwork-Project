@@ -23,6 +23,7 @@ public class Course {
 		this.description = description;
 		this.semester = semester;
 		this.credit = credit;
+		ratingCounter = 0;
 	}
 	
 	/* Methods of Course class */
@@ -31,12 +32,10 @@ public class Course {
 		if(!professors.contains(p)) {
 			professors.add(p);
 		}
-		//p.getCourses().add(this);
 	}
 	
 	public void removeProfessor(Professor p) {
 		int pIndex;
-		//int courseIndex;
 		
 		if(professors.contains(p)) {
 			pIndex = professors.indexOf(p);	
@@ -58,16 +57,44 @@ public class Course {
 
 	/* Getter and Setter methods of the Course class: */
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public String getName() {
 		return name;
+	}
+	
+	public void setOrientation(String orientation) {
+		this.orientation = orientation;
 	}
 
 	public String getOrientation() {
 		return orientation;
 	}
+	
+	public void setSemester(Integer semester) {
+		this.semester = semester;
+	}
 
 	public Integer getSemester() {
 		return semester;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public void setCredit(Integer credit) {
+		this.credit = credit;
+	}
+
+	public Integer getCredit() {
+		return credit;
 	}
 
 	public ArrayList<Professor> getProfessors() {
@@ -77,4 +104,5 @@ public class Course {
 	public Double getRating() {
 		return (double) (rating/ratingCounter);
 	}
+	
 }
