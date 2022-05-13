@@ -1,26 +1,18 @@
 package application;
-	
-import javafx.application.Application;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 
-
-public class Main extends Application {
-	@Override
-	public void start(Stage primaryStage) {
-		try {
-			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,400);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setScene(scene);
-			primaryStage.show();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+public class Main  {
 	
 	public static void main(String[] args) {
-		launch(args);
+		//Test to check if the password tester works properly
+		User user1 = new User("user1", "user1Password!", "User 1", "user1@uom.edu.gr", "user1 Description");
+		System.out.println(user1.getPassword()); //user1Password!
+		System.out.println(user1.setPassword("1234567")); //false
+		System.out.println(user1.setPassword("12345678")); //false
+		System.out.println(user1.setPassword("12345678AB")); //false
+		System.out.println(user1.setPassword("12345678AB@")); //false
+		System.out.println(user1.setPassword("12345678Ab")); //false
+		System.out.println(user1.setPassword("12345678ab@")); //false
+		System.out.println(user1.setPassword("12345678Ab@")); //true
 	}
+	
 }
