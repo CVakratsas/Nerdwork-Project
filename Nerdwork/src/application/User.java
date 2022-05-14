@@ -55,7 +55,8 @@ public class User {
 	}
 
 	/*Code for password checking found here: https://stackoverflow.com/a/41697673 and modified
-	to check if there is at least one upper and one lower letter*/
+	to check if there is at least one upper and one lower letter
+	Pattern documentation: https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html*/
 	public boolean setPassword(String password) {
 		if(password.length()>=8) {
 	        Pattern upperLetter = Pattern.compile("[A-Z]");
@@ -68,10 +69,15 @@ public class User {
 	       Matcher hasDigit = digit.matcher(password);
 	       Matcher hasSpecial = special.matcher(password);
 
-	       return hasUpperLetter.find() && hasLowerLetter.find() && hasDigit.find() && hasSpecial.find();
+	       if (hasUpperLetter.find() && hasLowerLetter.find() && hasDigit.find() && hasSpecial.find()) {
+	    	   this.password = password;
+	    	   return true;
+	       }
+	       else 
+	    	   return false;
 		}
-	    else
-	        return false;
+		else
+			return false;
 	}
 
 	public String getName() {
@@ -86,8 +92,18 @@ public class User {
 		return email;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public boolean setEmail(String email) {
+		int atIndex = email.indexOf("@");
+		String username = email.substring(0, atIndex);
+		String domain = email.substring(atIndex, email.length());
+		
+		if (!domain.matches("@uom.edu.gr") && !domain.matches("@uom.gr") || username.matches("")) {
+			return false;
+		}
+		else {
+			this.email = email;
+			return true;
+		}
 	}
 
 	public String getDescription() {
