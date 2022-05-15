@@ -17,6 +17,7 @@ public class Main  {
 		
 		System.out.println("----------------------");
 		
+		//Test to check if the Email verification is valid
 		System.out.println(user1.getEmail()); //user1@uom.edu.gr
 		System.out.println(user1.setEmail("user1@uon.edu.gr")); //false
 		System.out.println(user1.setEmail("user1@uom.grr")); //false

@@ -1,21 +1,29 @@
+/*
+ * The Course class, is used to create objects that represent,
+ * courses for a University. Objects of the classes Professor 
+ * and Student can react with objects of the Course class,
+ * according to their needs, by the use of certain methods, 
+ * provided by the class.
+ */
+
 package application;
 
 import java.util.ArrayList;
 
 public class Course {
 	
-	/* Course class properties: */
+	/* Course Constructor is here: */
 	
 	private String name;
-	private String orientation;
+	private String orientation; // There are three types of the orientation attribute
 	private String description;
 	private Integer semester;
 	private Integer credit;
-	private Integer rating;
-	private Integer ratingCounter;
-	private ArrayList<Professor> professors;
+	private Integer numOfStars; // Total number of stars for "this" Course object
+	private Integer numOfRates; // Total number of students who have rated "this" Course object
+	private ArrayList<Professor> professors; // Professors teaching each lesson
 	
-	/* Course class property initialization: */
+	/* Course class attribute initialization: */
 	
 	public Course(String name, String orientation, String description, Integer semester, Integer credit) {
 		this.name = name;
@@ -23,19 +31,43 @@ public class Course {
 		this.description = description;
 		this.semester = semester;
 		this.credit = credit;
-		ratingCounter = 0;
+		numOfRates = 0;
 	}
 	
 	/* Methods of Course class */
 	
+	/*
+	 * Method that parses the this.name attribute to a String
+	 * (overlaps the toString Java method).
+	 * toString, has no parameters and returns a String variable 
+	 * (the name attribute, of "this" Course object).
+	 */
+	public String toString(){
+		return name;
+	}
+	
+	/* Methods regarding professors are here: */
+	
+	/* 
+	 * Method that adds a professor in the professors array list,
+	 * of "this" Course object.
+	 * addProfessor, gets a Professor object (Professor to add)
+	 * as a parameter and is a void type method. 
+	 */
 	public void addProfessor(Professor p) {
 		if(!professors.contains(p)) {
 			professors.add(p);
 		}
 	}
 	
+	/*
+	 * Method that removes a professor from the professors array list,
+	 * of "this" Course object.
+	 * removeProfessor, gets a Professor object (Professor to remove)
+	 * as a parameter and is a void type method. 
+	 */
 	public void removeProfessor(Professor p) {
-		int pIndex;
+		int pIndex; // Index of the Professor object in the professors array list
 		
 		if(professors.contains(p)) {
 			pIndex = professors.indexOf(p);	
@@ -46,13 +78,30 @@ public class Course {
 		//p.getCourses().remove(courseIndex);
 	}
 	
+	/* Methods regarding rating are here: */
+	
+	/*
+	 * Method used by Students to rate "this" Course object, by
+	 * a number of stars (from 0-5). The method keeps track
+	 * of the number of students who have rated "this" Course object and
+	 * the total number of stars they have given.
+	 * addRate, gets an Integer (the stars selected by the Student)
+	 * as a parameter and is a void type method.
+	 */
 	public void addRate(Integer star) {
-		rating += star;
-		ratingCounter++;
+		numOfStars += star;
+		numOfRates++;
 	}
 	
-	public String toString(){
-		return name;
+	/*
+	 * Method used to calculate "this" Course object's rating,
+	 * using the numOfStars and numOfRates attributes in a simple
+	 * division.
+	 * calcRating, receives no parameters and is a Double type method,
+	 * returning the, previously mentioned, division's result.
+	 */
+	public Double calcRating() {
+		return (double) (numOfStars/numOfRates);
 	}
 
 	/* Getter and Setter methods of the Course class: */
@@ -101,8 +150,8 @@ public class Course {
 		return professors;
 	}
 	
-	public Double getRating() {
-		return (double) (rating/ratingCounter);
-	}
+//	public Double getRating() {
+//		return (double) (numOfStars/numOfRates);
+//	}
 	
 }

@@ -1,3 +1,9 @@
+/*
+ * Class that contains information about the hours and dates
+ * a Professor is available for an appointment with a Student
+ * and also for the status of the Students' requests for appointments.
+ */
+
 package application;
 
 import java.text.ParseException;
@@ -17,7 +23,7 @@ public class Timeslot {
 	
 	public Timeslot(String date) {
 		try {
-			this.date = sdf.parse(date);
+			this.date = sdf.parse(date); // Parsing the String into a special Date type.
 		}
 		catch(ParseException pe){
 			System.out.println("Parsing exception");
@@ -31,6 +37,7 @@ public class Timeslot {
 	public Date getDate() {
 		return date;
 	}
+	
 	
 	public void setAvailability(Availability a) {
 		this.availability = a;
@@ -49,7 +56,12 @@ public class Timeslot {
 		return student;
 	}
 	
-	/* Enumeration Class: */
+	/* 
+	 * Enumeration Class, that characterizes a timeslot as AVAILABLE
+	 * (Student able to request appointment), PENDING (Professor, must
+	 * deny or accept the appointment) and RESERVED (Professor has accepted
+	 * an appointment with a Student at the certain timeslot).
+	 */
 
 	enum Availability {
 		AVAILABLE,
