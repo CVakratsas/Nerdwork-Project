@@ -54,9 +54,9 @@ public class Course {
 	 * addProfessor, gets a Professor object (Professor to add)
 	 * as a parameter and is a void type method. 
 	 */
-	public void addProfessor(Professor p) {
-		if(!professors.contains(p)) {
-			professors.add(p);
+	public void addProfessor(Professor professor) {
+		if(!professors.contains(professor)) {
+			professors.add(professor);
 		}
 	}
 	
@@ -66,11 +66,11 @@ public class Course {
 	 * removeProfessor, gets a Professor object (Professor to remove)
 	 * as a parameter and is a void type method. 
 	 */
-	public void removeProfessor(Professor p) {
+	public void removeProfessor(Professor professor) {
 		int pIndex; // Index of the Professor object in the professors array list
 		
-		if(professors.contains(p)) {
-			pIndex = professors.indexOf(p);	
+		if(professors.contains(professor)) {
+			pIndex = professors.indexOf(professor);	
 			professors.remove(pIndex);
 		}
 			

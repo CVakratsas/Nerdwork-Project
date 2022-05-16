@@ -39,8 +39,8 @@ public class Timeslot {
 	}
 	
 	
-	public void setAvailability(Availability a) {
-		this.availability = a;
+	public void setAvailability(Availability availability) {
+		this.availability = availability;
 	}
 	
 	public Availability getAvailability() {
@@ -54,6 +54,10 @@ public class Timeslot {
 	
 	public Student getStudent() {
 		return student;
+	}
+	
+	public SimpleDateFormat getDateFormat() {
+		return sdf;
 	}
 	
 	/* 

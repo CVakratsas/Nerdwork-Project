@@ -9,6 +9,8 @@
 package application;
 
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import application.Timeslot.Availability;
 
@@ -18,7 +20,7 @@ public class Professor extends User {
 	
 	private Integer numOfStars; // Number of total stars given to "this" Professor object
 	private Integer numOfRates; // Number of Student object rated "this" Professor object
-	private Calendar myCalendar; // A Professor's available Timeslots
+	private ArrayList<Timeslot> timeslots; // A Professor's available Timeslots
 	private ArrayList<Timeslot> pendingAppointments; // Appointments that have not been accepted by "this" Professor object yet
 	
 	/*Professor Constructor is here*/
@@ -27,6 +29,7 @@ public class Professor extends User {
 		super(id, password, name, email, description);
 		numOfStars = 0;
 		numOfRates = 0;
+		timeslots = new ArrayList<>();
 		pendingAppointments = new ArrayList<>();
 	}
 	
@@ -123,6 +126,24 @@ public class Professor extends User {
 	/*Professor methods regarding appointments are here*/
 	
 	/*
+	 * Method used to create a new Timeslot for appointment requests (marked AVAILABLE).
+	 * addAvailableDate, receives a String class object (the date and hour in a special
+	 * format("dd/mm/yyyy")), as a parameter and is a void type method.
+	 */
+	public void addAvailableDate(String date) {
+		timeslots.add(new Timeslot(date));
+	}
+	
+	/*
+	 * Method used to delete a Timeslot for appointment requests (remove it from "this" Calendar).
+	 * removeAvailableDate, receives a Timeslot class object (the timeslot to be deleted), 
+	 * as a parameter and is a void type method.
+	 */
+	public void removeAvailableDate(Timeslot timeslot) {
+		timeslots.remove(timeslot);
+	}
+	
+	/*
 	 * Method used for appointment requests of Student class objects,
 	 * to "this" Professor object. It adds their request as a PENDING 
 	 * one in the pendingAppointments array list.
@@ -132,21 +153,46 @@ public class Professor extends User {
 	 * as parameters and is a void type method
 	 */
 	public void addAppointmentRequest(Student student, Timeslot timeslot) {
-		timeslot.setStudent(student);
-		pendingAppointments.add(timeslot);
+		SimpleDateFormat sdf = timeslot.getDateFormat(); // Our Date format
+		String timeslotDate = sdf.format(timeslot.getDate());
+		Timeslot tempTimeslot = new Timeslot(timeslotDate);
+		
+		tempTimeslot.setStudent(student);
+		pendingAppointments.add(tempTimeslot);
 	}
 
 	/*
 	 * Method used for acceptance of appointment requests of Student class objects,
 	 * to "this" Professor object. It marks their request as a RESERVED one and 
-	 * removes it from the pendingAppointments array list.
+	 * removes it from the pendingAppointments array list. Automatically denies all others
+	 * of the same timeslot.
 	 * acceptAppointment, receives a Timeslot class object (the timeslot selected
 	 * by a student and his request of appointment at that timeslot is marked as PENDING),
 	 * as parameter and is a void type method
 	 */
 	public void acceptAppointment(Timeslot timeslot) {
-		myCalendar.reserveTimeslot(timeslot);
-		pendingAppointments.remove(timeslot);
+		int i = 0;
+		Student student = timeslot.getStudent();
+		
+		// Accept the selected appointment:
+		for (Timeslot t: timeslots) {
+			if (timeslot.getStudent().equals(student) && timeslot.getDate().equals(t.getDate())) {
+				t.setAvailability(Availability.RESERVED);
+				pendingAppointments.remove(timeslot);
+		
+			}
+		}
+		
+		// Deny automatically all others:
+		// Επίσης ίσως μια διαφορετική υλοποίηση της deny
+		while (i < pendingAppointments.size()) {
+			if (pendingAppointments.get(i).getDate().equals(timeslot.getDate())) {
+				pendingAppointments.remove(pendingAppointments.get(i));
+				i -= 1; // Because we remove the current element
+			}
+			
+			i += 1;
+		}
 	}
 
 	/*
@@ -158,7 +204,12 @@ public class Professor extends User {
 	 * as parameter and is a void type method
 	 */
 	public void denyAppointment(Timeslot timeslot) {
-		myCalendar.freeTimeslot(timeslot);
+		int pIndex; // Index of timeslot parameter
+		
+		pIndex = timeslots.indexOf(timeslot);
+		timeslots.get(pIndex).setStudent(null);
+		
+		timeslots.get(pIndex).setAvailability(Availability.AVAILABLE);
 		pendingAppointments.remove(timeslot);
 	}
 	
@@ -172,9 +223,9 @@ public class Professor extends User {
 	public void cancelAppointment(Timeslot timeslot) {
 		Integer pIndex;
 		
-		pIndex = myCalendar.getTimeslots().indexOf(timeslot);
-		myCalendar.getTimeslots().get(pIndex).setStudent(null);
-		myCalendar.getTimeslots().get(pIndex).setAvailability(Availability.AVAILABLE);
+		pIndex = timeslots.indexOf(timeslot);
+		timeslots.get(pIndex).setStudent(null);
+		timeslots.get(pIndex).setAvailability(Availability.AVAILABLE);
 	}
 	
 	/*Professor class Getters and Setters: */
@@ -183,8 +234,8 @@ public class Professor extends User {
 //		return (double) (numOfStars/numOfRates);
 //	}
 	
-	public Calendar getCalendar() {
-		return myCalendar;
+	public ArrayList<Timeslot> getTimeslots() {
+		return timeslots;
 	}
 	
 	public ArrayList<Timeslot> getRequestedAppointments() {
