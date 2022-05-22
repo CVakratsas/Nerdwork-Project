@@ -62,12 +62,20 @@ public class Student extends User {
 	 * attended by him (updates "this" courseGrades array). 
 	 * addGrade receives a Course object (course to add the grade to) and a Double object
 	 * (the grade for the course), as parameters and is a void type method.
+	 * After getting the new grade, GPA is calculated and updated in its variable.
 	 */
 	public void addGrade(Course course, Double grade) {
 		Integer pIndex;
 		
 		pIndex = myCourses.indexOf(course);
 		courseGrades.set(pIndex, grade);
+		
+		gpa = (double) 0;
+		for (Double g : courseGrades) {
+			gpa += g;
+		}
+		
+		gpa /= courseGrades.size();
 	}
 	
 	/* Student methods regarding courses are here: */
