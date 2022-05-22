@@ -20,6 +20,7 @@ public class Professor extends User {
 	
 	private Integer numOfStars; // Number of total stars given to "this" Professor object
 	private Integer numOfRates; // Number of Student object rated "this" Professor object
+	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the professor
 	private ArrayList<Timeslot> timeslots; // A Professor's available Timeslots
 	private ArrayList<Timeslot> pendingAppointments; // Appointments that have not been accepted by "this" Professor object yet
 	
@@ -29,6 +30,7 @@ public class Professor extends User {
 		super(id, password, name, email, description);
 		numOfStars = 0;
 		numOfRates = 0;
+		studentsRated = new ArrayList<>();
 		timeslots = new ArrayList<>();
 		pendingAppointments = new ArrayList<>();
 	}
@@ -42,12 +44,21 @@ public class Professor extends User {
 	 * a number of stars (from 0-5). The method keeps track
 	 * of the number of students who have rated "this" Professor object and
 	 * the total number of stars they have given.
-	 * addRate, gets an Integer (the stars selected by the Student)
-	 * as a parameter and is a void type method.
+	 * addRate, gets an Integer (the stars selected by the Student) and a Student
+	 * as a parameters and is a boolean type method.
+	 * Returns true if the student's rate has been submitted, returns false if the student had already rated before.
 	 */
-	public void addRate(Integer star) {
-		numOfStars += star;
-		numOfRates++;
+	public boolean addRate(Student student, Integer star) {
+		if (!studentsRated.contains(student)) {
+			numOfStars += star;
+			numOfRates++;
+			studentsRated.add(student);
+			
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	/*

@@ -21,6 +21,7 @@ public class Course {
 	private Integer credit;
 	private Integer numOfStars; // Total number of stars for "this" Course object
 	private Integer numOfRates; // Total number of students who have rated "this" Course object
+	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the course
 	private ArrayList<Professor> professors; // Professors teaching each lesson
 	
 	/* Course class attribute initialization: */
@@ -32,6 +33,7 @@ public class Course {
 		this.semester = semester;
 		this.credit = credit;
 		numOfRates = 0;
+		studentsRated = new ArrayList<>();
 	}
 	
 	/* Methods of Course class */
@@ -85,12 +87,21 @@ public class Course {
 	 * a number of stars (from 0-5). The method keeps track
 	 * of the number of students who have rated "this" Course object and
 	 * the total number of stars they have given.
-	 * addRate, gets an Integer (the stars selected by the Student)
-	 * as a parameter and is a void type method.
+	 * addRate, gets an Integer (the stars selected by the Student) and a Student
+	 * as a parameters and is a boolean type method.
+	 * Returns true if the student's rate has been submitted, returns false if the student had already rated before.
 	 */
-	public void addRate(Integer star) {
-		numOfStars += star;
-		numOfRates++;
+	public boolean addRate(Student student, Integer star) {
+		if (!studentsRated.contains(student)) {
+			numOfStars += star;
+			numOfRates++;
+			studentsRated.add(student);
+			
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	/*

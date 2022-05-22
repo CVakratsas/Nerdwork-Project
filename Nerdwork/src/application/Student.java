@@ -42,7 +42,7 @@ public class Student extends User {
 	 */
 	public void rateCourse(Course course, Integer stars) {
 		//if (myCourses.contains(course))	
-			course.addRate(stars);
+			course.addRate(this, stars);
 	}
 	
 	/*
@@ -52,7 +52,7 @@ public class Student extends User {
 	 * (stars given to it by "this" Student object), as parameters and is a void type method.
 	 */
 	public void rateProfessor(Professor professor, Integer stars) {
-		professor.addRate(stars);
+		professor.addRate(this, stars);
 	}
 	
 	/* Student methods regarding grades are here: */
