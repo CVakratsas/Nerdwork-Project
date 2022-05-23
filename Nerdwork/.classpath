@@ -6,12 +6,8 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Andrew/git/Nerdwork-Project/Nerdwork/json-simple-1.1.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX"/>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Paris/Documents/NerdWorkProject/functionality2/Nerdwork-Project/Nerdwork/json-simple-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

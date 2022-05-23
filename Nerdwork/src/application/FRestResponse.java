@@ -1,3 +1,8 @@
+/*
+ * Class that keeps track of the data sent by a server back to the User
+ * as an answer to his Posting requests (i.e. expanding the url)
+ */
+
 package application;
 
 import java.util.List;

@@ -1,3 +1,7 @@
+/*
+ * Class containing the AVAILABLE Timeslots extracted from the data base
+ */
+
 package application;
 
 import java.util.ArrayList;

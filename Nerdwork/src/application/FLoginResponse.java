@@ -1,12 +1,17 @@
+/*
+ * Class used to send to the main functionalities section of the 
+ * program some data concerning the User objects.
+ */
+
 package application;
 
 public class FLoginResponse{
 	
-	public boolean isSuccess;
-	public String userId;
-	public String displayName;
-	public String username;
-	public int accountType;
+	public boolean isSuccess; // If the http request was successful
+	public String userId; // The id attribute
+	public String displayName; // ??????
+	public String username; // name attribute of the User class
+	public int accountType; // Professor or Student
 	
 	public FLoginResponse(boolean success) {
 		isSuccess = success;
