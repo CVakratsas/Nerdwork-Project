@@ -1,4 +1,4 @@
-package application;
+package application.functinonality;
 
 public class Student {
 	private String id;

@@ -1,0 +1,43 @@
+.button {
+	-fx-background-color : #FFF;
+	-fx-border-color: #3889c4;
+	-fx-text-fill:  #3889c4;
+}
+
+.button:pressed {
+	-fx-background-color: #3889c4 ;
+	-fx-text-fill: #FFF;
+}
+
+#whiteButton:hover {
+	-fx-background-color: #3889c4 ;
+	-fx-text-fill:  #FFF;
+}
+
+#whiteButton:pressed {
+	-fx-background-color: #1F4E6F;
+	-fx-text-fill:  #FFF;
+}
+
+
+#blueButton {
+	-fx-background-color:  #3889c4;
+	-fx-text-fill:  #FFF;
+}
+
+#blueButton:hover {
+	-fx-background-color: #1F4E6F;
+	-fx-text-fill: #FFF;
+}
+
+#blueButton:pressed {
+	-fx-background-color: #3889c4 ;
+}
+
+#forgotPasswordLabel {
+	-fx-text-fill:  #3889c4;
+}
+
+#forgotPasswordLabel:pressed {
+	-fx-text-fill:  #1F4E6F;
+}

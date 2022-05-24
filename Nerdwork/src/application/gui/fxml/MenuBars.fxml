@@ -21,7 +21,7 @@
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
                      <image>
-                        <Image url="@house.png" />
+                        <Image url="@icons/house.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -33,7 +33,7 @@
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
                      <image>
-                        <Image url="@book.png" />
+                        <Image url="@icons/book.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -45,7 +45,7 @@
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
                      <image>
-                        <Image url="@professor.png" />
+                        <Image url="@icons/professor.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -57,7 +57,7 @@
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
                      <image>
-                        <Image url="@settings.png" />
+                        <Image url="@icons/settings.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -78,7 +78,7 @@
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
                      <image>
-                        <Image url="@profile.png" />
+                        <Image url="@icons/profile.png" />
                      </image>
                   </ImageView>
                </graphic></Button>
@@ -89,7 +89,7 @@
             </Text>
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="14.0" layoutY="12.0">
                <image>
-                  <Image url="@nerd_icon.png" />
+                  <Image url="@icons/nerd_icon.png" />
                </image>
             </ImageView>
          </children>
