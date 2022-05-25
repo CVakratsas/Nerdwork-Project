@@ -1,71 +1,93 @@
 package application;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.json.simple.parser.ParseException;
 
 public class Main  {
 	
-	public static void main(String[] args) {
-		//Test to check if the password tester works properly
-		User user_student1 = new User("user1", "user1Password!", "User 1", "user1@uom.edu.gr", "user1 Description");
-		System.out.println(user_student1.getPassword()); //user1Password!
-		System.out.println(user_student1.setPassword("1234567")); //false
-		System.out.println(user_student1.setPassword("12345678")); //false
-		System.out.println(user_student1.setPassword("12345678AB")); //false
-		System.out.println(user_student1.setPassword("12345678AB@")); //false
-		System.out.println(user_student1.setPassword("12345678Ab")); //false
-		System.out.println(user_student1.setPassword("12345678ab@")); //false
-		System.out.println(user_student1.setPassword("12345678Ab@")); //true
-		System.out.println("New password: " + user_student1.getPassword()); //New password: 12345678Ab@
+	public static void main(String[] args) throws IOException, ParseException {
+		URestController controller = new URestController();
+		ArrayList<FSubjectsResponse> fsr;
+		ArrayList<Course> courses = new ArrayList<Course>();
 		
-		System.out.println("----------------------");
+		//System.out.println(controller.doRegister("iss1234", "123456789", "iss1234", "iss1234@uom.edu.gr"));
 		
-		//Test to check if the Email verification is valid
-		System.out.println(user_student1.getEmail()); //user1@uom.edu.gr
-		System.out.println(user_student1.setEmail("user1@uon.edu.gr")); //false
-		System.out.println(user_student1.setEmail("user1@uom.grr")); //false
-		System.out.println(user_student1.setEmail("user1@")); //false
-		System.out.println(user_student1.setEmail("@uom.gr")); //false
-		System.out.println(user_student1.setEmail("user1@uom.edu.gr")); //true
-		System.out.println(user_student1.setEmail("user1@uom.gr")); //true
-		System.out.println("New email: " + user_student1.getEmail()); //New email: user1@uom.gr
+		System.out.println("Login: ");
+		controller.doLogin("iss1234", "123456789");
 		
-		// Testing Professor for appointments:
-		Professor prof = new Professor("prof1", "prof1Pass!", "Prof 1", "prof1@uom.gr", "prof1 Description");
-		Student stud1 = new Student("stud1", "stud1Pass!", "Stud 1", "stud1@uom.edu.gr", "stud1 Des", "sddsa");
-		Student stud2 = new Student("stud2", "stud2Pass@", "Stud 2", "stud2@uom.edu.gr", "stud2 Des", "das");
+		System.out.println("\nGet all Subjects and parse into Course: ");
+		fsr = controller.getAllSubjects();
 		
-		System.out.println("\nCreate a new Timeslot");
-		prof.addAvailableDate("25/01/2022");
-		System.out.println(prof.getTimeslots().get(0).getDate()); // Created a new Timeslot
+		for (int i = 0; i < fsr.size(); i++) 
+			courses.add(new Course(fsr.get(i).id, fsr.get(i).name, fsr.get(i).rating, fsr.get(i).semester));
 		
-		System.out.println("\nRequests for appointment by the Students:");
-		stud1.requestAppointment(prof, prof.getTimeslots().get(0));
-		stud2.requestAppointment(prof, prof.getTimeslots().get(0));
-		System.out.println(prof.getRequestedAppointments()); // Two requests created at the timeslot (both have different id)
-		System.out.println(prof.getRequestedAppointments().get(0).getStudent()); 
-		System.out.println(prof.getRequestedAppointments().get(1).getStudent());
-		
-		System.out.println("\nAccept a request and deny the other:");
-		prof.acceptAppointment(prof.getRequestedAppointments().get(0));
-		System.out.println(prof.getRequestedAppointments());
-		System.out.println(prof.getTimeslots().get(0).getAvailability());
-		
-		System.out.println("\nCancel an appointment:");
-		prof.cancelAppointment(prof.getTimeslots().get(0));
-		System.out.println(prof.getTimeslots().get(0).getAvailability());
-		
-		System.out.println("\nAPI testing: ");
-		URestController  restController = new URestController();
-		try {
-			restController.doLogin("example", "12345678");
-			System.out.println(restController.getAllSubjects().get(1).rating);
-		} catch (IOException | ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		int i = 1;
+		for (Course course: courses) {
+			System.out.println("Course " + i + ": " 
+								+ course.getId() + " "
+								+ course.getName() + " "
+								+ course.getRating() + " "
+								+ course.getSemester());
+			i++;
 		}
 		
-	}
+		courses.clear();
+		
+		System.out.println("\nRating a Course: ");
+		if (controller.setSubjectRating(3, "AIC102")) {
+			// Πρέπει να ξανά κάνουμε getAllSubjects, για εμφάνιση αποτελέσματος στο GUI:
+			// Σημείωση: Κάθε φορά πρέπει να αδειάζουμε την ArrayList<Course>
+			
+			fsr = controller.getAllSubjects();
+			
+			for (i = 0; i < fsr.size(); i++) 
+				courses.add(new Course(fsr.get(i).id, fsr.get(i).name, fsr.get(i).rating, fsr.get(i).semester));
+			
+			i = 1;
+			for (Course course: courses) {
+				System.out.println("Course " + i + ": " 
+									+ course.getId() + " "
+									+ course.getRating());
+				i++;
+			}
+			
+		}
+		
+		else 
+			System.out.println("You have already rated this course!");
+		
+		System.out.println("\nEnroll to a Course: ");
+		if (controller.enrollSubject("AIC103") || controller.enrollSubject("AIC104"))
+			System.out.println("Successful enrollment!");
+		else 
+			System.out.println("Already enrolled!");
 	
+		System.out.println("\nGetting enrolled courses: ");
+		
+		fsr = controller.getAllSubjects();
+		
+		for (i = 0; i < fsr.size(); i++) 
+			courses.add(new Course(fsr.get(i).id, fsr.get(i).name, fsr.get(i).rating, fsr.get(i).semester));
+		
+		ArrayList<String> enrolledCourseNames = controller.getEnrolledSubjects();
+		ArrayList<Course> myCourses = new ArrayList<Course>();
+		System.out.println(enrolledCourseNames);
+		for (i = 0; i < enrolledCourseNames.size(); i++) 
+			for (int j = 0; j < courses.size(); j++)	
+				if (enrolledCourseNames.get(i).equals(courses.get(j).getId()))
+					myCourses.add(courses.get(j));
+		
+		i = 0;
+		for (Course course: myCourses) {
+			System.out.println("Course " + i + ": " 
+					+ course.getId() + " "
+					+ course.getName() + " "
+					+ course.getRating() + " "
+					+ course.getSemester());
+			i++;
+		}
+			
+	}
 }

@@ -63,7 +63,6 @@ public class URestController {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent); // Parse response contents into a JSON 
     		 JSONArray arrayData = (JSONArray)data.get("triggerResults"); // Key in the JSON file
-    		 // System.out.println(arrayData);
     		 // arrayData contains the Course attributes as JSON objects.
     		 
     		 // Courses will be stored here as FCourseResponse objects
@@ -97,7 +96,7 @@ public class URestController {
     	 obj.put("rating", rating);
     	 obj.put("subjectId", subjectId);
     	 FRestResponse r = requestComponent.Post("/api/subjects/rating/", obj);
-    	 
+    	 System.out.println(r.statusCode);
     	 return r.statusCode==200;
      }
      
@@ -144,8 +143,9 @@ public class URestController {
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
-    		 JSONArray jArray = (JSONArray)data.get("triggerResults"); // Enrolled Courses as JSON objects
-    	
+    		 JSONObject enrollments = (JSONObject) data.get("triggerResults");
+    		 JSONArray jArray = (JSONArray)enrollments.get("enrollments"); // Enrolled Courses as JSON objects
+
     		 ArrayList<String> listdata = new ArrayList<String>(); // Enrolled Courses as String type
     		 
     		 // Convert the JSON Courses into String
@@ -238,7 +238,7 @@ public class URestController {
 
 	     FRestResponse r = requestComponent.Post("/api/auth/register/", obj);
     	 
-    	 return r.statusCode==200;
+    	 return r.statusCode == 200;
      }
      
 }

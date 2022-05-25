@@ -14,17 +14,24 @@ public class Course {
 	
 	/* Course Constructor is here: */
 	
+	private String id;
 	private String name;
 	private String orientation; // There are three types of the orientation attribute
 	private String description;
-	private Integer semester;
-	private Integer credit;
-	private Integer numOfStars; // Total number of stars for "this" Course object
-	private Integer numOfRates; // Total number of students who have rated "this" Course object
+	private int semester;
+	private int credit;
+	private float rating;
 	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the course
 	private ArrayList<Professor> professors; // Professors teaching each lesson
 	
 	/* Course class attribute initialization: */
+	
+	public Course(String id, String name, float rating, int semester) {
+		this.id = id;
+		this.name = name;
+		this.rating = rating;
+		this.semester = semester;
+	}
 	
 	public Course(String name, String orientation, String description, Integer semester, Integer credit) {
 		this.name = name;
@@ -32,7 +39,6 @@ public class Course {
 		this.description = description;
 		this.semester = semester;
 		this.credit = credit;
-		numOfRates = 0;
 		studentsRated = new ArrayList<>();
 	}
 	
@@ -91,34 +97,27 @@ public class Course {
 	 * as a parameters and is a boolean type method.
 	 * Returns true if the student's rate has been submitted, returns false if the student had already rated before.
 	 */
-	public boolean addRate(Student student, Integer star) {
-		if (!studentsRated.contains(student)) {
-			numOfStars += star;
-			numOfRates++;
-			studentsRated.add(student);
-			
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	/*
-	 * Method used to calculate "this" Course object's rating,
-	 * using the numOfStars and numOfRates attributes in a simple
-	 * division.
-	 * calcRating, receives no parameters and is a Double type method,
-	 * returning the, previously mentioned, division's result.
-	 */
-	public Double calcRating() {
-		return (double) (numOfStars/numOfRates);
-	}
+//	public boolean addRate(Student student, Integer star) {
+//		if (!studentsRated.contains(student)) {
+//			numOfStars += star;
+//			numOfRates++;
+//			studentsRated.add(student);
+//			
+//			return true;
+//		}
+//		else {
+//			return false;
+//		}
+//	}
 
 	/* Getter and Setter methods of the Course class: */
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getId() {
+		return id;
 	}
 	
 	public String getName() {
@@ -156,13 +155,12 @@ public class Course {
 	public Integer getCredit() {
 		return credit;
 	}
-
+	
+	public float getRating() {
+		return rating;
+	}
+	
 	public ArrayList<Professor> getProfessors() {
 		return professors;
 	}
-	
-//	public Double getRating() {
-//		return (double) (numOfStars/numOfRates);
-//	}
-	
 }

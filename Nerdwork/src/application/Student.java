@@ -40,10 +40,10 @@ public class Student extends User {
 	 * rateCourse, receives a Course object (course to rate) and an Integer object
 	 * (stars given to it by "this" Student object), as parameters and is a void type method.
 	 */
-	public void rateCourse(Course course, Integer stars) {
-		//if (myCourses.contains(course))	
-			course.addRate(this, stars);
-	}
+//	public void rateCourse(Course course, Integer stars) {
+//		//if (myCourses.contains(course))	
+//			course.addRate(this, stars);
+//	}
 	
 	/*
 	 * Method that is used to rate a Professor object, whom "this" Student object 
