@@ -36,12 +36,59 @@ public class URestController {
     	 return new FLoginResponse(false);
      }
      
+     public ArrayList<FProfessorsResponse> getAllProfessors() throws IOException, ParseException{
+    	 FRestResponse r = requestComponent.Get("/api/professors");
+    	 if(r.statusCode==200) {
+    		 JSONParser parser = new JSONParser();
+    		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 JSONArray arrayData = (JSONArray)data.get("triggerResults");
+    		 ArrayList<FProfessorsResponse> outResponse = new ArrayList<FProfessorsResponse>();
+    		 for(int i = 0; i<arrayData.size(); i++) {
+    			 JSONObject tempData = (JSONObject)arrayData.get(i);
+    			 outResponse.add(new FProfessorsResponse(((Number)tempData.get("id")).intValue(), (String) tempData.get("name"), (String) tempData.get("phone"), (String) tempData.get("email"), (String) tempData.get("profilePhoto"), ((Number)tempData.get("rating")).floatValue()));
+    		 }
+    		 return outResponse;
+    	 }
+    	 return new ArrayList<FProfessorsResponse>();
+     }
+     
+     public float getProfessorRating(int professorId) throws IOException, ParseException{
+    	 FRestResponse r = requestComponent.Get("/api/professors/rating?professorId="+professorId);
+    	 if(r.statusCode==200) {
+    		 JSONParser parser = new JSONParser();
+    		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 data = (JSONObject)data.get("triggerResults");
+    		 return ((Number)(data.get("rating"))).floatValue();
+    	 }
+    	 return 0;
+     }
+     
+     public int getMyProfessorRating(int professorId) throws IOException, ParseException{
+    	 FRestResponse r = requestComponent.Get("/api/professors/rating?professorId="+professorId);
+    	 if(r.statusCode==200) {
+    		 JSONParser parser = new JSONParser();
+    		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 data = (JSONObject)data.get("triggerResults");
+    		 return ((Number)(data.get("myRating"))).intValue();
+    	 }
+    	 return -1;
+     }
+     
+     public boolean setProfessorRating(int rating, int professorId) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("rating", rating);
+    	 obj.put("professorId", professorId);
+    	 FRestResponse r = requestComponent.Post("/api/professors/rating/", obj);
+    	 return r.statusCode==200;
+     }
+     
      /*
        Επιστρέφει μια λίστα με όλα τα μαθήματα που είναι καταχωρημένα στην βάση δεδομένων.
       */
      
      public ArrayList<FSubjectsResponse> getAllSubjects() throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/subjects");
+    	 System.out.println(r.responseContent);
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
@@ -116,7 +163,10 @@ public class URestController {
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
-    		 JSONArray jArray = (JSONArray)data.get("triggerResults");
+    		 JSONArray jArray = (JSONArray)data.get("enrollments");
+    		 if(jArray==null) {
+    			 return new ArrayList<String>();
+    		 }
     		 ArrayList<String> listdata = new ArrayList<String>();
     		 if (jArray != null) { 
  			    for (int j=0;j<jArray.size();j++){ 
@@ -140,16 +190,28 @@ public class URestController {
      }
      
      /*
+     Συνάρτηση για απεγγραφή σε μαθημα, μεγιστο 10 μαθήματα
+   */
+     
+     public boolean disenrollSubject(String subjectId) throws IOException{
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("subjectId", subjectId);
+    	 FRestResponse r = requestComponent.Post("/api/subjects/enrollments/disenroll/", obj);
+    	 return r.statusCode==200;
+     }
+     
+     /*
      Συνάρτηση για ληψη διαθεσιμων ημερομηνιων για ραντεβου ενος καθηγητη.
      Δειτε FAvailabilityResponse
    */
      
-     public FAvailabilityResponse getAvailabilityDates(int professor) throws IOException, ParseException {
-    	 FRestResponse r = requestComponent.Get("/api/appointments/availability?professor="+professor);
+     public FAvailabilityResponse getAvailabilityDates(int professorId) throws IOException, ParseException {
+    	 FRestResponse r = requestComponent.Get("/api/appointments/availability?professorId="+professorId);
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
-    		 JSONArray arrayData = (JSONArray)data.get("triggerResults");
+    		 data = (JSONObject)data.get("triggerResults");
+    		 JSONArray arrayData = (JSONArray)data.get("availability");
     		 ArrayList<HashMap<String, Integer>> dates = new ArrayList<HashMap<String, Integer>>();
     		 for(int i = 0; i<arrayData.size(); i++) {
     			 JSONObject tempData = (JSONObject)arrayData.get(i);
@@ -164,6 +226,22 @@ public class URestController {
     	 return new FAvailabilityResponse(false);
      }
      
+     public ArrayList<Integer> getBookedTimestamps(int professorId) throws IOException, ParseException{
+    	 FRestResponse r = requestComponent.Get("/api/appointments/availability?professorId="+professorId);
+    	 if(r.statusCode==200) {
+    		 JSONParser parser = new JSONParser();
+    		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 data = (JSONObject)data.get("triggerResults");
+    		 JSONArray arrayData = (JSONArray)data.get("bookedTimestamps");
+    		 ArrayList<Integer> booked = new ArrayList<Integer>();
+    		 for(int i = 0; i<arrayData.size(); i++) {
+    			 booked.add(((Number)arrayData.get(i)).intValue());
+    		 }
+    		 return booked;
+    	 }
+    	 return new ArrayList<Integer>();
+     }
+     
      /*
      Συνάρτηση για ενημερωση των διαθεσιμων ημερομηνιων του καθηγητη.
      Μπορει να κληθει μονο αν accountType = 1, δειτε FLoginResponse.
@@ -175,6 +253,90 @@ public class URestController {
     	 obj.put("startHour", startHour);
     	 obj.put("endHour", endHour);
     	 FRestResponse r = requestComponent.Post("/api/appointments/availability/", obj);
+    	 return r.statusCode==200;
+     }
+     
+     public ArrayList<FAppointmentsResponse> getMyAppointments() throws IOException, ParseException{
+    	 FRestResponse r = requestComponent.Get("/api/appointments");
+    	 System.out.println(r.responseContent);
+    	 if(r.statusCode==200) {
+    		 JSONParser parser = new JSONParser();
+    		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 JSONArray arrayData = (JSONArray)data.get("triggerResults");
+    		 if(arrayData==null) {
+    			 return new ArrayList<FAppointmentsResponse>();
+    		 }
+    		 ArrayList<FAppointmentsResponse> outResponse = new ArrayList<FAppointmentsResponse>();
+    		 for(int i = 0; i<arrayData.size(); i++) {
+    			 JSONObject tempData = (JSONObject)arrayData.get(i);
+    			 outResponse.add(new FAppointmentsResponse(((Number)tempData.get("appointmentId")).intValue(), (String) tempData.get("studentId"), ((Number) tempData.get("professorId")).intValue(), ((Number) tempData.get("date")).intValue(), ((Number) tempData.get("status")).intValue(), (String) tempData.get("created_at")));
+    		 }
+    		 return outResponse;
+    	 }
+    	 return new ArrayList<FAppointmentsResponse>();
+     }
+     
+     /*
+      * Συνάρτηση για αποδοχή ραντεβού, μπορεί να κληθεί μόνο απο καθηγητή.
+      * δεν μπορεί να κληθεί αν το ραντεβού είναι ακυρωμένο ή ηδη επιβεβαιωμένο
+      */
+     
+     public boolean acceptAppointment(int appointmentId) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("appointmentId", appointmentId);
+    	 FRestResponse r = requestComponent.Post("/api/appointments/accept/", obj);
+    	 return r.statusCode==200;
+     }
+
+     /*
+      * Συνάρτηση για ακύρωση ραντεβού, μπορεί να κληθεί αν ο χρήστης ανήκει σε αυτό το ραντεβού.
+      * δεν μπορεί να κληθεί αν το ραντεβού είναι ακυρωμένο.
+      */
+     
+     public boolean cancelAppointment(int appointmentId) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("appointmentId", appointmentId);
+    	 FRestResponse r = requestComponent.Post("/api/appointments/cancel/", obj);
+    	 return r.statusCode==200;
+     }
+     
+     /*
+      * Συνάρτηση για κλείσιμο ραντεβού, μπορεί να κληθεί αν ο χρήστης είναι φοιτητής
+      */
+     
+     public boolean bookAppointment(int professorId, int dateTimestamp) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("professorId", professorId);
+    	 obj.put("timestamp", dateTimestamp);
+    	 FRestResponse r = requestComponent.Post("/api/appointments/book/", obj);
+    	 return r.statusCode==200;
+     }
+     
+     /*
+      * Συνάρτηση για ληψη βασικών πληροφοριών ενός χρήστη
+      * Πολυ χρήσιμη για τα ραντεβου.
+      */
+     
+     public FUserInformationResponse getUserProfile(String userId) throws IOException, ParseException{
+    	 FRestResponse r = requestComponent.Get("/api/profile?userId="+userId);
+    	 if(r.statusCode==200) {
+    		 JSONParser parser = new JSONParser();
+    		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 data = (JSONObject)data.get("triggerResults");
+    		 return new FUserInformationResponse(true, (String)data.get("displayName"), (String)data.get("bio"), (String)data.get("email"));
+    	 }
+    	 return new FUserInformationResponse(false);
+     }
+     
+     /*
+      * Συνάρτηση για να θεσουμε νεο display name
+      */
+     
+     public boolean setDisplayName(String newDisplayName) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("displayName", newDisplayName);
+    	 FRestResponse r = requestComponent.Put("/api/profile/displayName/", obj);
+    	 System.out.println(r.responseContent);
     	 return r.statusCode==200;
      }
      
