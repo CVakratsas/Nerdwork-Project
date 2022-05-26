@@ -17,59 +17,18 @@ import application.Timeslot.Availability;
 public class Professor extends User {
 	
 	/*Professor attributes are here*/
-	
-	private Integer numOfStars; // Number of total stars given to "this" Professor object
-	private Integer numOfRates; // Number of Student object rated "this" Professor object
+
 	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the professor
 	private ArrayList<Timeslot> timeslots; // A Professor's available Timeslots
 	private ArrayList<Timeslot> pendingAppointments; // Appointments that have not been accepted by "this" Professor object yet
 	
 	/*Professor Constructor is here*/
 	
-	public Professor(String id, String password, String name, String email, String description) {
-		super(id, password, name, email, description);
-		numOfStars = 0;
-		numOfRates = 0;
+	public Professor(String id, String name, String displayName) {
+		super(id, name, displayName);
 		studentsRated = new ArrayList<>();
 		timeslots = new ArrayList<>();
 		pendingAppointments = new ArrayList<>();
-	}
-	
-	/*Professor methods regarding courses are here*/
-	
-	/* Professor methods regarding rating are here: */
-	
-	/*
-	 * Method used by Students to rate "this" Professor object, by
-	 * a number of stars (from 0-5). The method keeps track
-	 * of the number of students who have rated "this" Professor object and
-	 * the total number of stars they have given.
-	 * addRate, gets an Integer (the stars selected by the Student) and a Student
-	 * as a parameters and is a boolean type method.
-	 * Returns true if the student's rate has been submitted, returns false if the student had already rated before.
-	 */
-	public boolean addRate(Student student, Integer star) {
-		if (!studentsRated.contains(student)) {
-			numOfStars += star;
-			numOfRates++;
-			studentsRated.add(student);
-			
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	/*
-	 * Method used to calculate "this" Professor object's rating,
-	 * using the numOfStars and numOfRates attributes in a simple
-	 * division.
-	 * calcRating, receives no parameters and is a Double type method,
-	 * returning the, previously mentioned, division's result.
-	 */
-	public Double calcRating() {
-		return (double) (numOfStars/numOfRates);
 	}
 	
 	/* Professor methods regarding course are here: */

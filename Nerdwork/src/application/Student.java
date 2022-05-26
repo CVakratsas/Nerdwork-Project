@@ -13,7 +13,6 @@ public class Student extends User {
 	/*Student attributes are here*/
 	
 	private Double gpa;
-	private String orientation;
 	
 	/*
 	 * courseGrades functions as follows: it contains the grades of the 
@@ -25,23 +24,10 @@ public class Student extends User {
 	
 	/*Student Constructor is here*/
 	
-	public Student(String id, String password, String name, String email, String description, String orientation) {
-		super(id, password, name, email, description);
+	public Student(String id, String name, String displayName) {
+		super(id, name, displayName);
 		this.gpa = null;
-		this.orientation = orientation;
 		courseGrades = new ArrayList<>();
-	}
-	
-	/*Student methods regarding ratings are here: */
-	
-	/*
-	 * Method that is used to rate a Professor object, whom "this" Student object 
-	 * is taught by, with the help of the addRate method of the Professor class.
-	 * rateProfessor, receives a Professor object (professor to rate) and an Integer object
-	 * (stars given to it by "this" Student object), as parameters and is a void type method.
-	 */
-	public void rateProfessor(Professor professor, Integer stars) {
-		professor.addRate(this, stars);
 	}
 	
 	/* Student methods regarding grades are here: */
@@ -121,14 +107,6 @@ public class Student extends User {
 	}
 	
 	/*User Getters and Setters methods are here*/
-
-	public String getOrientation() {
-		return orientation;
-	}
-
-	public void setOrientation(String orientation) {
-		this.orientation = orientation;
-	}
 
 	public Double getGpa() {
 		return gpa;

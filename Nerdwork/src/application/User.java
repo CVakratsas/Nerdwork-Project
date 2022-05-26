@@ -18,7 +18,8 @@ public class User {
 	protected String password;
 	protected String name;
 	protected String email;
-	protected String description;
+	protected String displayName;
+	//protected String description;
 	/*
 	 * The above five attributes keep track of personal Student/Professor,
 	 * concerning the profile they have built.
@@ -29,12 +30,10 @@ public class User {
 	
 	/*User Constructor is here*/
 	
-	public User(String id, String password, String name, String email, String description) {
+	public User(String id, String name, String displayName) {
 		this.id = id;
-		this.password = password;
 		this.name = name;
-		this.email = email;
-		this.description = description;
+		this.displayName = displayName;
 		myCourses = new ArrayList<>();
 		myAppointments = new ArrayList<>();
 	}
@@ -76,47 +75,6 @@ public class User {
 	}
 	
 	/* User methods regarding passwords and emails are here: */
-	
-	/*
-	 * Method for setting a password for "this" Users object and also check
-	 * if the inputed password has been written according to our password pattern.
-	 * setPassword, receives a String object (password inputed by the user), as a 
-	 * parameter and is a boolean type method, returning true if the password provided,
-	 * meets the pattern and false otherwise.
-	 * Some of the following code is product of others. Sources follow:
-	 * 
-	 * Code for password checking found here: https://stackoverflow.com/a/41697673 and modified
-	 * to check if there is at least one upper and one lower letter
-	 * Pattern documentation: https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
-	 */
-	public boolean setPassword(String password) {
-		// Password verification begins here:
-		if(password.length()>=8) {
-	       Pattern upperLetter = Pattern.compile("[A-Z]");
-	       Pattern lowerLetter = Pattern.compile("[a-z]");
-	       Pattern digit = Pattern.compile("[0-9]");
-	       Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
-	       
-	       // The above code serves as our password pattern 
-	       
-	       Matcher hasUpperLetter = upperLetter.matcher(password);
-	       Matcher hasLowerLetter = lowerLetter.matcher(password);
-	       Matcher hasDigit = digit.matcher(password);
-	       Matcher hasSpecial = special.matcher(password);
-	       
-	       // Password pattern checking begins here:
-	       if (hasUpperLetter.find() && hasLowerLetter.find() && hasDigit.find() && hasSpecial.find()) {
-	    	   this.password = password;
-	    	   return true;
-	       }
-	       else
-	    	   // Password that has at least one upper letter, lower letter, digit and special character, only accepted
-	    	   return false;
-		}
-		else
-			// Password of 8 letters and above only accepted
-			return false;
-	}
 	
 	/*
 	 * Method that checks if the inputed - by "this" User - e-mail is valid.
@@ -162,13 +120,4 @@ public class User {
 	public String getEmail() {
 		return email;
 	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
 }
