@@ -31,7 +31,7 @@ public class URestController {
     		 data = (JSONObject)data.get("triggerResults");
     		 userId = (String) data.get("id");
     		 this.username = username;
-    		 return new FLoginResponse(true, userId, (String)data.get("displayName"), username, ((Number)data.get("accountType")).intValue());
+    		 return new FLoginResponse(true, userId, (String)data.get("displayName"), username, ((Number)data.get("accountType")).intValue(), ((Number)data.get("associatedProfessor")).intValue());
     	 }
     	 return new FLoginResponse(false);
      }
@@ -225,6 +225,11 @@ public class URestController {
     	 }
     	 return new FAvailabilityResponse(false);
      }
+     
+     /*
+      * Συνάρτηση για ληψη ηδη κλεισμενων ραντεβου ενος καθηγητη
+      * Η μορφη ειναι timestamp.
+      */
      
      public ArrayList<Integer> getBookedTimestamps(int professorId) throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/appointments/availability?professorId="+professorId);
