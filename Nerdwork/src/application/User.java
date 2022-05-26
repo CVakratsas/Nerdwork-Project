@@ -14,11 +14,11 @@ public class User {
 	
 	/*User attributes are here*/
 
-	protected String id;
-	protected String password;
-	protected String name;
+	protected String userId;
+	protected String username;
 	protected String email;
 	protected String displayName;
+	protected int accountType;
 	//protected String description;
 	/*
 	 * The above five attributes keep track of personal Student/Professor,
@@ -30,10 +30,11 @@ public class User {
 	
 	/*User Constructor is here*/
 	
-	public User(String id, String name, String displayName) {
-		this.id = id;
-		this.name = name;
+	public User(String userId, String username, String displayName, int accountType) {
+		this.userId = userId;
+		this.username = username;
 		this.displayName = displayName;
+		this.accountType = accountType;
 		myCourses = new ArrayList<>();
 		myAppointments = new ArrayList<>();
 	}
@@ -47,7 +48,7 @@ public class User {
 	 * (the name attribute, of "this" User object).
 	 */
 	public String toString() {
-		return id;
+		return userId;
 	}
 	
 	/* User methods regarding courses are here: */
@@ -74,47 +75,22 @@ public class User {
 		myCourses.remove(course);
 	}
 	
-	/* User methods regarding passwords and emails are here: */
-	
-	/*
-	 * Method that checks if the inputed - by "this" User - e-mail is valid.
-	 * It also creates a new email for "this" (only if it is a newly created one) User, 
-	 * by setting a value to the email attribute.
-	 * setEmail, receives a String object (the email inputed by the user), as a parameter
-	 * and is a boolean class returning true if the email is valid and false otherwise.
-	 */
-	public boolean setEmail(String email) {
-		int atIndex = email.indexOf("@");
-		String username = email.substring(0, atIndex);
-		String domain = email.substring(atIndex, email.length());
-		
-		// E-mail validation begins here:
-		if (!domain.matches("@uom.edu.gr") && !domain.matches("@uom.gr") || username.matches("")) {
-			return false;
-		}
-		else {
-			// E-mail of the type username@uom.(edu).gr, with username a non null String, is only valid.			
-			this.email = email;
-			return true;
-		}
-	}
-	
 	/*User Getters and Setters methods are here*/
 	
-	public String getId() {
-		return id;
+	public String getUserId() {
+		return userId;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getUserName() {
+		return username;
 	}
 
-	public String getName() {
-		return name;
+	public void setUserame(String username) {
+		this.username = username;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	
+	public String getDisplayName() {
+		return displayName;
 	}
 
 	public String getEmail() {

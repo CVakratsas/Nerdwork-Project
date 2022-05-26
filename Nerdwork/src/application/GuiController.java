@@ -13,6 +13,7 @@ public class GuiController {
 	private URestController controller; // Not to be user by GUI.
  	private ArrayList<Course> allCourses; // All courses.
  	private ArrayList<Course> myCourses; // Courses taught by "this" professor/Courses attended by "this" student.
+ 	private ArrayList<Professor> allProfessors;
  	// The 2 types of User:
  	private Student student;
  	private Professor professor;
@@ -46,11 +47,13 @@ public class GuiController {
  		if (flr.isSuccess) {
 	 		if (flr.accountType == 0) {
 	 			professor = null;
-	 			student = new Student(flr.userId, flr.username, flr.displayName);
+	 			student = new Student(flr.userId, flr.username, flr.displayName, flr.accountType);
+	 			student.setEmail(controller.getUserProfile(student.getUserId()).email);
 	 		}
 	 		else {
 	 			student = null;
-	 			professor = new Professor(flr.userId, flr.username, flr.displayName);
+	 			professor = new Professor(flr.userId, flr.username, flr.displayName, flr.accountType, flr.associatedProfessorId);
+	 			professor.setBio(controller.getUserProfile(professor.getUserId()).bio);
 	 		}
  		}
 
@@ -155,21 +158,41 @@ public class GuiController {
  		return controller.getMySubjectRating(id);
  	}
  	
- 	public ArrayList<Professor> getAllProfessors(){
- 		
+ 	public int getCourseECTS(Course course) {
+ 		return course.getECTS();
  	}
  	
- 	/*
- 	 * Method that returns the User. As mentioned in the login method,
- 	 * the user type that is not logged in will be pointing to null. 
- 	 * The other user type will only be pointing to a User object.
- 	 */
- 	public User getUser() {
+ 	public ArrayList<Professor> getAllProfessors(){
+ 		ArrayList<FProfessorsResponse> fpr = controller.getAllProfessors();
  		
- 		if (professor == null)
- 			return student;
+ 		for (FProfessorsResponse i : fpr)
+ 			allProfessors.add(new Professor())
  		
- 		return professor;
+ 		return fpr;
+ 	}
+ 	
+ 	public String getDisplayNameStudent() {
+ 		return student.getDisplayName();
+ 	}
+ 	
+ 	public String getDisplayName() {
+ 		return professor.getDisplayName();
+ 	}
+ 	
+ 	public String getUserNameStudent() {
+ 		return student.getUserName();
+ 	}
+ 	
+ 	public String getUserNameProfessor() {
+ 		return professor.getUserName();
+ 	}
+ 	
+ 	public String getEmailStudent() {
+ 		return student.getEmail();
+ 	}
+ 	
+ 	public String getEmailProfessor() {
+ 		return professor.getEmail();
  	}
  	
 	/*

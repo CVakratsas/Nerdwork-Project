@@ -20,6 +20,8 @@ public class Professor extends User {
 	
 	private String phone;
 	private String profilePhoto;
+	private String bio;
+	private int professorId;
 	private float rating;
 	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the professor
 	private ArrayList<Timeslot> timeslots; // A Professor's available Timeslots
@@ -27,11 +29,21 @@ public class Professor extends User {
 	
 	/*Professor Constructor is here*/
 	
-	public Professor(String id, String name, String displayName, String phone, String profilePhoto, float rating) {
-		super(id, name, displayName);
-		this.phone = phone;
+	public Professor(String userId, String username, String displayName, int accountType, int professorId, String email, String profilePhoto, String phone, float rating) {
+		super(userId, username, displayName, accountType);
+		this.professorId = professorId;
+		this.email = email;
 		this.profilePhoto = profilePhoto;
+		this.phone = phone;
 		this.rating = rating;
+		studentsRated = new ArrayList<>();
+		timeslots = new ArrayList<>();
+		pendingAppointments = new ArrayList<>();
+	}
+	
+	public Professor(String userId, String username, String displayName, int accountType, int professorId) {
+		super(userId, username, displayName, accountType);
+		this.professorId = professorId;
 		studentsRated = new ArrayList<>();
 		timeslots = new ArrayList<>();
 		pendingAppointments = new ArrayList<>();
@@ -64,18 +76,6 @@ public class Professor extends User {
 	}
 	
 	/*
-	 * Method used to set a value at the description attribute of a course 
-	 * object.
-	 * editCourseDescription, receives a Course class object (course object
-	 * to set a value at its description attribute) and a String class object
-	 * (the value that the Course.description attribute will be set at), as parameters
-	 * and is a void type method.
-	 */
-	public void editCourseDescription(Course course, String description) {
-		course.setDescription(description);
-	}
-	
-	/*
 	 * Method used to set a value at the semester attribute of a course 
 	 * object.
 	 * editCourseName, receives a Course class object (course object
@@ -85,18 +85,6 @@ public class Professor extends User {
 	 */
 	public void editCourseSemester(Course course, Integer semester) {
 		course.setSemester(semester);
-	}
-	
-	/*
-	 * Method used to set a value at the credit attribute of a course 
-	 * object.
-	 * editCourseName, receives a Course class object (course object
-	 * to set a value at its credit attribute) and a Integer class object
-	 * (the value that the Course.credit attribute will be set at), as parameters
-	 * and is a void type method.
-	 */
-	public void editCourseCredit(Course course, Integer credit) {
-		course.setCredit(credit);
 	}
 	
 	/*Professor methods regarding appointments are here*/
@@ -214,4 +202,7 @@ public class Professor extends User {
 		return pendingAppointments;
 	}
 	
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
 }

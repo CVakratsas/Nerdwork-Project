@@ -17,9 +17,8 @@ public class Course {
 	private String id;
 	private String name;
 	private String orientation; // There are three types of the orientation attribute
-	private String description;
+	private final int ECTS;
 	private int semester;
-	private int credit;
 	private float rating;
 	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the course
 	private ArrayList<Professor> professors; // Professors teaching each lesson
@@ -31,15 +30,7 @@ public class Course {
 		this.name = name;
 		this.rating = rating;
 		this.semester = semester;
-	}
-	
-	public Course(String name, String orientation, String description, Integer semester, Integer credit) {
-		this.name = name;
-		this.orientation = orientation;
-		this.description = description;
-		this.semester = semester;
-		this.credit = credit;
-		studentsRated = new ArrayList<>();
+		this.ECTS = 5;
 	}
 	
 	/* Methods of Course class */
@@ -109,24 +100,12 @@ public class Course {
 		this.semester = semester;
 	}
 
-	public Integer getSemester() {
+	public int getSemester() {
 		return semester;
 	}
-	
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	public String getDescription() {
-		return description;
-	}
-	
-	public void setCredit(Integer credit) {
-		this.credit = credit;
-	}
 
-	public Integer getCredit() {
-		return credit;
+	public int getECTS() {
+		return ECTS;
 	}
 	
 	public float getRating() {

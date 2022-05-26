@@ -24,8 +24,8 @@ public class Student extends User {
 	
 	/*Student Constructor is here*/
 	
-	public Student(String id, String name, String displayName) {
-		super(id, name, displayName);
+	public Student(String userId, String username, String displayName, int accountType) {
+		super(userId, username, displayName, accountType);
 		this.gpa = null;
 		courseGrades = new ArrayList<>();
 	}
@@ -115,5 +115,8 @@ public class Student extends User {
 	public ArrayList<Double> getCourseGrades() {
 		return courseGrades;
 	}
-
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
 }

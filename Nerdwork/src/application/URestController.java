@@ -47,7 +47,7 @@ public class URestController {
     		 this.username = username;
     		 
     		 // Returns FLoginResponse object with data required for the User objects
-    		 return new FLoginResponse(true, userId, (String)data.get("displayName"), username, ((Number)data.get("accountType")).intValue());
+    		 return new FLoginResponse(true, userId, (String)data.get("displayName"), username, ((Number)data.get("accountType")).intValue(), ((Number)data.get("associatedProfessor")).intValue());
     	 }
     	 
     	 return new FLoginResponse(false);
