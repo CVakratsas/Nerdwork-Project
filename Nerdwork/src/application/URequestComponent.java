@@ -119,4 +119,30 @@ public class URequestComponent {
     	return new FRestResponse(http.getResponseCode(), getResponseContent(http), http.getHeaderFields());
     }
     
+    public FRestResponse Put(String endpoint, JSONObject args) throws IOException {
+    	URL url = new URL(baseUrl+endpoint);
+    	HttpURLConnection http = (HttpURLConnection)url.openConnection();
+		
+    	http.setRequestMethod("PUT");
+		http.setDoOutput(true);
+		http.setRequestProperty("Content-Type", "application/json");
+		
+		if(isAuthenticated) {
+			http.setRequestProperty("Cookie", authCookie);
+		}
+		
+		String data = args.toString();
+		byte[] out = data.getBytes(StandardCharsets.UTF_8);
+		OutputStream stream = http.getOutputStream();
+		stream.write(out);
+		
+		if(endpoint.contains("api/auth/login")) {
+			if(http.getResponseCode()==200) {
+				isAuthenticated = true;
+				authCookie = http.getHeaderFields().get("set-cookie").get(0).split(";")[0];
+			}
+		}
+		
+		return new FRestResponse(http.getResponseCode(), getResponseContent(http), http.getHeaderFields());
+    }
 }

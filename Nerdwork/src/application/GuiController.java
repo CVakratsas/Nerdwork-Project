@@ -64,6 +64,8 @@ public class GuiController {
  	public ArrayList<Course> getAllCourses() throws IOException, ParseException{
  		ArrayList<FSubjectsResponse> fsr = controller.getAllSubjects();
 		
+		// The first if statement is used to check if the user has already accessed the page 
+ 		// for all courses. In that way we do not spend time refilling the array.
  		if (allCourses.size() != fsr.size()) {
  			allCourses.clear();
  			
@@ -74,10 +76,87 @@ public class GuiController {
  		return allCourses;
  	}
  	
+ 	/*
+ 	 * Method used by students in order to enroll to a course.
+ 	 * The method returns true only if the enrollment was successful.
+ 	 * It returns false if the enrollment failed (student already enrolled)
+ 	 * or because of the http request failure.
+ 	 */
+ 	public boolean courseEnrollment(String id) throws IOException {
+ 		return controller.enrollSubject(id);
+ 	}
  	
+ 	public boolean courseDisenrollment(String id) throws IOException {
+ 		return controller.disenrollSubject(id);
+ 	}
  	
- 	public ArrayList<Course> getMyCourses(){
+ 	public ArrayList<Course> getEnrolledCourses() throws IOException, ParseException{
+ 		ArrayList<String> enrolledCourses = controller.getEnrolledSubjects();
+ 		
+ 		// The first if statement is used to check if the user has already accessed the page 
+ 		// for his courses. In that way we do not spend time refilling the array.
+ 		if (enrolledCourses.size() != myCourses.size()) {
+ 			myCourses.clear();
+ 			
+			for (int i = 0; i < enrolledCourses.size(); i++) 
+				for (int j = 0; j < allCourses.size(); j++)	
+					if (enrolledCourses.get(i).equals(allCourses.get(j).getId()))
+						myCourses.add(allCourses.get(j));
+ 		}
+ 		
  		return myCourses;
+ 	}
+ 	
+ 	/*
+ 	 * Method used for rating a Course, by students. It checks if
+ 	 * the selected course is attended by the student and also updates 
+ 	 * attributes with new data.
+ 	 * Returns true if the rating was successful and false if it was not
+ 	 * (student already rated this course) or an error occurred on the side
+ 	 * of the server.
+ 	 */
+ 	public boolean rateCourse(int stars, String id) throws IOException, ParseException {
+ 		boolean success = false;
+ 		int indexOfRatedCourse = 0;
+ 		
+ 		// Checking if the course the Student chose to rate is attended by him
+		for (Course course : myCourses) {
+			if (course.getId().equals(id)) {
+					success = controller.setSubjectRating(stars, id);
+					break;
+			}
+			
+			indexOfRatedCourse++;
+		}
+		
+		// Update data with new values if rating was successful
+ 		if (success) {
+ 			float rating = controller.getSubjectRating(id);
+ 			
+ 			myCourses.get(indexOfRatedCourse).setRating(rating); // Update allCourses
+ 			
+ 			// Update myCourses
+ 			for (int i = 0; i < allCourses.size(); i++) {
+ 				if (allCourses.get(i).getId().equals(id)) {
+ 					allCourses.get(i).setRating(rating);
+ 					break;
+ 				}
+ 			}		
+ 		}
+ 		
+ 		return success;
+ 	}
+ 	
+ 	public float getCourseRating(String id) throws IOException, ParseException {
+ 		return controller.getSubjectRating(id);
+ 	}
+ 	
+ 	public int getMyCourseRating(String id) throws IOException, ParseException {
+ 		return controller.getMySubjectRating(id);
+ 	}
+ 	
+ 	public ArrayList<Professor> getAllProfessors(){
+ 		
  	}
  	
  	/*

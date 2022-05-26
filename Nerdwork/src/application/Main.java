@@ -73,7 +73,7 @@ public class Main  {
 		
 		ArrayList<String> enrolledCourseNames = controller.getEnrolledSubjects();
 		ArrayList<Course> myCourses = new ArrayList<Course>();
-		System.out.println(enrolledCourseNames);
+		//System.out.println(enrolledCourseNames);
 		for (i = 0; i < enrolledCourseNames.size(); i++) 
 			for (int j = 0; j < courses.size(); j++)	
 				if (enrolledCourseNames.get(i).equals(courses.get(j).getId()))

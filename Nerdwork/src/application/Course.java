@@ -133,6 +133,10 @@ public class Course {
 		return rating;
 	}
 	
+	public void setRating(float rating) {
+		this.rating = rating;
+	}
+	
 	public ArrayList<Professor> getProfessors() {
 		return professors;
 	}

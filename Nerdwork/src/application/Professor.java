@@ -17,15 +17,21 @@ import application.Timeslot.Availability;
 public class Professor extends User {
 	
 	/*Professor attributes are here*/
-
+	
+	private String phone;
+	private String profilePhoto;
+	private float rating;
 	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the professor
 	private ArrayList<Timeslot> timeslots; // A Professor's available Timeslots
 	private ArrayList<Timeslot> pendingAppointments; // Appointments that have not been accepted by "this" Professor object yet
 	
 	/*Professor Constructor is here*/
 	
-	public Professor(String id, String name, String displayName) {
+	public Professor(String id, String name, String displayName, String phone, String profilePhoto, float rating) {
 		super(id, name, displayName);
+		this.phone = phone;
+		this.profilePhoto = profilePhoto;
+		this.rating = rating;
 		studentsRated = new ArrayList<>();
 		timeslots = new ArrayList<>();
 		pendingAppointments = new ArrayList<>();

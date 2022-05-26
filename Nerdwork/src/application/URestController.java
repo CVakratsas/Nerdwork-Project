@@ -53,6 +53,64 @@ public class URestController {
     	 return new FLoginResponse(false);
      }
      
+     public ArrayList<FProfessorsResponse> getAllProfessors() throws IOException, ParseException{
+    	 FRestResponse r = requestComponent.Get("/api/professors");
+    	
+    	 if(r.statusCode == 200) {
+    		 JSONParser parser = new JSONParser();
+    		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 JSONArray arrayData = (JSONArray)data.get("triggerResults");
+    		 ArrayList<FProfessorsResponse> outResponse = new ArrayList<FProfessorsResponse>();
+    		
+    		 for(int i = 0; i < arrayData.size(); i++) {
+    			 JSONObject tempData = (JSONObject)arrayData.get(i);
+    			 outResponse.add(new FProfessorsResponse(((Number)tempData.get("id")).intValue(), (String) tempData.get("name"), (String) tempData.get("phone"), (String) tempData.get("email"), (String) tempData.get("profilePhoto"), ((Number)tempData.get("rating")).floatValue()));
+    		 }
+    		
+    		 return outResponse;
+    	 }
+    	 
+    	 return new ArrayList<FProfessorsResponse>();
+     }
+     
+     public float getProfessorRating(int professorId) throws IOException, ParseException{
+    	 FRestResponse r = requestComponent.Get("/api/professors/rating?professorId="+professorId);
+
+    	 if(r.statusCode == 200) {
+    		 JSONParser parser = new JSONParser();
+    		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 data = (JSONObject)data.get("triggerResults");
+    		
+    		 return ((Number)(data.get("rating"))).floatValue();
+    	 }
+    
+    	 return 0;
+     }
+     
+     public int getMyProfessorRating(int professorId) throws IOException, ParseException{
+    	 FRestResponse r = requestComponent.Get("/api/professors/rating?professorId="+professorId);
+
+    	 if(r.statusCode==200) {
+    		 JSONParser parser = new JSONParser();
+    		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 data = (JSONObject)data.get("triggerResults");
+    	
+    		 return ((Number)(data.get("myRating"))).intValue();
+    	 }
+    	 
+    	 return -1;
+     }
+     
+     public boolean setProfessorRating(int rating, int professorId) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    
+    	 obj.put("rating", rating);
+    	 obj.put("professorId", professorId);
+    	 FRestResponse r = requestComponent.Post("/api/professors/rating/", obj);
+    
+    	 return r.statusCode==200;
+     }
+     
      /*
       * Method used to return all Courses. 
       */
@@ -97,7 +155,7 @@ public class URestController {
     	 obj.put("rating", rating);
     	 obj.put("subjectId", subjectId);
     	 FRestResponse r = requestComponent.Post("/api/subjects/rating/", obj);
-    	 System.out.println(r.statusCode);
+    	
     	 return r.statusCode==200;
      }
      
@@ -115,7 +173,7 @@ public class URestController {
     		 return ((Number)(data.get("rating"))).floatValue(); // Returns current Course rating
     	}
     	 
-    	 return 0;
+    	 return -1;
      }
      
      /*
@@ -139,7 +197,7 @@ public class URestController {
       */
      public ArrayList<String> getEnrolledSubjects() throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/subjects/enrollments"); // Redirection
-    	 System.out.println(r.responseContent);
+//    	 System.out.println(r.responseContent);
     	 // If the redirection request is successful return enrolled Courses
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();
@@ -163,7 +221,7 @@ public class URestController {
      /*
       * Method used in order to enroll to a Course. Uses the Course's name
       * in order to do that.
-      * The USer selects the Course.name to be enrolled to.
+      * The User selects the Course.name to be enrolled to.
       */
      public boolean enrollSubject(String subjectId) throws IOException{
     	 JSONObject obj = new JSONObject();
@@ -173,6 +231,15 @@ public class URestController {
     	 FRestResponse r = requestComponent.Post("/api/subjects/enrollments/enroll/", obj);
     	 System.out.println(r.responseContent);
     	 return r.statusCode == 200;
+     }
+     
+     public boolean disenrollSubject(String subjectId) throws IOException{
+    	 JSONObject obj = new JSONObject();
+    	
+    	 obj.put("subjectId", subjectId);
+    	 FRestResponse r = requestComponent.Post("/api/subjects/enrollments/disenroll/", obj);
+    	 
+    	 return r.statusCode==200;
      }
      
      /*
@@ -222,6 +289,103 @@ public class URestController {
     	
     	 FRestResponse r = requestComponent.Post("/api/appointments/availability/", obj);
     	
+    	 return r.statusCode==200;
+     }
+     
+     public ArrayList<Integer> getBookedTimestamps(int professorId) throws IOException, ParseException{
+    	 FRestResponse r = requestComponent.Get("/api/appointments/availability?professorId="+professorId);
+    	
+    	 if(r.statusCode==200) {
+    		 JSONParser parser = new JSONParser();
+    		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 data = (JSONObject)data.get("triggerResults");
+    		 JSONArray arrayData = (JSONArray)data.get("bookedTimestamps");
+    		 
+    		 ArrayList<Integer> booked = new ArrayList<Integer>();
+    		 for(int i = 0; i<arrayData.size(); i++) {
+    			 booked.add(((Number)arrayData.get(i)).intValue());
+    		 }
+    		 
+    		 return booked;
+    	 }
+    
+    	 return new ArrayList<Integer>();
+     }
+     
+     public ArrayList<FAppointmentsResponse> getMyAppointments() throws IOException, ParseException{
+    	 FRestResponse r = requestComponent.Get("/api/appointments");
+    	 System.out.println(r.responseContent);
+    	 
+    	 if(r.statusCode==200) {
+    		 JSONParser parser = new JSONParser();
+    		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 JSONArray arrayData = (JSONArray)data.get("triggerResults");
+    		
+    		 if(arrayData==null) {
+    			 return new ArrayList<FAppointmentsResponse>();
+    		 }
+    		 ArrayList<FAppointmentsResponse> outResponse = new ArrayList<FAppointmentsResponse>();
+    		 
+    		 for(int i = 0; i<arrayData.size(); i++) {
+    			 JSONObject tempData = (JSONObject)arrayData.get(i);
+    			 outResponse.add(new FAppointmentsResponse(((Number)tempData.get("appointmentId")).intValue(), (String) tempData.get("studentId"), ((Number) tempData.get("professorId")).intValue(), ((Number) tempData.get("date")).intValue(), ((Number) tempData.get("status")).intValue(), (String) tempData.get("created_at")));
+    		 }
+    
+    		 return outResponse;
+    	 }
+    
+    	 return new ArrayList<FAppointmentsResponse>();
+     }
+     
+     public boolean acceptAppointment(int appointmentId) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	 
+    	 obj.put("appointmentId", appointmentId);
+    	 FRestResponse r = requestComponent.Post("/api/appointments/accept/", obj);
+    	 
+    	 return r.statusCode==200;
+     }
+     
+     public boolean cancelAppointment(int appointmentId) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    
+    	 obj.put("appointmentId", appointmentId);
+    	 FRestResponse r = requestComponent.Post("/api/appointments/cancel/", obj);
+    
+    	 return r.statusCode==200;
+     }
+     
+     public boolean bookAppointment(int professorId, int dateTimestamp) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    
+    	 obj.put("professorId", professorId);
+    	 obj.put("timestamp", dateTimestamp);
+    	 FRestResponse r = requestComponent.Post("/api/appointments/book/", obj);
+    	 
+    	 return r.statusCode==200;
+     }
+     
+     public FUserInformationResponse getUserProfile(String userId) throws IOException, ParseException{
+    	 FRestResponse r = requestComponent.Get("/api/profile?userId="+userId);
+    	
+    	 if(r.statusCode==200) {
+    		 JSONParser parser = new JSONParser();
+    		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 data = (JSONObject)data.get("triggerResults");
+    	
+    		 return new FUserInformationResponse(true, (String)data.get("displayName"), (String)data.get("bio"), (String)data.get("email"));
+    	 }
+    	
+    	 return new FUserInformationResponse(false);
+     }
+     
+     public boolean setDisplayName(String newDisplayName) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	
+    	 obj.put("displayName", newDisplayName);
+    	 FRestResponse r = requestComponent.Put("/api/profile/displayName/", obj);
+    	 System.out.println(r.responseContent);
+    	 
     	 return r.statusCode==200;
      }
      
