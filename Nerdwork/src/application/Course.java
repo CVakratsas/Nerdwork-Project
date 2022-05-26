@@ -81,34 +81,7 @@ public class Course {
 			pIndex = professors.indexOf(professor);	
 			professors.remove(pIndex);
 		}
-			
-		//courseIndex = p.getCourses().indexOf(this);
-		//p.getCourses().remove(courseIndex);
 	}
-	
-	/* Methods regarding rating are here: */
-	
-	/*
-	 * Method used by Students to rate "this" Course object, by
-	 * a number of stars (from 0-5). The method keeps track
-	 * of the number of students who have rated "this" Course object and
-	 * the total number of stars they have given.
-	 * addRate, gets an Integer (the stars selected by the Student) and a Student
-	 * as a parameters and is a boolean type method.
-	 * Returns true if the student's rate has been submitted, returns false if the student had already rated before.
-	 */
-//	public boolean addRate(Student student, Integer star) {
-//		if (!studentsRated.contains(student)) {
-//			numOfStars += star;
-//			numOfRates++;
-//			studentsRated.add(student);
-//			
-//			return true;
-//		}
-//		else {
-//			return false;
-//		}
-//	}
 
 	/* Getter and Setter methods of the Course class: */
 	

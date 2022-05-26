@@ -241,10 +241,6 @@ public class Professor extends User {
 	
 	/*Professor class Getters and Setters: */
 	
-//	public Double getRating() {
-//		return (double) (numOfStars/numOfRates);
-//	}
-	
 	public ArrayList<Timeslot> getTimeslots() {
 		return timeslots;
 	}

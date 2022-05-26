@@ -15,7 +15,7 @@ public class Main  {
 		//System.out.println(controller.doRegister("iss1234", "123456789", "iss1234", "iss1234@uom.edu.gr"));
 		
 		System.out.println("Login: ");
-		controller.doLogin("iss1234", "123456789");
+		System.out.println(controller.doLogin("iss1234", "123456789"));
 		
 		System.out.println("\nGet all Subjects and parse into Course: ");
 		fsr = controller.getAllSubjects();
@@ -88,6 +88,5 @@ public class Main  {
 					+ course.getSemester());
 			i++;
 		}
-			
 	}
 }

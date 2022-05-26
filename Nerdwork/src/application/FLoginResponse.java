@@ -11,7 +11,7 @@ public class FLoginResponse{
 	public String userId; // The id attribute
 	public String displayName; // ??????
 	public String username; // name attribute of the User class
-	public int accountType; // Professor or Student
+	public int accountType; // Professor (1) or Student (0)
 	
 	public FLoginResponse(boolean success) {
 		isSuccess = success;

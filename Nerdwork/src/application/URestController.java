@@ -33,7 +33,8 @@ public class URestController {
 	      * Post the JSON containing the username and password to the login
 	      * section of our web site
 	      */
-    	 FRestResponse r = requestComponent.Post("/api/auth/login/", obj); 
+    	 FRestResponse r = requestComponent.Post("/api/auth/login/", obj);
+    	 //System.out.println(r.responseContent);
     
     	 // If request succeeded:
     	 if(r.statusCode == 200) {
@@ -138,7 +139,7 @@ public class URestController {
       */
      public ArrayList<String> getEnrolledSubjects() throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/subjects/enrollments"); // Redirection
-    	
+    	 System.out.println(r.responseContent);
     	 // If the redirection request is successful return enrolled Courses
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();
@@ -170,8 +171,8 @@ public class URestController {
     	 obj.put("subjectId", subjectId);
     	 
     	 FRestResponse r = requestComponent.Post("/api/subjects/enrollments/enroll/", obj);
-    	 
-    	 return r.statusCode==200;
+    	 System.out.println(r.responseContent);
+    	 return r.statusCode == 200;
      }
      
      /*
