@@ -102,9 +102,9 @@
                        </VBox.margin>
                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
                                   preserveRatio="true">
-                           <Image url="@../icons/phone.png"/>
+                           <Image url="@../icons"/>
                        </ImageView>
-                       <Label text="2310 891894">
+                       <Label text="2ο Εξάμηνο">
                            <font>
                                <Font name="Comic Sans MS" size="18.0"/>
                            </font>
@@ -119,9 +119,9 @@
                        </VBox.margin>
                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
                                   preserveRatio="true">
-                           <Image url="@../icons/email.png"/>
+                           <Image url="@../icons"/>
                        </ImageView>
-                       <Label text="manos@uom.gr">
+                       <Label text="ΕΤΥ-ΠΣ">
                            <font>
                                <Font name="Comic Sans MS" size="18.0"/>
                            </font>
@@ -136,9 +136,9 @@
                        </VBox.margin>
                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
                                   preserveRatio="true">
-                           <Image url="@../icons/office.png"/>
+                           <Image url="@../icons"/>
                        </ImageView>
-                       <Label text="Γραφείο: Γ5, 525">
+                       <Label text="5 ECTS">
                            <font>
                                <Font name="Comic Sans MS" size="18.0"/>
                            </font>
@@ -148,30 +148,30 @@
                        </Label>
                    </HBox>
                </VBox>
-               <Rating layoutX="77.0" layoutY="260.0" partialRating="true" rating="1.4"/>
+               <Rating layoutX="77.0" layoutY="260.0" partialRating="true" rating="4.7"/>
                <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="68.0" layoutY="51.0" pickOnBounds="true"
                           preserveRatio="true">
-                   <Image url="@../icons/manos.jpg"/>
+                   <Image url="@../icons/DBMS.png"/>
                </ImageView>
            </AnchorPane>
            <ScrollPane prefHeight="200.0" prefWidth="200.0">
                <AnchorPane prefHeight="400.0" prefWidth="937.0">
-                   <Label layoutX="24.0" layoutY="49.0" text="Εμμανουήλ Ρουμελιώτης">
+                   <Label layoutX="24.0" layoutY="49.0" text="Βάσεις Δεδομένων">
                        <font>
                            <Font name="Segoe UI Bold" size="30.0"/>
                        </font>
                    </Label>
                    <TextFlow layoutX="24.0" layoutY="252.0" prefHeight="327.0" prefWidth="637.0"/>
-                   <VBox layoutX="24.0" layoutY="86.0" prefHeight="138.0" prefWidth="359.0">
+                   <VBox layoutX="24.0" layoutY="86.0" prefHeight="74.0" prefWidth="275.0">
                        <HBox alignment="CENTER_LEFT" opacity="0.8" prefHeight="32.0" prefWidth="200.0">
                            <VBox.margin>
                                <Insets bottom="5.0"/>
                            </VBox.margin>
                            <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
                                       preserveRatio="true">
-                               <Image url="@../icons"/>
+                               <Image url="@../icons/gevan.jpg"/>
                            </ImageView>
-                           <Label text="Αρχιτεκτονική Υπολογιστών">
+                           <Label text="Ευαγγελίδης Γεώργιος">
                                <font>
                                    <Font name="Comic Sans MS" size="18.0"/>
                                </font>
@@ -186,37 +186,9 @@
                            </VBox.margin>
                            <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
                                       preserveRatio="true">
-                               <Image url="@../icons"/>
+                               <Image url="@../icons/gkoloniari.jpg"/>
                            </ImageView>
-                           <Label text="Λειτουργικά Συστήματα">
-                               <font>
-                                   <Font name="Comic Sans MS" size="18.0"/>
-                               </font>
-                               <HBox.margin>
-                                   <Insets left="5.0"/>
-                               </HBox.margin>
-                           </Label>
-                       </HBox>
-                       <HBox alignment="CENTER_LEFT" opacity="0.8" prefHeight="32.0" prefWidth="200.0">
-                           <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
-                                      preserveRatio="true">
-                               <Image url="@../icons"/>
-                           </ImageView>
-                           <Label text="Προηγμένη Αρχιτεκτονική Η/Υ">
-                               <font>
-                                   <Font name="Comic Sans MS" size="18.0"/>
-                               </font>
-                               <HBox.margin>
-                                   <Insets left="5.0"/>
-                               </HBox.margin>
-                           </Label>
-                       </HBox>
-                       <HBox alignment="CENTER_LEFT" opacity="0.8" prefHeight="32.0" prefWidth="200.0">
-                           <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
-                                      preserveRatio="true">
-                               <Image url="@../icons"/>
-                           </ImageView>
-                           <Label text="Τεχνικές Προσομοίωσης">
+                           <Label text="Κολωνιάρη Γεωργία ">
                                <font>
                                    <Font name="Comic Sans MS" size="18.0"/>
                                </font>
