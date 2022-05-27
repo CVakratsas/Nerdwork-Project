@@ -1,3 +1,10 @@
+/*
+ * Class used in order to provide temporary storage
+ * for information extracted from the database regarding
+ * student appointments with professors. After that information
+ * are passed to the Timeslot class???
+ */
+
 package application;
 
 public class FAppointmentsResponse {

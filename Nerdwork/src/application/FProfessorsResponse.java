@@ -1,10 +1,17 @@
+/*
+ * Class for temporary storage of information extracted from
+ * the database, concerning professors. The attributes are used to 
+ * construct a new Professor object from the student's point
+ * if view.
+ */
+
 package application;
 
 import java.util.ArrayList;
 
 public class FProfessorsResponse {
-	public int id;
-    public String name;
+	public int id; // The Professor Id
+    public String name; // Professor displayName
     public String phone;
     public String email;
     public String profilePhoto;

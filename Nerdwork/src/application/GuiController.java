@@ -1,3 +1,13 @@
+/*
+ * Class used in order to connect the GUI part of the program
+ * with the database and vice versa. It provides methods for 
+ * communication between both and also parses data so that they
+ * can be used correctly by both. 
+ * 
+ * Note: This class is to be used instead of URestController, 
+ * while the last must not be used anywhere else in the program
+ */
+
 package application;
 
 import java.io.IOException;
@@ -27,17 +37,24 @@ public class GuiController {
  	
  	/*
  	 * Method used to register user.
+ 	 * In order for the registration to be successful the user needs to pass
+ 	 * four String arguments: a username, a password, the name to be displayed 
+ 	 * to other users and an email (his academic email). It returns true if the 
+ 	 * registration was successful and false otherwise (described below).
  	 */
  	public boolean register(String username, String password, String displayName, String email) throws IOException {
  		if (checkPassword(password))
- 			return controller.doRegister(username, password, displayName, email); // Email incorrect or username already exists.
+ 			return controller.doRegister(username, password, displayName, email); // false if email incorrect or username already exists.
  		
  		return false; // Password incorrect.
  	}
  	
  	/*
  	 * Method used for logging in.
- 	 * login returns true if the login was successful or false otherwise
+ 	 * It returns true if the login was successful or false otherwise and
+ 	 * gets two String objects as parameters. First is the username that the
+ 	 * user who wants to login uses and second is the password linked to this
+ 	 * username.
  	 */
  	public boolean login(String username, String password) throws IOException, ParseException {
  		FLoginResponse flr;
@@ -62,7 +79,8 @@ public class GuiController {
  	
  	/*
  	 * Method used to get all the Courses contained in the database.
- 	 * It returns all of these Courses.
+ 	 * It returns an ArrayList consisting of Course objects and has
+ 	 * no parameters.
  	 */
  	public ArrayList<Course> getAllCourses() throws IOException, ParseException{
  		ArrayList<FSubjectsResponse> fsr = controller.getAllSubjects();
@@ -88,11 +106,22 @@ public class GuiController {
  	public boolean courseEnrollment(String id) throws IOException {
  		return controller.enrollSubject(id);
  	}
- 	
+
+ 	/*
+ 	 * Method used by students in order to disenroll from a course.
+ 	 * The method returns true only if the disenrollment was successful.
+ 	 * It returns false if the disenrollment failed (student not enrolled)
+ 	 * or because of the http request failure.
+ 	 */
  	public boolean courseDisenrollment(String id) throws IOException {
  		return controller.disenrollSubject(id);
  	}
  	
+ 	/*
+ 	 * Method used to provide access to the user's enrolled courses.
+ 	 * It returns an ArrayList consisting of Course objects, which 
+ 	 * represent the ones that the user is enrolled to and gets no parameters.
+ 	 */
  	public ArrayList<Course> getEnrolledCourses() throws IOException, ParseException{
  		ArrayList<String> enrolledCourses = controller.getEnrolledSubjects();
  		
@@ -150,18 +179,41 @@ public class GuiController {
  		return success;
  	}
  	
+ 	/*
+ 	 * Method used to get the total rating of a selected course, which
+ 	 * is defined by its id.
+ 	 * It returns a float object representing the total rating of the selected course
+ 	 * and gets a String object as parameter which represents the selected course, by its id.
+ 	 */
  	public float getCourseRating(String id) throws IOException, ParseException {
  		return controller.getSubjectRating(id);
  	}
- 	
+
+ 	/*
+ 	 * Method used to get the stars of a selected course, which
+ 	 * is defined by its id, which a student gave to it.
+ 	 * It returns a float object representing the stars of the selected course given by the user
+ 	 * and gets a String object as parameter which represents the selected course, by its id.
+ 	 */
  	public int getMyCourseRating(String id) throws IOException, ParseException {
  		return controller.getMySubjectRating(id);
  	}
  	
+ 	/*
+ 	 * Method used to get the ECTS provided by a course.
+ 	 * It returns an integer object which represents the course's
+ 	 * ECTS and gets a Course object as a parameter, which defines 
+ 	 * the selected course.
+ 	 */
  	public int getCourseECTS(Course course) {
  		return course.getECTS();
  	}
  	
+ 	/*
+ 	 * Method used to get all the professors currently teaching at the University.
+ 	 * It returns an ArrayList consisting of Professor objects and gets no
+ 	 * parameters.
+ 	 */
  	public ArrayList<Professor> getAllProfessors(){
  		ArrayList<FProfessorsResponse> fpr = controller.getAllProfessors();
  		

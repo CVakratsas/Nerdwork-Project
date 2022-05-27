@@ -1,3 +1,10 @@
+/*
+ * Class used for temporary storage of user
+ * profile information, when they are extracted
+ * from the database. After that they are passed
+ * to the User class.
+ */
+
 package application;
 
 public class FUserInformationResponse {

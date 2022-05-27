@@ -1,3 +1,12 @@
+/*
+ * Class used to provide communication between the database
+ * and the main program. It provides methods for extracting data 
+ * needed by the main program from the database.
+ * 
+ * Note: must not be used anywhere else except the GuiController
+ * class.
+ */
+
 package application;
 
 import java.io.IOException;
@@ -53,6 +62,12 @@ public class URestController {
     	 return new FLoginResponse(false);
      }
      
+     /*
+      * Method used to extract all of the information concerning professors, 
+      * from the database. 
+      * It returns an ArrayList consisting of FProfessorResponse objects 
+      * (details for all professors) and has no parameters.
+      */
      public ArrayList<FProfessorsResponse> getAllProfessors() throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/professors");
     	
@@ -60,6 +75,7 @@ public class URestController {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
     		 JSONArray arrayData = (JSONArray)data.get("triggerResults");
+    	
     		 ArrayList<FProfessorsResponse> outResponse = new ArrayList<FProfessorsResponse>();
     		
     		 for(int i = 0; i < arrayData.size(); i++) {
@@ -73,6 +89,18 @@ public class URestController {
     	 return new ArrayList<FProfessorsResponse>();
      }
      
+     /*
+      * Method used to extract from the database a professor's rating,
+      * by his id. 
+      * It returns a float object (the professor's rating) and has
+      * an integer type parameter (the professor's id whose rating will
+      * be returned from the database).
+      * 
+      * Note concerning professor ids: as professor id we mean a unique number which is used to 
+      * identify each professor. It is not to be confused with the userId,
+      * which is used by both the Professor and Student objects and is used 
+      * for security purposes.
+      */
      public float getProfessorRating(int professorId) throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/professors/rating?professorId="+professorId);
 
@@ -87,10 +115,17 @@ public class URestController {
     	 return 0;
      }
      
+     /*
+      * Method used to extract from the database the stars that "this" student
+      * has given to a certain professor, who is defined by his id.
+      * It returns an integer type object (the stars "this" student has given
+      * to the professor) and has an integer type parameter object (the professor's
+      * id (see "Note concerning professor ids")).
+      */
      public int getMyProfessorRating(int professorId) throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/professors/rating?professorId="+professorId);
 
-    	 if(r.statusCode==200) {
+    	 if(r.statusCode == 200) {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
     		 data = (JSONObject)data.get("triggerResults");
@@ -100,7 +135,18 @@ public class URestController {
     	 
     	 return -1;
      }
-     
+
+     /*
+      * Method used to add stars (to rate) a professor, who is defined by
+      * his id.
+      * It returns true if the operation was successful (the rating operation was
+      * successful and the server responded correctly) and false otherwise (the
+      * rating operation failed (student already rated this professor) or the
+      * server did not manage to respond correctly to the request) and gets
+      * two parameters: an integer type object representing the stars given by the
+      * student to the professor and an integer type object representing the professor's
+      * id (whom the student is going to rate) (see "Note concerning professor ids").
+      */
      public boolean setProfessorRating(int rating, int professorId) throws IOException {
     	 JSONObject obj = new JSONObject();
     
@@ -112,7 +158,10 @@ public class URestController {
      }
      
      /*
-      * Method used to return all Courses. 
+      * Method used to extract all courses from the database.
+      * It returns ArrayList consisting of FSubjectResponse objects,
+      * containing details for each course contained in the database 
+      * and gets no parameters.
       */
      public ArrayList<FSubjectsResponse> getAllSubjects() throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/subjects"); // Change to another URL
@@ -147,7 +196,11 @@ public class URestController {
      }
      
      /*
-      * Used to rate a Course selected by the user with a number from 1 to 5.
+      * Used to rate a course selected by the user with a number from 1 to 5 and save
+      * any changes to the database (concerning subject rating).
+      * It returns true if the operation was successful and the server responded correctly
+      * and false if the operation was not successful (student already rated this subject)
+      * or the server did not manage to respond correctly to the request.
       */
      public boolean setSubjectRating(int rating, String subjectId) throws IOException {
     	 JSONObject obj = new JSONObject();
@@ -160,7 +213,9 @@ public class URestController {
      }
      
      /*
-      * Method used by the User to see the rating of the selected Course
+      * Method used to extract a subject's rating from the database.
+      * It returns a float object representing the subject's total rating
+      * and gets a String object as parameter (the selected subject's id).
       */
      public float getSubjectRating(String subjectId) throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/subjects/rating?subjectId="+subjectId); // Course URL
@@ -177,7 +232,11 @@ public class URestController {
      }
      
      /*
-      * Method used by a User to see his rating a certain Course
+      * Method used to extract the rating (the stars) that "this" student has 
+      * given to the selected subject, which is defined by its id.
+      * It returns an integer object representing the stars given by "this" student
+      * to the selected subject and gets a String object as parameter (the selected subject's
+      * id).
       */
      public int getMySubjectRating(String subjectId) throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/subjects/rating?subjectId="+subjectId); // Course URL
@@ -193,7 +252,9 @@ public class URestController {
      }
      
      /*
-      * Method that returns the Course which the Student has been enrolled to.
+      * Method that is used to extract the subjects that a student is enrolled to.
+      * It returns an ArrayList consisting of String objects, each representing the enrolled
+      * subject's name and gets no parameters.
       */
      public ArrayList<String> getEnrolledSubjects() throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/subjects/enrollments"); // Redirection
@@ -219,10 +280,14 @@ public class URestController {
      }
      
      /*
-      * Method used in order to enroll to a Course. Uses the Course's name
-      * in order to do that.
-      * The User selects the Course.name to be enrolled to.
-      */
+      * Method used in order to enroll to a Course. Saves changes to 
+      * the database.
+      * It returns true if the enrollment operation was successful and
+      * the server responded correctly and false if the enrollment operation
+      * was unsuccessful (student already enrolled to this subject) or the server
+      * did not manage to respond correctly to the request and gets a String object
+      * (the subject's id to which the student chose to enroll to) as parameter.
+      */ 
      public boolean enrollSubject(String subjectId) throws IOException{
     	 JSONObject obj = new JSONObject();
 
@@ -233,6 +298,9 @@ public class URestController {
     	 return r.statusCode == 200;
      }
      
+     /*
+      * 
+      */
      public boolean disenrollSubject(String subjectId) throws IOException{
     	 JSONObject obj = new JSONObject();
     	

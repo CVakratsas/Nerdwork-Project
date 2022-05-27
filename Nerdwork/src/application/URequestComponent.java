@@ -1,3 +1,9 @@
+/*
+ * Class that provides methods in order to contact
+ * directly the database. It makes HTTP requests
+ * to it.
+ */
+
 package application;
 
 import java.io.BufferedReader;
