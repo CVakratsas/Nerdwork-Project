@@ -90,8 +90,10 @@ public class GuiController {
  		if (allCourses.size() != fsr.size()) {
  			allCourses.clear();
  			
+ 			getAllProfessors();
+ 			
  			for (FSubjectsResponse i : fsr) 
- 				allCourses.add(new Course(i.id, i.name, i.rating, i.semester));
+ 				allCourses.add(new Course(i.id, i.name, i.associatedProfessors, i.rating, i.semester, allProfessors));
  		}
  		
  		return allCourses;
@@ -209,25 +211,67 @@ public class GuiController {
  		return course.getECTS();
  	}
  	
+ 	public int getCourseSemester(Course course) {
+ 		return course.getSemester();
+ 	}
+ 	
  	/*
  	 * Method used to get all the professors currently teaching at the University.
  	 * It returns an ArrayList consisting of Professor objects and gets no
  	 * parameters.
  	 */
- 	public ArrayList<Professor> getAllProfessors(){
+ 	public ArrayList<Professor> getAllProfessors() throws IOException, ParseException{
  		ArrayList<FProfessorsResponse> fpr = controller.getAllProfessors();
  		
- 		for (FProfessorsResponse i : fpr)
- 			allProfessors.add(new Professor())
+ 		if (allProfessors.size() == 0)
+	 		for (FProfessorsResponse i : fpr)
+	 			allProfessors.add(new Professor(i.name, i.id, i.phone, i.email, i.profilePhoto, i.rating));
  		
- 		return fpr;
+ 		return allProfessors;
+ 	}
+ 	
+ 	// Change comments:!!!!!
+ 	public boolean rateProfessor(int stars, int professorId) throws IOException, ParseException {
+ 		boolean success = false;
+ 		int indexOfRatedProfessor = 0;
+ 		
+ 		// Checking if the course the Student chose to rate is attended by him
+		for (Professor professor : allProfessors) {
+			if (professor.getProfessorId() == professorId) {
+					success = controller.setProfessorRating(stars, professorId);
+					break;
+			}
+			
+			indexOfRatedProfessor++;
+		}
+		
+		// Update data with new values if rating was successful
+ 		if (success) {
+ 			float rating = controller.getProfessorRating(professorId);
+ 			
+ 			allProfessors.get(indexOfRatedProfessor).setRating(rating); // Update allCourses		
+ 		}
+ 		
+ 		return success;
+ 	}
+ 	
+ 	public float getProfessorRating(int professorId) throws IOException, ParseException {
+ 		return controller.getProfessorRating(professorId);
+ 	}
+ 	
+ 	public int getMyProfessorRating(int professorId) throws IOException, ParseException {
+ 		return controller.getMyProfessorRating(professorId);
+ 	}
+ 	
+ 	public boolean setDisplayName(String newDisplayName) throws IOException {
+ 		return controller.setDisplayName(newDisplayName);
  	}
  	
  	public String getDisplayNameStudent() {
  		return student.getDisplayName();
  	}
  	
- 	public String getDisplayName() {
+ 	public String getDisplayNameProfessor() {
  		return professor.getDisplayName();
  	}
  	

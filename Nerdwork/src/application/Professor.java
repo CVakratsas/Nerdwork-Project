@@ -29,8 +29,9 @@ public class Professor extends User {
 	
 	/*Professor Constructor is here*/
 	
-	public Professor(String userId, String username, String displayName, int accountType, int professorId, String email, String profilePhoto, String phone, float rating) {
-		super(userId, username, displayName, accountType);
+	// Constructor for getting professor information as student.
+	public Professor(String displayName, int professorId, String email, String profilePhoto, String phone, float rating) {
+		super(null, null, displayName, 1);
 		this.professorId = professorId;
 		this.email = email;
 		this.profilePhoto = profilePhoto;
@@ -41,6 +42,7 @@ public class Professor extends User {
 		pendingAppointments = new ArrayList<>();
 	}
 	
+	// Constructor for professor login
 	public Professor(String userId, String username, String displayName, int accountType, int professorId) {
 		super(userId, username, displayName, accountType);
 		this.professorId = professorId;
@@ -194,6 +196,10 @@ public class Professor extends User {
 	
 	/*Professor class Getters and Setters: */
 	
+	public int getProfessorId() {
+		return professorId;
+	}
+	
 	public ArrayList<Timeslot> getTimeslots() {
 		return timeslots;
 	}
@@ -204,5 +210,9 @@ public class Professor extends User {
 	
 	public void setBio(String bio) {
 		this.bio = bio;
+	}
+	
+	public void setRating(float rating) {
+		this.rating = rating;
 	}
 }

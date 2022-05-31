@@ -21,15 +21,22 @@ public class Course {
 	private int semester;
 	private float rating;
 	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the course
-	private ArrayList<Professor> professors; // Professors teaching each lesson
+	private ArrayList<Professor> associatedProfessors; // Professors teaching each lesson
+	
 	
 	/* Course class attribute initialization: */
 	
-	public Course(String id, String name, float rating, int semester) {
+	public Course(String id, String name, ArrayList<String> associatedProfessorsId, float rating, int semester, ArrayList<Professor> professors) {
 		this.id = id;
 		this.name = name;
 		this.rating = rating;
 		this.semester = semester;
+		
+		for (Professor professor : professors)
+			for (String associatedProfessorId : associatedProfessorsId)
+				if (associatedProfessorId.equals(professor.getUserId()))
+					associatedProfessors.add(professor);
+		
 		this.ECTS = 5;
 	}
 	
@@ -45,35 +52,6 @@ public class Course {
 		return name;
 	}
 	
-	/* Methods regarding professors are here: */
-	
-	/* 
-	 * Method that adds a professor in the professors array list,
-	 * of "this" Course object.
-	 * addProfessor, gets a Professor object (Professor to add)
-	 * as a parameter and is a void type method. 
-	 */
-	public void addProfessor(Professor professor) {
-		if(!professors.contains(professor)) {
-			professors.add(professor);
-		}
-	}
-	
-	/*
-	 * Method that removes a professor from the professors array list,
-	 * of "this" Course object.
-	 * removeProfessor, gets a Professor object (Professor to remove)
-	 * as a parameter and is a void type method. 
-	 */
-	public void removeProfessor(Professor professor) {
-		int pIndex; // Index of the Professor object in the professors array list
-		
-		if(professors.contains(professor)) {
-			pIndex = professors.indexOf(professor);	
-			professors.remove(pIndex);
-		}
-	}
-
 	/* Getter and Setter methods of the Course class: */
 	
 	public void setName(String name) {
@@ -117,6 +95,6 @@ public class Course {
 	}
 	
 	public ArrayList<Professor> getProfessors() {
-		return professors;
+		return associatedProfessors;
 	}
 }

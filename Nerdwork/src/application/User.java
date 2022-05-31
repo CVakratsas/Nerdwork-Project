@@ -19,7 +19,6 @@ public class User {
 	protected String email;
 	protected String displayName;
 	protected int accountType;
-	//protected String description;
 	/*
 	 * The above five attributes keep track of personal Student/Professor,
 	 * concerning the profile they have built.
