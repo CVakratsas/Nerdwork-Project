@@ -17,7 +17,7 @@ public class Course {
 	private String id;
 	private String name;
 	private String orientation; // There are three types of the orientation attribute
-	private final int ECTS;
+	private static final int ECTS = 5;
 	private int semester;
 	private float rating;
 	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the course
@@ -26,18 +26,17 @@ public class Course {
 	
 	/* Course class attribute initialization: */
 	
-	public Course(String id, String name, ArrayList<String> associatedProfessorsId, float rating, int semester, ArrayList<Professor> professors) {
+	public Course(String id, String name, ArrayList<String> associatedProfessorsId, float rating, int semester, ArrayList<Professor> allProfessors) {
 		this.id = id;
 		this.name = name;
 		this.rating = rating;
 		this.semester = semester;
+		this.associatedProfessors = new ArrayList<Professor>();
 		
-		for (Professor professor : professors)
+		for (Professor p : allProfessors)
 			for (String associatedProfessorId : associatedProfessorsId)
-				if (associatedProfessorId.equals(professor.getUserId()))
-					associatedProfessors.add(professor);
-		
-		this.ECTS = 5;
+				if (associatedProfessorId.equals(p.getUserId()))
+					associatedProfessors.add(p);
 	}
 	
 	/* Methods of Course class */

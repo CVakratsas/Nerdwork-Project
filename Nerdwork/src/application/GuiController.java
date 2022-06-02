@@ -33,6 +33,7 @@ public class GuiController {
  		controller = new URestController();
  		allCourses = new ArrayList<Course>();
  		myCourses = new ArrayList<Course>();
+ 		allProfessors = new ArrayList<Professor>();
  	}
  	
  	/*
@@ -223,9 +224,12 @@ public class GuiController {
  	public ArrayList<Professor> getAllProfessors() throws IOException, ParseException{
  		ArrayList<FProfessorsResponse> fpr = controller.getAllProfessors();
  		
- 		if (allProfessors.size() == 0)
+ 		if (allProfessors.size() != fpr.size()) {
+ 			allProfessors.clear();
+ 			
 	 		for (FProfessorsResponse i : fpr)
 	 			allProfessors.add(new Professor(i.name, i.id, i.phone, i.email, i.profilePhoto, i.rating));
+ 		}
  		
  		return allProfessors;
  	}

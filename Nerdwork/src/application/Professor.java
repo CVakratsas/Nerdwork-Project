@@ -31,7 +31,7 @@ public class Professor extends User {
 	
 	// Constructor for getting professor information as student.
 	public Professor(String displayName, int professorId, String email, String profilePhoto, String phone, float rating) {
-		super(null, null, displayName, 1);
+		super(Integer.toString(professorId), null, displayName, 1);
 		this.professorId = professorId;
 		this.email = email;
 		this.profilePhoto = profilePhoto;
@@ -150,7 +150,7 @@ public class Professor extends User {
 		}
 		
 		// Deny automatically all others:
-		// Επίσης ίσως μια διαφορετική υλοποίηση της deny
+		// οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ deny
 		while (i < pendingAppointments.size()) {
 			if (pendingAppointments.get(i).getDate().equals(timeslot.getDate())) {
 				pendingAppointments.remove(pendingAppointments.get(i));
@@ -204,6 +204,22 @@ public class Professor extends User {
 		return timeslots;
 	}
 	
+	public String getPhone() {
+		return phone;
+	}
+
+	public String getProfilePhoto() {
+		return profilePhoto;
+	}
+
+	public String getBio() {
+		return bio;
+	}
+
+	public float getRating() {
+		return rating;
+	}
+
 	public ArrayList<Timeslot> getRequestedAppointments() {
 		return pendingAppointments;
 	}
