@@ -194,6 +194,27 @@ public class Professor extends User {
 		timeslots.get(pIndex).setAvailability(Availability.AVAILABLE);
 	}
 	
+	/*
+	 * Method that is used to get the courses a professor is teaching.
+	 * The method returns an ArrayList of Course class objects and receives 
+	 * an ArrayList of Course class objects (all the courses stored in our 
+	 * database. This is used in order to define which course the professor 
+	 * teaches, via the associatedProfessors attribute, of Course class objects).
+	 */
+	public ArrayList<Course> getCoursesTaught(ArrayList<Course> allCourses){
+		/*
+		 * For each course in allCourses we get the associatedProfessors
+		 * attribute and use their professorId, in order to check if 
+		 * the current course is being taught by "this" Professor object.
+		 */
+		for (Course course : allCourses)
+			for (Professor associatedProfessor : course.getProfessors())
+				if (associatedProfessor.getProfessorId() == this.professorId)
+					myCourses.add(course);
+		
+		return myCourses;
+	}
+	
 	/*Professor class Getters and Setters: */
 	
 	public int getProfessorId() {

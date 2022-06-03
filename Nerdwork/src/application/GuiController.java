@@ -91,7 +91,18 @@ public class GuiController {
  		if (allCourses.size() != fsr.size()) {
  			allCourses.clear();
  			
- 			getAllProfessors();
+ 			// The following part of the code is used to get the professors from the database
+ 	 		// This is done, in order to find out the Professor objects who teach each course
+ 			// (otherwise, only their professorId will be known to each Course object).
+ 			ArrayList<FProfessorsResponse> fpr = controller.getAllProfessors();
+ 	 		
+ 	 		if (allProfessors.size() != fpr.size()) {
+ 	 			allProfessors.clear();
+ 	 			
+ 		 		for (FProfessorsResponse i : fpr)
+ 		 			allProfessors.add(new Professor(i.name, i.id, i.phone, i.email, i.profilePhoto, i.rating));
+ 	 		}
+ 	 		// allProfessors, now contains all the professors contained in the database
  			
  			for (FSubjectsResponse i : fsr) 
  				allCourses.add(new Course(i.id, i.name, i.associatedProfessors, i.rating, i.semester, allProfessors));
@@ -224,11 +235,17 @@ public class GuiController {
  	public ArrayList<Professor> getAllProfessors() throws IOException, ParseException{
  		ArrayList<FProfessorsResponse> fpr = controller.getAllProfessors();
  		
+ 		getAllCourses(); // Fill allCourses, if it is empty. Used for finding the courses each professor teaches.
+ 		
  		if (allProfessors.size() != fpr.size()) {
  			allProfessors.clear();
  			
 	 		for (FProfessorsResponse i : fpr)
 	 			allProfessors.add(new Professor(i.name, i.id, i.phone, i.email, i.profilePhoto, i.rating));
+	 		
+	 		// This part returns the courses each professor teaches.
+	 		for (Professor professor : allProfessors)
+	 			professor.getCoursesTaught(allCourses);
  		}
  		
  		return allProfessors;
