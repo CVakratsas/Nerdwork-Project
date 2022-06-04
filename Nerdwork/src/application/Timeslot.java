@@ -8,36 +8,34 @@ package application;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Timeslot {
 	
 	/* Timeslot class properties: */
 	
-	private Date date;
+	private HashMap<String, Integer> date;
 	private Availability availability;
 	private Student student;
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
 	
 	/* Timeslot constructor: */
 	
-	public Timeslot(String date) {
-		try {
-			this.date = sdf.parse(date); // Parsing the String into a special Date type.
-		}
-		catch(ParseException pe){
-			System.out.println("Parsing exception");
-		}
-		
+	public Timeslot(HashMap<String, Integer> date) {
+		this.date = date;
 		this.availability = Availability.AVAILABLE;
 	}
 	
 	/* Timeslot class Getters and Setters: */
 	
-	public Date getDate() {
+	public HashMap<String, Integer> getDate(){
 		return date;
 	}
 	
+	public void setDate(HashMap<String, Integer> date) {
+		this.date = date;
+	}
 	
 	public void setAvailability(Availability availability) {
 		this.availability = availability;
@@ -54,10 +52,6 @@ public class Timeslot {
 	
 	public Student getStudent() {
 		return student;
-	}
-	
-	public SimpleDateFormat getDateFormat() {
-		return sdf;
 	}
 	
 	/* 

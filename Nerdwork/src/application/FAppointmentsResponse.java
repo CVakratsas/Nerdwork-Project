@@ -8,6 +8,7 @@
 package application;
 
 public class FAppointmentsResponse {
+	
 	public int id;
 	public String studentId;
 	public int professorId;

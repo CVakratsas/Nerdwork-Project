@@ -80,7 +80,7 @@ public class URestController {
     		
     		 for(int i = 0; i < arrayData.size(); i++) {
     			 JSONObject tempData = (JSONObject)arrayData.get(i);
-    			 outResponse.add(new FProfessorsResponse(((Number)tempData.get("id")).intValue(), (String) tempData.get("name"), (String) tempData.get("phone"), (String) tempData.get("email"), (String) tempData.get("profilePhoto"), ((Number)tempData.get("rating")).floatValue()));
+    			 outResponse.add(new FProfessorsResponse(((Number)tempData.get("id")).intValue(), (String) tempData.get("name"), (String) tempData.get("phone"), (String) tempData.get("email"), (String) tempData.get("profilePhoto"), (String) tempData.get("office"), ((Number)tempData.get("rating")).floatValue()));
     		 }
     		
     		 return outResponse;

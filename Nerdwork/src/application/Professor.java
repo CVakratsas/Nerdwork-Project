@@ -11,6 +11,7 @@ package application;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import application.Timeslot.Availability;
 
@@ -21,24 +22,26 @@ public class Professor extends User {
 	private String phone;
 	private String profilePhoto;
 	private String bio;
+	private String office;
 	private int professorId;
 	private float rating;
-	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the professor
 	private ArrayList<Timeslot> timeslots; // A Professor's available Timeslots
+	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the professor
 	private ArrayList<Timeslot> pendingAppointments; // Appointments that have not been accepted by "this" Professor object yet
 	
 	/*Professor Constructor is here*/
 	
 	// Constructor for getting professor information as student.
-	public Professor(String displayName, int professorId, String email, String profilePhoto, String phone, float rating) {
+	public Professor(String displayName, int professorId, String email, String profilePhoto, String phone, String office, float rating) {
 		super(Integer.toString(professorId), null, displayName, 1);
 		this.professorId = professorId;
 		this.email = email;
 		this.profilePhoto = profilePhoto;
 		this.phone = phone;
+		this.office = office;
 		this.rating = rating;
-		studentsRated = new ArrayList<>();
 		timeslots = new ArrayList<>();
+		studentsRated = new ArrayList<>();
 		pendingAppointments = new ArrayList<>();
 	}
 	
@@ -192,6 +195,30 @@ public class Professor extends User {
 		pIndex = timeslots.indexOf(timeslot);
 		timeslots.get(pIndex).setStudent(null);
 		timeslots.get(pIndex).setAvailability(Availability.AVAILABLE);
+	}
+	
+	/*
+	 * Method used to check if "this" Professor object already contains 
+	 * this.timeslots attribute and also if it is updated.
+	 * It returns true or false (returning values explained below) and 
+	 * receives an ArrayList object contaning HashMap objects with 
+	 * a String object as key and an Integer as a value, which represents 
+	 * Timeslot objects from the data base.
+	 */
+	public boolean checkTimelsots(ArrayList<HashMap<String, Integer>> dates) {
+		int nextDate = 0; // Index of the dates ArrayList object
+		
+		// Checks if all values contained in the dates object are the same as this.timeslots object
+		for (Timeslot timeslot : timeslots) {
+			if (!timeslot.getDate().get("day").equals(dates.get(nextDate).get("day")))
+				if (!timeslot.getDate().get("startHour").equals(dates.get(nextDate).get("startHour")))
+					if (!timeslot.getDate().get("endHour").equals(dates.get(nextDate).get("endHour")))
+						return false; // The professor contains an outdated timeslots object
+			
+			nextDate++;
+		}
+	
+		return true; // The professor already contains the exact same values in the timeslots object
 	}
 	
 	/*
