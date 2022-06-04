@@ -5,12 +5,12 @@
 }
 
 .button:pressed {
-	-fx-background-color: #3889c4 ;
+	-fx-background-color: #3889c4;
 	-fx-text-fill: #FFF;
 }
 
 #whiteButton:hover {
-	-fx-background-color: #3889c4 ;
+	-fx-background-color: #3889c4;
 	-fx-text-fill:  #FFF;
 }
 
@@ -31,7 +31,7 @@
 }
 
 #blueButton:pressed {
-	-fx-background-color: #3889c4 ;
+	-fx-background-color: #3889c4;
 }
 
 #forgotPasswordLabel {
@@ -40,4 +40,12 @@
 
 #forgotPasswordLabel:pressed {
 	-fx-text-fill:  #1F4E6F;
+}
+
+#lowerMenuHBox {
+	-fx-background-color: #3889c4;
+}
+
+#upperMenuHBox {
+	-fx-background-color: #3889c4;
 }
