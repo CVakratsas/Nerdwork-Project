@@ -30,7 +30,7 @@ public class GuiController {
  	private Professor professor;
  	
  	// Constuctor:
- 	public GuiController() {
+ 	public GuiController() throws IOException, ParseException {
  		controller = new URestController();
  		allCourses = new ArrayList<Course>();
  		myCourses = new ArrayList<Course>();
@@ -101,7 +101,7 @@ public class GuiController {
  	 			allProfessors.clear();
  	 			
  		 		for (FProfessorsResponse i : fpr)
- 		 			allProfessors.add(new Professor(i.name, i.id, i.phone, i.email, i.profilePhoto, i.office, i.rating));
+ 		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating));
  	 		}
  	 		// allProfessors, now contains all the professors contained in the database
  			
@@ -242,7 +242,7 @@ public class GuiController {
  			allProfessors.clear();
  			
 	 		for (FProfessorsResponse i : fpr)
-	 			allProfessors.add(new Professor(i.name, i.id, i.phone, i.email, i.profilePhoto, i.office, i.rating));
+	 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating));
 	 		
 	 		// This part returns the courses each professor teaches.
 	 		for (Professor professor : allProfessors)
@@ -293,7 +293,7 @@ public class GuiController {
  	 * int type variables as parameters (the day, the starting hour and the ending hour, that
  	 * the professor will be available for appointments).
  	 */
- 	public boolean setAvailabilityDate(int day, int startHour, int endHour) throws IOException {
+ 	public boolean setAvailableDate(int day, int startHour, int endHour) throws IOException {
  		return controller.setAvailabilityDates(day, startHour, endHour);
  	}
  	
@@ -305,17 +305,21 @@ public class GuiController {
  	 * professor is available for appointments) and receives an int type variable, representing 
  	 * the professor's unique id.
  	 */
- 	public ArrayList<Timeslot> getAvailableDates(int professorId) throws IOException, ParseException{
- 		FAvailabilityResponse far = controller.getAvailabilityDates(professorId);
+ 	public ArrayList<Timeslot> getAvailableDates(String name) throws IOException, ParseException{
  		Professor selectedProfessor = null;
  		int nextTimeslot = 0; // The index of the timeslots ArrayList in the Professor object
  		int nextDate = 0; // The index of the far.dates object
  		
+ 		getAllProfessors();
+ 		
+ 		// Check if the professor with this name, already has an active timeslot:
+ 		for (Professor p : allProfessors)
+ 			if (p.getDisplayName().equals(name))
+ 				selectedProfessor = p;
+ 		
+ 		FAvailabilityResponse far = controller.getAvailabilityDates(selectedProfessor.getProfessorId());
+ 		
  		if (far.isSuccess) {
-	 		// Check if the professor with this id, already has an active timeslot:
-	 		for (Professor p : allProfessors)
-	 			if (p.getProfessorId() == professorId)
-	 				selectedProfessor = p;
 	 		
 	 		// If timeslots is already filled in the professor object, it will just update it if needed.
 	 		if (!selectedProfessor.checkTimelsots(far.dates) && selectedProfessor.getTimeslots() != null) {	
@@ -336,12 +340,12 @@ public class GuiController {
 	 		// Professor.timeslots is empty.
 	 		else {
 	 			for (HashMap<String, Integer> date : far.dates)
-	 				selectedProfessor.getTimeslots().add(new Timeslot(date));
+	 				selectedProfessor.addAvailableDate(date);
 	 		}
-	 				
+
 	 		return selectedProfessor.getTimeslots();
  		}
- 		
+
  		return null; // Error occurred and did not manage to connect to server.
  	}
  	

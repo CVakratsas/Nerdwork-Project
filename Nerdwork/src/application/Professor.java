@@ -99,7 +99,7 @@ public class Professor extends User {
 	 * addAvailableDate, receives a String class object (the date and hour in a special
 	 * format("dd/mm/yyyy")), as a parameter and is a void type method.
 	 */
-	public void addAvailableDate(String date) {
+	public void addAvailableDate(HashMap<String, Integer> date) {
 		timeslots.add(new Timeslot(date));
 	}
 	
@@ -122,9 +122,7 @@ public class Professor extends User {
 	 * as parameters and is a void type method
 	 */
 	public void addAppointmentRequest(Student student, Timeslot timeslot) {
-		SimpleDateFormat sdf = timeslot.getDateFormat(); // Our Date format
-		String timeslotDate = sdf.format(timeslot.getDate());
-		Timeslot tempTimeslot = new Timeslot(timeslotDate);
+		Timeslot tempTimeslot = timeslot;
 		
 		tempTimeslot.setStudent(student);
 		pendingAppointments.add(tempTimeslot);
@@ -254,6 +252,10 @@ public class Professor extends User {
 	
 	public String getPhone() {
 		return phone;
+	}
+	
+	public String getOffice() {
+		return office;
 	}
 
 	public String getProfilePhoto() {
