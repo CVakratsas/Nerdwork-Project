@@ -114,7 +114,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Button layoutX="1179.0" layoutY="25.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="76.0" text="Εγγραφή">
+                  <Button layoutX="1179.0" layoutY="25.0" mnemonicParsing="false" onAction="#switchToMyCoursesAddCourse" prefHeight="20.0" prefWidth="76.0" text="Εγγραφή">
                      <font>
                         <Font size="14.0" />
                      </font>

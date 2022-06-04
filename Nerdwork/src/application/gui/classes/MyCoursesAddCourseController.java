@@ -5,10 +5,8 @@ import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,7 +18,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-public class MyCoursesController {
+public class MyCoursesAddCourseController {
 	
 	private Stage stage;
 	private Scene scene;
@@ -45,7 +43,7 @@ public class MyCoursesController {
 			courseBox.prefWidth(100.0);
 			
 			// VBox button creation
-			Button deleteButton = new Button("-");
+			Button deleteButton = new Button("+");
 			deleteButton.setFont(Font.font("Sefoe UI", FontWeight.BOLD, 14.0));
 			VBox buttonBox = new VBox(deleteButton);
 			buttonBox.setAlignment(Pos.CENTER);
@@ -54,34 +52,15 @@ public class MyCoursesController {
 			RowConstraints row = new RowConstraints(80);
 			coursesPane.getRowConstraints().add(row);
 			
+			
 			coursesPane.add(courseBox, 0, i + 2);
 			coursesPane.add(buttonBox, 1, i + 2);
 			coursesPane.setMargin(courseBox, new Insets(0, 0, 0, 10));
 		}
 	}
 	
-	public void switchToMyCoursesAddCourse(ActionEvent event) throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/MyCoursesAddCourse.fxml"));
-		root = loader.load();
-		
+	public void switchToMyCourses(ActionEvent event) throws IOException {
 		HomePageController homePageController = new HomePageController();
-		
-		MyCoursesAddCourseController myCoursesAddCourseController = loader.getController();
-		
-		ArrayList<Course> coursesToAdd = new ArrayList<Course>();
-		
-		Course c1 = new Course("rmsid20551", "Ψηφιακή Οικονομία", "Στεϊκάκης");
-		Course c2 = new Course("rmsid20384", "Τεχνολογία Λογισμικού", "Χατζηγεωργίου");
-		Course c3 = new Course("rmsid20917", "Δομές Δεδομένων", "Σατρατζέμη");
-		coursesToAdd.add(c1);
-		coursesToAdd.add(c2);
-		coursesToAdd.add(c3);
-		
-		myCoursesAddCourseController.load(coursesToAdd);
-		
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
+		homePageController.switchToMyCourses(event);
 	}
 }

@@ -17,12 +17,19 @@ import javafx.stage.Stage;
 
 public class HomePageController {
 	
+	// TODO
+	// Create a variable that can distinguish a user inside the database e.g. id
 	private Stage stage;
 	private Scene scene;
 	private Parent root;
+	private ArrayList<Course> courses;
 	
 	@FXML
 	private VBox calendarPane;
+	
+	public ArrayList<Course> getArray() {
+		return courses;
+	}
 	
 	@FXML
 	private void initialize() {
@@ -36,16 +43,18 @@ public class HomePageController {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/MyCourses.fxml"));
 		root = loader.load();
 		
-		ArrayList<Course> array = new ArrayList<Course>();
+		MyCoursesController myCoursesController = loader.getController();
+		courses = new ArrayList<Course>();
 		Course c1 = new Course("smrid21037", "Αλγόριθμοι", "Σαμαράς");
 		Course c2 = new Course("smrid21085", "Προγραμματισμός Διαδικτύου", "Κασκάλης");
 		Course c3 = new Course("smrid21022", "Δίκτυα", "Τρακατέλης");
-		array.add(c1);
-		array.add(c2);
-		array.add(c3);
-		
-		MyCoursesController myCoursesController = loader.getController();
-		myCoursesController.load(array);
+		courses.add(c1);
+		courses.add(c2);
+		courses.add(c3);
+		myCoursesController.load(courses);
+		// TODO
+//		GeneralController generalController = new GeneralController();
+//		myCoursesController.load(generalController.getCourses());
 		
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
