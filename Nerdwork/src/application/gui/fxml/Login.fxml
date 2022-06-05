@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gui.classes.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/generalStyling.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gui.classes.LoginController">
    <children>
       <AnchorPane prefHeight="720.0" prefWidth="640.0" style="-fx-background-color: #3889c4;">
          <children>
@@ -36,15 +36,15 @@
                         <Font size="14.0" />
                      </font>
                   </PasswordField>
-                  <Label id="forgotPasswordLabel" alignment="CENTER" layoutX="170.0" layoutY="312.0" prefHeight="30.0" prefWidth="120.0" stylesheets="@../css/generalStyling.css" text="Forgot Password" />
-                  <Button id="whiteButton" alignment="CENTER" contentDisplay="CENTER" layoutX="330.0" layoutY="312.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" stylesheets="@../css/generalStyling.css" text="Sgn In" />
+                  <Label id="forgotPasswordLabel" alignment="CENTER" layoutX="170.0" layoutY="312.0" prefHeight="30.0" prefWidth="120.0" text="Forgot Password" />
+                  <Button id="whiteButton" alignment="CENTER" contentDisplay="CENTER" layoutX="330.0" layoutY="312.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" text="Sgn In" />
                   <Separator layoutX="160.0" layoutY="364.0" prefHeight="13.0" prefWidth="300.0" />
                   <Label alignment="CENTER" layoutX="258.0" layoutY="359.0" prefHeight="23.0" prefWidth="90.0" style="-fx-background-color: #fff;" text="Or register as a" textFill="#5b5a5a">
                      <font>
                         <Font name="Segoe UI" size="12.0" />
                      </font>
                   </Label>
-                  <Button id="blueButton" layoutX="160.0" layoutY="405.0" mnemonicParsing="false" onAction="#switchToRegister" prefHeight="50.0" prefWidth="300.0" stylesheets="@../css/generalStyling.css" text="Student" textFill="WHITE">
+                  <Button id="blueButton" layoutX="160.0" layoutY="405.0" mnemonicParsing="false" onAction="#switchToRegister" prefHeight="50.0" prefWidth="300.0" text="Student" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI" size="14.0" />
                      </font>
@@ -55,11 +55,16 @@
                         <Font name="Segoe UI" size="12.0" />
                      </font>
                   </Label>
-                  <Button id="whiteButton" layoutX="160.0" layoutY="520.0" mnemonicParsing="false" onAction="#switchToRegister" prefHeight="50.0" prefWidth="300.0" stylesheets="@../css/generalStyling.css" text="Professor">
+                  <Button id="whiteButton" layoutX="160.0" layoutY="520.0" mnemonicParsing="false" onAction="#switchToRegister" prefHeight="50.0" prefWidth="300.0" text="Professor">
                      <font>
                         <Font name="Segoe UI" size="14.0" />
                      </font>
                   </Button>
+                  <ImageView id="closeImageView" fx:id="close" fitWidth="30.0" layoutX="596.0" layoutY="14.0" onMousePressed="#closeWindow" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/close.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Pane>
          </children>
