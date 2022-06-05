@@ -112,6 +112,16 @@ public class GuiController {
  		return allCourses;
  	}
  	
+ 	public Course getCourseById(String courseId) throws IOException, ParseException {
+ 		for (Course c : getAllCourses()) {
+ 			if (c.getId().equals(courseId)) {
+ 				return c;
+ 			}
+ 		}
+ 		
+ 		return null;
+ 	}
+ 	
  	/*
  	 * Method used by students in order to enroll to a course.
  	 * The method returns true only if the enrollment was successful.
@@ -250,6 +260,16 @@ public class GuiController {
  		}
  		
  		return allProfessors;
+ 	}
+ 	
+ 	public Professor getProfessorById(int professorId) throws IOException, ParseException {
+ 		for (Professor p : getAllProfessors()) {
+ 			if (p.getProfessorId()==professorId) {
+ 				return p;
+ 			}
+ 		}
+ 		
+ 		return null;
  	}
  	
  	// Change comments:!!!!!
