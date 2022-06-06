@@ -16,55 +16,54 @@
 <?import javafx.scene.text.TextFlow?>
 <?import org.controlsfx.control.Rating?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0"
-            prefWidth="1280.0" xmlns="http://javafx.com/javafx/18">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gui.classes.CourseProfileController">
    <center>
    </center>
    <bottom>
        <HBox alignment="CENTER" prefWidth="1280.0" BorderPane.alignment="CENTER">
            <BorderPane.margin>
-               <Insets/>
+               <Insets />
            </BorderPane.margin>
            <padding>
-               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
            </padding>
            <Button mnemonicParsing="false">
               <HBox.margin>
-                  <Insets/>
+                  <Insets />
               </HBox.margin>
               <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
-                      <Image url="@../icons/house.png"/>
+                      <Image url="@../icons/house.png" />
                   </ImageView>
               </graphic>
            </Button>
            <Button mnemonicParsing="false">
               <HBox.margin>
-                  <Insets left="60.0" right="30.0"/>
+                  <Insets left="60.0" right="30.0" />
               </HBox.margin>
               <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
-                      <Image url="@../icons/book.png"/>
+                      <Image url="@../icons/book.png" />
                   </ImageView>
               </graphic>
            </Button>
            <Button mnemonicParsing="false">
               <HBox.margin>
-                  <Insets left="30.0" right="60.0"/>
+                  <Insets left="30.0" right="60.0" />
               </HBox.margin>
               <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
-                      <Image url="@../icons/professor.png"/>
+                      <Image url="@../icons/professor.png" />
                   </ImageView>
               </graphic>
            </Button>
            <Button mnemonicParsing="false">
               <HBox.margin>
-                  <Insets/>
+                  <Insets />
               </HBox.margin>
               <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
-                      <Image url="@../icons/settings.png"/>
+                      <Image url="@../icons/settings.png" />
                   </ImageView>
               </graphic>
            </Button>
@@ -75,129 +74,87 @@
            <Button layoutX="1210.0" layoutY="13.0" mnemonicParsing="false">
               <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
-                      <Image url="@../icons/profile.png"/>
+                      <Image url="@../icons/profile.png" />
                   </ImageView>
               </graphic>
            </Button>
-           <Text layoutX="582.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nerdwork"
-                 textAlignment="CENTER">
+           <Text layoutX="582.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nerdwork" textAlignment="CENTER">
               <font>
-                  <Font name="Verdana Italic" size="24.0"/>
+                  <Font name="Verdana Italic" size="24.0" />
               </font>
            </Text>
            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="14.0" layoutY="12.0">
-               <Image url="@../icons/nerd_icon.png"/>
+               <Image url="@../icons/nerd_icon.png" />
            </ImageView>
        </AnchorPane>
    </top>
    <center>
-       <SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                  minWidth="-Infinity" prefHeight="581.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
-           <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                       prefHeight="580.0" prefWidth="335.0">
+       <SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+           <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="335.0">
                <VBox layoutX="65.0" layoutY="309.0" prefHeight="111.0" prefWidth="200.0">
                    <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="200.0">
                        <VBox.margin>
-                           <Insets bottom="5.0"/>
+                           <Insets bottom="5.0" />
                        </VBox.margin>
-                       <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
-                                  preserveRatio="true">
-                           <Image url="@../icons"/>
+                       <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <Image url="@../icons/semester.jpg" />
                        </ImageView>
-                       <Label text="2ο Εξάμηνο">
+                       <Label fx:id="semester" text="courseSemester">
                            <font>
-                               <Font name="Comic Sans MS" size="18.0"/>
+                               <Font name="Comic Sans MS" size="18.0" />
                            </font>
                            <HBox.margin>
-                               <Insets left="5.0"/>
+                               <Insets left="5.0" />
                            </HBox.margin>
                        </Label>
                    </HBox>
                    <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="200.0">
                        <VBox.margin>
-                           <Insets bottom="5.0"/>
+                           <Insets bottom="5.0" />
                        </VBox.margin>
-                       <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
-                                  preserveRatio="true">
-                           <Image url="@../icons"/>
+                       <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <Image url="@../icons/orientation.jpg" />
                        </ImageView>
-                       <Label text="ΕΤΥ-ΠΣ">
+                       <Label fx:id="orientation" text="courseOrientation">
                            <font>
-                               <Font name="Comic Sans MS" size="18.0"/>
+                               <Font name="Comic Sans MS" size="18.0" />
                            </font>
                            <HBox.margin>
-                               <Insets left="5.0"/>
+                               <Insets left="5.0" />
                            </HBox.margin>
                        </Label>
                    </HBox>
                    <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="200.0">
                        <VBox.margin>
-                           <Insets bottom="5.0"/>
+                           <Insets bottom="5.0" />
                        </VBox.margin>
-                       <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
-                                  preserveRatio="true">
-                           <Image url="@../icons"/>
+                       <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <Image url="@../icons/ECTS.jpg" />
                        </ImageView>
-                       <Label text="5 ECTS">
+                       <Label fx:id="ects" text="courseECTS">
                            <font>
-                               <Font name="Comic Sans MS" size="18.0"/>
+                               <Font name="Comic Sans MS" size="18.0" />
                            </font>
                            <HBox.margin>
-                               <Insets left="5.0"/>
+                               <Insets left="5.0" />
                            </HBox.margin>
                        </Label>
                    </HBox>
                </VBox>
-               <Rating layoutX="77.0" layoutY="260.0" partialRating="true" rating="4.7"/>
-               <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="68.0" layoutY="51.0" pickOnBounds="true"
-                          preserveRatio="true">
-                   <Image url="@../icons/DBMS.png"/>
+               <Rating fx:id="rating" layoutX="77.0" layoutY="260.0" partialRating="true" rating="5.0" />
+               <ImageView fx:id="profilePicture" fitHeight="200.0" fitWidth="200.0" layoutX="68.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+                   <Image url="@../icons" />
                </ImageView>
            </AnchorPane>
            <ScrollPane prefHeight="200.0" prefWidth="200.0">
                <AnchorPane prefHeight="400.0" prefWidth="937.0">
-                   <Label layoutX="24.0" layoutY="49.0" text="Βάσεις Δεδομένων">
+                   <Label fx:id="name" layoutX="24.0" layoutY="49.0" text="courseDisplayName">
                        <font>
-                           <Font name="Segoe UI Bold" size="30.0"/>
+                           <Font name="Segoe UI Bold" size="30.0" />
                        </font>
                    </Label>
-                   <TextFlow layoutX="24.0" layoutY="252.0" prefHeight="327.0" prefWidth="637.0"/>
-                   <VBox layoutX="24.0" layoutY="86.0" prefHeight="74.0" prefWidth="275.0">
-                       <HBox alignment="CENTER_LEFT" opacity="0.8" prefHeight="32.0" prefWidth="200.0">
-                           <VBox.margin>
-                               <Insets bottom="5.0"/>
-                           </VBox.margin>
-                           <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
-                                      preserveRatio="true">
-                               <Image url="@../icons/gevan.jpg"/>
-                           </ImageView>
-                           <Label text="Ευαγγελίδης Γεώργιος">
-                               <font>
-                                   <Font name="Comic Sans MS" size="18.0"/>
-                               </font>
-                               <HBox.margin>
-                                   <Insets left="5.0"/>
-                               </HBox.margin>
-                           </Label>
-                       </HBox>
-                       <HBox alignment="CENTER_LEFT" opacity="0.8" prefHeight="32.0" prefWidth="200.0">
-                           <VBox.margin>
-                               <Insets bottom="5.0"/>
-                           </VBox.margin>
-                           <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
-                                      preserveRatio="true">
-                               <Image url="@../icons/gkoloniari.jpg"/>
-                           </ImageView>
-                           <Label text="Κολωνιάρη Γεωργία ">
-                               <font>
-                                   <Font name="Comic Sans MS" size="18.0"/>
-                               </font>
-                               <HBox.margin>
-                                   <Insets left="5.0"/>
-                               </HBox.margin>
-                           </Label>
-                       </HBox>
-                   </VBox>
+                   <TextFlow fx:id="description" layoutX="24.0" layoutY="252.0" prefHeight="327.0" prefWidth="637.0" />
+                   <VBox fx:id="professorList" layoutX="24.0" layoutY="86.0" prefHeight="0.0" prefWidth="275.0" />
                </AnchorPane>
            </ScrollPane>
        </SplitPane>
