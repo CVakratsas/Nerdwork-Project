@@ -232,6 +232,7 @@ public class Professor extends User {
 		 * attribute and use their professorId, in order to check if 
 		 * the current course is being taught by "this" Professor object.
 		 */
+		myCourses.clear();
 		for (Course course : allCourses)
 			for (Professor associatedProfessor : course.getProfessors())
 				if (associatedProfessor.getProfessorId() == this.professorId)
