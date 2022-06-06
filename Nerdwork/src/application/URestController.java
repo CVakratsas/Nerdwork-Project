@@ -321,7 +321,8 @@ public class URestController {
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
-    		 JSONArray arrayData = (JSONArray)data.get("triggerResults"); // AVAILABLE Timelsots as a JSON object
+    		 data = (JSONObject)data.get("triggerResults");
+    		 JSONArray arrayData = (JSONArray)data.get("availability"); // AVAILABLE Timelsots as a JSON object
     		 
     		 // AVAILABLE Timelsots as HashMap.
     		 ArrayList<HashMap<String, Integer>> dates = new ArrayList<HashMap<String, Integer>>();
@@ -332,10 +333,10 @@ public class URestController {
     			 HashMap<String, Integer> dateElement = new HashMap<String, Integer>();
     		
     			 dateElement.put("day", ((Number)tempData.get("day")).intValue());
-    			 dateElement.put("startHour", ((Number)tempData.get("day")).intValue());
-    			 dateElement.put("endHour", ((Number)tempData.get("day")).intValue());
+    			 dateElement.put("startHour", ((Number)tempData.get("startHour")).intValue());
+    			 dateElement.put("endHour", ((Number)tempData.get("endHour")).intValue());
     			 dates.add(dateElement);
-    		 }
+    		 } 
     		 
     		 // Returns the AVAILABLE Timelsots.
     		 return new FAvailabilityResponse(true, dates);
