@@ -362,7 +362,7 @@ public class URestController {
      }
      
      public ArrayList<Integer> getBookedTimestamps(int professorId) throws IOException, ParseException{
-    	 FRestResponse r = requestComponent.Get("/api/appointments/availability?professorId="+professorId);
+    	 FRestResponse r = requestComponent.Get("/api/appointments/availability?professorId="+professorId); 
     	
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();

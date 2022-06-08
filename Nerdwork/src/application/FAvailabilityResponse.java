@@ -23,11 +23,11 @@ public class FAvailabilityResponse {
 	public ArrayList<HashMap<String, Integer>> dates;
 	
 	public FAvailabilityResponse(boolean isSuccess) {
-		this.isSuccess = isSuccess;
+		this.isSuccess = isSuccess; 
 	}
 	
 	public FAvailabilityResponse(boolean isSuccess, ArrayList<HashMap<String, Integer>> dates) {
 		this.isSuccess = isSuccess;
 		this.dates = dates;
-	}
+	} 
 }

@@ -20,6 +20,14 @@ import org.json.simple.parser.ParseException;
 
 public class GuiController {
 	
+	private static GuiController c = null;
+	
+	public static GuiController getInstance() throws IOException, ParseException {
+		if (c== null)
+            c = new GuiController();
+		return c;
+	}
+	
 	// Class attributes
 	private URestController controller; // Not to be user by GUI.
  	private ArrayList<Course> allCourses; // All courses.
@@ -30,7 +38,7 @@ public class GuiController {
  	private Professor professor;
  	
  	// Constuctor:
- 	public GuiController() throws IOException, ParseException {
+ 	private GuiController() throws IOException, ParseException {
  		controller = new URestController();
  		allCourses = new ArrayList<Course>();
  		myCourses = new ArrayList<Course>();
@@ -314,7 +322,7 @@ public class GuiController {
  	 * the professor will be available for appointments).
  	 */
  	public boolean setAvailableDate(int day, int startHour, int endHour) throws IOException {
- 		return controller.setAvailabilityDates(day, startHour, endHour);
+ 		return controller.setAvailabilityDates(day, startHour, endHour); 
  	}
  	
  	/*
@@ -325,48 +333,27 @@ public class GuiController {
  	 * professor is available for appointments) and receives an int type variable, representing 
  	 * the professor's unique id.
  	 */
- 	public ArrayList<Timeslot> getAvailableDates(String name) throws IOException, ParseException{
- 		Professor selectedProfessor = null;
- 		int nextTimeslot = 0; // The index of the timeslots ArrayList in the Professor object
- 		int nextDate = 0; // The index of the far.dates object
+ 	public ArrayList<Timeslot> getAvailableTimeslots(String name) {
  		
- 		getAllProfessors();
+ 	}
+ 	
+ 	
+ 	public ArrayList<Timeslot> getBookedTimeslots(String name) throws IOException, ParseException{
+ 		Professor selectedProfessor = null;
  		
  		// Check if the professor with this name, already has an active timeslot:
- 		for (Professor p : allProfessors)
+ 		for (Professor p : this.getAllProfessors())
  			if (p.getDisplayName().equals(name))
  				selectedProfessor = p;
  		
- 		FAvailabilityResponse far = controller.getAvailabilityDates(selectedProfessor.getProfessorId());
+ 		ArrayList<FAppointmentsResponse> far = controller.getMyAppointments();
  		
- 		if (far.isSuccess) {
-	 		
-	 		// If timeslots is already filled in the professor object, it will just update it if needed.
-	 		if (!selectedProfessor.checkTimelsots(far.dates) && selectedProfessor.getTimeslots() != null) {	
-	 			for (HashMap<String, Integer> date : far.dates) {
-	 				Timeslot tempTimeslot = selectedProfessor.getTimeslots().get(nextTimeslot); // Used to store each value at a time, from the timeslots attribute.
-	 				
-	 				// Making the updates needed. Only accessed if Professor.checkTimeslots returned true.
-	 				if (!tempTimeslot.getDate().get("day").equals(far.dates.get(nextDate).get("day")))
-	 					if (!tempTimeslot.getDate().get("startHour").equals(far.dates.get(nextDate).get("startHour")))
-	 						if (!tempTimeslot.getDate().get("endHour").equals(far.dates.get(nextDate).get("endHour")))
-	 							tempTimeslot.setDate(date);
-	 				
-	 				nextDate++;
-	 				nextTimeslot++;
-	 			}
-	 		}
-	 		
-	 		// Professor.timeslots is empty.
-	 		else {
-	 			for (HashMap<String, Integer> date : far.dates)
-	 				selectedProfessor.addAvailableDate(date);
-	 		}
-
-	 		return selectedProfessor.getTimeslots();
+ 		for (FAppointmentsResponse f : far) {
+ 			selectedProfessor.getBookedTimeslots().add(new Timeslot(f.id, f.studentId, f.professorId, f.dateTimestamp, 
+ 			f.status, f.created_at));
  		}
 
- 		return null; // Error occurred and did not manage to connect to server.
+ 		return selectedProfessor.getBookedTimeslots(); // Error occurred and did not manage to connect to server.
  	}
  	
  	public boolean setDisplayName(String newDisplayName) throws IOException {

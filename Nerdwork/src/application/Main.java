@@ -9,11 +9,14 @@ public class Main  {
 	
 	public static void main(String[] args) throws IOException, ParseException {
 		//GUI Controller creation
-		GuiController controller = new GuiController();
+		GuiController controller = GuiController.getInstance();
 		
 		//Login section
 		System.out.print("Login: ");
-		System.out.println(controller.login("iss1234", "123456789"));
+		System.out.println(controller.login("example", "12345678"));
+		System.out.println("--------------------");
+		/*
+		System.out.println(controller.getAllProfessors().get(13).getDisplayName());
 		System.out.println("--------------------");
 
 		//All courses section
@@ -75,13 +78,11 @@ public class Main  {
 		System.out.println("--------------------");
 		
 		//To be continued...
+		 */
 		
-		System.out.println(controller.getAllProfessors().get(13).getDisplayName());
-		System.out.println(controller.getAllProfessors().get(13).getCoursesTaught(controller.getAllCourses()));
-		
-		/*System.out.println(controller.getAllCourses().get(5).getName());
-		for (Professor p : controller.getAllCourses().get(5).getProfessors()) {
-			System.out.println(p.getDisplayName());
-		}*/
+		for (Timeslot t : controller.getBookedTimeslots("Αλεξανδροπούλου Ευγενία")) {
+			System.out.println(t.getProfessorId());
+		}
 	}
+	
 }

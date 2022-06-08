@@ -13,8 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-import application.Timeslot.Availability;
-
 public class Professor extends User {
 	
 	/*Professor attributes are here*/
@@ -25,7 +23,8 @@ public class Professor extends User {
 	private String office;
 	private int professorId;
 	private float rating;
-	private ArrayList<Timeslot> timeslots; // A Professor's available Timeslots
+	private ArrayList<Timeslot> availableTimeslots; // A Professor's available Timeslots
+	private ArrayList<Timeslot> bookedTimeslots; // A Professor's booked Timeslots
 	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the professor
 	private ArrayList<Timeslot> pendingAppointments; // Appointments that have not been accepted by "this" Professor object yet
 	
@@ -40,7 +39,6 @@ public class Professor extends User {
 		this.phone = phone;
 		this.office = office;
 		this.rating = rating;
-		timeslots = new ArrayList<>();
 		studentsRated = new ArrayList<>();
 		pendingAppointments = new ArrayList<>();
 	}
@@ -50,7 +48,6 @@ public class Professor extends User {
 		super(userId, username, displayName, accountType);
 		this.professorId = professorId;
 		studentsRated = new ArrayList<>();
-		timeslots = new ArrayList<>();
 		pendingAppointments = new ArrayList<>();
 	}
 	
@@ -92,132 +89,11 @@ public class Professor extends User {
 		course.setSemester(semester);
 	}
 	
-	/*Professor methods regarding appointments are here*/
-	
-	/*
-	 * Method used to create a new Timeslot for appointment requests (marked AVAILABLE).
-	 * addAvailableDate, receives a String class object (the date and hour in a special
-	 * format("dd/mm/yyyy")), as a parameter and is a void type method.
-	 */
-	public void addAvailableDate(HashMap<String, Integer> date) {
-		timeslots.add(new Timeslot(date));
-	}
-	
 	/*
 	 * Method used to delete a Timeslot for appointment requests (remove it from "this" Calendar).
 	 * removeAvailableDate, receives a Timeslot class object (the timeslot to be deleted), 
 	 * as a parameter and is a void type method.
 	 */
-	public void removeAvailableDate(Timeslot timeslot) {
-		timeslots.remove(timeslot);
-	}
-	
-	/*
-	 * Method used for appointment requests of Student class objects,
-	 * to "this" Professor object. It adds their request as a PENDING 
-	 * one in the pendingAppointments array list.
-	 * addAppointmentRequest, receives a Student class object (student that
-	 * requests an appointment) and a Timeslot class object (a selected by
-	 * the student timeslot, which "this" Professor object, marked as available),
-	 * as parameters and is a void type method
-	 */
-	public void addAppointmentRequest(Student student, Timeslot timeslot) {
-		Timeslot tempTimeslot = timeslot;
-		
-		tempTimeslot.setStudent(student);
-		pendingAppointments.add(tempTimeslot);
-	}
-
-	/*
-	 * Method used for acceptance of appointment requests of Student class objects,
-	 * to "this" Professor object. It marks their request as a RESERVED one and 
-	 * removes it from the pendingAppointments array list. Automatically denies all others
-	 * of the same timeslot.
-	 * acceptAppointment, receives a Timeslot class object (the timeslot selected
-	 * by a student and his request of appointment at that timeslot is marked as PENDING),
-	 * as parameter and is a void type method
-	 */
-	public void acceptAppointment(Timeslot timeslot) {
-		int i = 0;
-		Student student = timeslot.getStudent();
-		
-		// Accept the selected appointment:
-		for (Timeslot t: timeslots) {
-			if (timeslot.getStudent().equals(student) && timeslot.getDate().equals(t.getDate())) {
-				t.setAvailability(Availability.RESERVED);
-				pendingAppointments.remove(timeslot);
-		
-			}
-		}
-		
-		// Deny automatically all others:
-		// ������ ���� ��� ����������� ��������� ��� deny
-		while (i < pendingAppointments.size()) {
-			if (pendingAppointments.get(i).getDate().equals(timeslot.getDate())) {
-				pendingAppointments.remove(pendingAppointments.get(i));
-				i -= 1; // Because we remove the current element
-			}
-			
-			i += 1;
-		}
-	}
-
-	/*
-	 * Method used for denial of appointment requests of Student class objects,
-	 * to "this" Professor object. It marks their request as an AVAILABLE one and 
-	 * removes it from the pendingAppointments array list.
-	 * denyAppointment, receives a Timeslot class object (the timeslot selected
-	 * by a student and his request of appointment at that timeslot is marked as PENDING),
-	 * as parameter and is a void type method
-	 */
-	public void denyAppointment(Timeslot timeslot) {
-		int pIndex; // Index of timeslot parameter
-		
-		pIndex = timeslots.indexOf(timeslot);
-		timeslots.get(pIndex).setStudent(null);
-		
-		timeslots.get(pIndex).setAvailability(Availability.AVAILABLE);
-		pendingAppointments.remove(timeslot);
-	}
-	
-	/*
-	 * Method used for canceling reserved appointments of Student class objects,
-	 * to "this" Professor object. It marks their request as AVAILABLE.
-	 * denyAppointment, receives a Timeslot class object (the timeslot the student
-	 * reserved for an appointmetn with "this" Professor class object),
-	 * as parameter and is a void type method
-	 */
-	public void cancelAppointment(Timeslot timeslot) {
-		Integer pIndex;
-		
-		pIndex = timeslots.indexOf(timeslot);
-		timeslots.get(pIndex).setStudent(null);
-		timeslots.get(pIndex).setAvailability(Availability.AVAILABLE);
-	}
-	
-	/*
-	 * Method used to check if "this" Professor object already contains 
-	 * this.timeslots attribute and also if it is updated.
-	 * It returns true or false (returning values explained below) and 
-	 * receives an ArrayList object contaning HashMap objects with 
-	 * a String object as key and an Integer as a value, which represents 
-	 * Timeslot objects from the data base.
-	 */
-	public boolean checkTimelsots(ArrayList<HashMap<String, Integer>> dates) {
-		int nextDate = 0; // Index of the dates ArrayList object
-		
-		// Checks if all values contained in the dates object are the same as this.timeslots object
-		for (Timeslot timeslot : timeslots) {
-			if (!timeslot.getDate().get("day").equals(dates.get(nextDate).get("day")))
-				if (!timeslot.getDate().get("startHour").equals(dates.get(nextDate).get("startHour")))
-					if (!timeslot.getDate().get("endHour").equals(dates.get(nextDate).get("endHour")))
-						return false; // The professor contains an outdated timeslots object
-			
-			nextDate++;
-		}
-	
-		return true; // The professor already contains the exact same values in the timeslots object
-	}
 	
 	/*
 	 * Method that is used to get the courses a professor is teaching.
@@ -247,8 +123,12 @@ public class Professor extends User {
 		return professorId;
 	}
 	
-	public ArrayList<Timeslot> getTimeslots() {
-		return timeslots;
+	public ArrayList<Timeslot> getAvailableTimeslots() {
+		return availableTimeslots;
+	}
+	
+	public ArrayList<Timeslot> getBookedTimeslots() {
+		return bookedTimeslots;
 	}
 	
 	public String getPhone() {

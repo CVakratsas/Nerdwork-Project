@@ -22,6 +22,6 @@ public class FAppointmentsResponse {
 		this.professorId = professorId;
 		this.dateTimestamp = dateTimestamp;
 		this.status = status;
-		this.created_at = created_at;
+		this.created_at = created_at; 
 	}
 }

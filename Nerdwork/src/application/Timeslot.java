@@ -14,58 +14,61 @@ import java.util.HashMap;
 
 public class Timeslot {
 	
-	/* Timeslot class properties: */
+	private int id;
+	private String studentId;
+	private int professorId;
+	private int dateTimestamp;
+	private int day;
+	private int startHour;
+	private int endHour;
+	private int status; //0 = Not Confirmed, 1 = Confirmed, 2 = Cancelled
+	private String created_at;
 	
-	private HashMap<String, Integer> date;
-	private Availability availability;
-	private Student student;
-	
-	/* Timeslot constructor: */
-	
-	public Timeslot(HashMap<String, Integer> date) {
-		this.date = date;
-		this.availability = Availability.AVAILABLE;
+	public Timeslot(int id, String studentId, int professorId, int dateTimestamp, int status, String created_at) {
+		this.id = id;
+		this.studentId = studentId;
+		this.professorId = professorId;
+		this.dateTimestamp = dateTimestamp;
+		this.status = status;
+		this.created_at = created_at;
 	}
-	
-	/* Timeslot class Getters and Setters: */
-	
-	public HashMap<String, Integer> getDate(){
-		return date;
-	}
-	
-	public void setDate(HashMap<String, Integer> date) {
-		this.date = date;
-	}
-	
-	public void setAvailability(Availability availability) {
-		this.availability = availability;
-	}
-	
-	public Availability getAvailability() {
-		return availability;
-	}
-	
-	public void setStudent(Student student) {
-		this.student = student;
-		availability = Availability.PENDING;
-	}
-	
-	public Student getStudent() {
-		return student;
-	}
-	
-	/* 
-	 * Enumeration Class, that characterizes a timeslot as AVAILABLE
-	 * (Student able to request appointment), PENDING (Professor, must
-	 * deny or accept the appointment) and RESERVED (Professor has accepted
-	 * an appointment with a Student at the certain timeslot).
-	 */
 
-	enum Availability {
-		AVAILABLE,
-		PENDING,
-		RESERVED
+	public int getId() {
+		return id;
 	}
+
+	public String getStudentId() {
+		return studentId;
+	}
+
+	public int getProfessorId() {
+		return professorId;
+	}
+
+	public int getDateTimestamp() {
+		return dateTimestamp;
+	}
+
+	public int getDay() {
+		return day;
+	}
+
+	public int getStartHour() {
+		return startHour;
+	}
+
+	public int getEndHour() {
+		return endHour;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public String getCreated_at() {
+		return created_at;
+	}
+	
 }
 
 
