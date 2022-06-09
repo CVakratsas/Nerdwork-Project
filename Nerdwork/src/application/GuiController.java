@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.json.simple.parser.ParseException;
 
@@ -333,10 +335,34 @@ public class GuiController {
  	 * professor is available for appointments) and receives an int type variable, representing 
  	 * the professor's unique id.
  	 */
- 	public ArrayList<Timeslot> getAvailableTimeslots(String name) {
+ 	public ArrayList<Timeslot> getAvailableTimeslots(String name) throws IOException, ParseException {
+ 		Professor selectedProfessor = null; // The professor found below
+ 		Calendar nextAvailableDate = Calendar.getInstance(); // Next date the professor set as available
+ 		Date availableDate; // For temporary storage and parsing of data to a Date object
+ 		int weekday; // The Calendar.DAY_OF_WEEK attribute, for the available date
  		
+ 		// Find the professor, from allProfessors ArrayList:
+ 		for (Professor professor : this.getAllProfessors())
+ 			if (professor.getDisplayName().equals(name))
+ 				selectedProfessor = professor;
+ 		
+ 		FAvailabilityResponse far = controller.getAvailabilityDates(selectedProfessor.getProfessorId());
+ 		
+ 		// Not finished
+ 		// It will return available dates for this week and the next 3, meaning that the available
+ 		// dates are set by professors only once (don't know how to change them)
+ 		for (int i = 0; i < 28; i++) {
+ 			for (HashMap<String, Integer> date : far.dates) {
+ 				weekday = nextAvailableDate.get(Calendar.DAY_OF_WEEK);
+ 				availableDate = nextAvailableDate.getTime();
+ 				selectedProfessor.addAvailableTimeslot((int)availableDate.getTime());
+ 				
+ 				nextAvailableDate.add(Calendar.DAY_OF_YEAR, 1);
+ 			}
+ 		}
+ 		
+ 		return selectedProfessor.getAvailableTimeslots();
  	}
- 	
  	
  	public ArrayList<Timeslot> getBookedTimeslots(String name) throws IOException, ParseException{
  		Professor selectedProfessor = null;

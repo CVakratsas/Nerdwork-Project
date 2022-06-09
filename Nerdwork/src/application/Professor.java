@@ -123,6 +123,10 @@ public class Professor extends User {
 		return professorId;
 	}
 	
+	public void addAvailableTimeslot(int timestamp) {
+		availableTimeslots.add(new Timeslot(timestamp));
+	}
+	
 	public ArrayList<Timeslot> getAvailableTimeslots() {
 		return availableTimeslots;
 	}

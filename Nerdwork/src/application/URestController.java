@@ -316,14 +316,14 @@ public class URestController {
       */
      public FAvailabilityResponse getAvailabilityDates(int professor) throws IOException, ParseException {
     	 FRestResponse r = requestComponent.Get("/api/appointments/availability?professor="+professor);
-    	 
+   
     	 // If redirection successful, return AVAILABLE Timeslots:
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
     		 data = (JSONObject)data.get("triggerResults");
     		 JSONArray arrayData = (JSONArray)data.get("availability"); // AVAILABLE Timelsots as a JSON object
-    		 
+   
     		 // AVAILABLE Timelsots as HashMap.
     		 ArrayList<HashMap<String, Integer>> dates = new ArrayList<HashMap<String, Integer>>();
     		

@@ -24,6 +24,12 @@ public class Timeslot {
 	private int status; //0 = Not Confirmed, 1 = Confirmed, 2 = Cancelled
 	private String created_at;
 	
+	// Constructor used for available Timeslots
+	public Timeslot(int dateTimestamp) {
+		this.dateTimestamp = dateTimestamp;
+	}
+	
+	// Constructor used for Timeslots at when a Student requestsed an appointment
 	public Timeslot(int id, String studentId, int professorId, int dateTimestamp, int status, String created_at) {
 		this.id = id;
 		this.studentId = studentId;

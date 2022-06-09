@@ -15,10 +15,10 @@ public class Main  {
 		System.out.print("Login: ");
 		System.out.println(controller.login("example", "12345678"));
 		System.out.println("--------------------");
-		/*
+		
 		System.out.println(controller.getAllProfessors().get(13).getDisplayName());
 		System.out.println("--------------------");
-
+		/*
 		//All courses section
 		System.out.println("All courses in the database: ");
 		for (Course c : controller.getAllCourses()) {
@@ -76,11 +76,16 @@ public class Main  {
 		System.out.println(controller.getAllProfessors().get(13).getDisplayName() + ", " + "Rating: "
 		+ controller.getAllProfessors().get(13).getRating() + ", " + "My rating: " + controller.getMyProfessorRating(14));
 		System.out.println("--------------------");
-		
+		*/
 		//To be continued...
-		 */
 		
-		for (Timeslot t : controller.getBookedTimeslots("Ξ‘Ξ»ΞµΞΎΞ±Ξ½Ξ΄ΟΞΏΟ€ΞΏΟΞ»ΞΏΟ… Ξ•Ο…Ξ³ΞµΞ½Ξ―Ξ±")) {
+		// Setting new available dates for professor Aλεξανδροπούλου Ευγενία
+		System.out.println("Attempt a set of available date: " + controller.setAvailableDate(2, 11, 13));
+		System.out.println("Change previous avalabke date: " + controller.setAvailableDate(2, 16, 18)); // I don't know if it changes, since it encounters problems with connecting to the get available dates side of the api.
+		controller.setAvailableDate(3, 12, 15);
+		controller.setAvailableDate(5, 12, 16);
+		
+		for (Timeslot t : controller.getAvailableTimeslots("Αλεξανδροπούλου Ευγενία")) {
 			System.out.println(t.getProfessorId());
 		}
 	}
