@@ -81,13 +81,12 @@ public class Main  {
 		
 		// Setting new available dates for professor Aλεξανδροπούλου Ευγενία
 		System.out.println("Attempt a set of available date: " + controller.setAvailableDate(2, 11, 13));
-		System.out.println("Change previous avalabke date: " + controller.setAvailableDate(2, 16, 18)); // I don't know if it changes, since it encounters problems with connecting to the get available dates side of the api.
+		System.out.println("Change previous available date: " + controller.setAvailableDate(2, 16, 18)); // I don't know if it changes, since it encounters problems with connecting to the get available dates side of the api.
 		controller.setAvailableDate(3, 12, 15);
 		controller.setAvailableDate(5, 12, 16);
 		
 		for (Timeslot t : controller.getAvailableTimeslots("Αλεξανδροπούλου Ευγενία")) {
-			System.out.println(t.getProfessorId());
+			System.out.println(t.getDate() + ": " + t.getDateTimestamp());
 		}
 	}
-	
 }

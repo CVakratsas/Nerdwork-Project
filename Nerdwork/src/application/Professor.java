@@ -39,6 +39,8 @@ public class Professor extends User {
 		this.phone = phone;
 		this.office = office;
 		this.rating = rating;
+		availableTimeslots = new ArrayList<Timeslot>();
+		bookedTimeslots = new ArrayList<Timeslot>();
 		studentsRated = new ArrayList<>();
 		pendingAppointments = new ArrayList<>();
 	}
@@ -47,6 +49,8 @@ public class Professor extends User {
 	public Professor(String userId, String username, String displayName, int accountType, int professorId) {
 		super(userId, username, displayName, accountType);
 		this.professorId = professorId;
+		availableTimeslots = new ArrayList<Timeslot>();
+		bookedTimeslots = new ArrayList<Timeslot>();
 		studentsRated = new ArrayList<>();
 		pendingAppointments = new ArrayList<>();
 	}
@@ -115,6 +119,10 @@ public class Professor extends User {
 					myCourses.add(course);
 		
 		return myCourses;
+	}
+	
+	public void clearAvailableTimeslots() {
+		availableTimeslots.clear();
 	}
 	
 	/*Professor class Getters and Setters: */

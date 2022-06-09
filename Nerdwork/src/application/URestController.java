@@ -315,8 +315,9 @@ public class URestController {
       * with a Professor from the database.
       */
      public FAvailabilityResponse getAvailabilityDates(int professor) throws IOException, ParseException {
-    	 FRestResponse r = requestComponent.Get("/api/appointments/availability?professor="+professor);
-   
+    	 FRestResponse r = requestComponent.Get("/api/appointments/availability?professorId="+professor);
+    	 System.out.println(r.responseContent);
+    	 
     	 // If redirection successful, return AVAILABLE Timeslots:
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();

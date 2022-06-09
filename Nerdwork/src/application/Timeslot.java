@@ -17,7 +17,7 @@ public class Timeslot {
 	private int id;
 	private String studentId;
 	private int professorId;
-	private int dateTimestamp;
+	private int dateTimestamp; // Seconds since 1st January 1970 00:00:00
 	private int day;
 	private int startHour;
 	private int endHour;
@@ -37,6 +37,16 @@ public class Timeslot {
 		this.dateTimestamp = dateTimestamp;
 		this.status = status;
 		this.created_at = created_at;
+	}
+	
+	/*
+	 * This method is used to return the date of the available Timelsot
+	 * in a Date format.
+	 */
+	public Date getDate() {
+		Date date = new Date((long)dateTimestamp * 1000);
+		
+		return date;
 	}
 
 	public int getId() {

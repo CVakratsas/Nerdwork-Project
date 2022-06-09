@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 import org.json.simple.parser.ParseException;
@@ -340,6 +341,7 @@ public class GuiController {
  		Calendar nextAvailableDate = Calendar.getInstance(); // Next date the professor set as available
  		Date availableDate; // For temporary storage and parsing of data to a Date object
  		int weekday; // The Calendar.DAY_OF_WEEK attribute, for the available date
+ 		int indexOfWeekday = 0; // It's index in the far.dates ArrayList.
  		
  		// Find the professor, from allProfessors ArrayList:
  		for (Professor professor : this.getAllProfessors())
@@ -348,18 +350,42 @@ public class GuiController {
  		
  		FAvailabilityResponse far = controller.getAvailabilityDates(selectedProfessor.getProfessorId());
  		
- 		// Not finished
- 		// It will return available dates for this week and the next 3, meaning that the available
- 		// dates are set by professors only once (don't know how to change them)
- 		for (int i = 0; i < 28; i++) {
- 			for (HashMap<String, Integer> date : far.dates) {
- 				weekday = nextAvailableDate.get(Calendar.DAY_OF_WEEK);
- 				availableDate = nextAvailableDate.getTime();
- 				selectedProfessor.addAvailableTimeslot((int)availableDate.getTime());
- 				
- 				nextAvailableDate.add(Calendar.DAY_OF_YEAR, 1);
+ 		// Matching the today's day with the correct one from the dates ArrayList:
+ 		for (HashMap<String, Integer> date : far.dates) {
+ 			if (date.get("day").equals(nextAvailableDate.get(Calendar.DAY_OF_WEEK))) {
+ 				weekday = date.get("day");
+ 				break;
  			}
+ 			
+ 			indexOfWeekday++;
  		}
+ 		
+ 		// Reform the dates ArrayList, so that weekday is the first element
+ 		
+		// The operation will be done as many times as the element needs to become first
+		// In this case, its distance from the first element is that number.
+		for (int i = 0; i < indexOfWeekday; i++) {
+ 			int j = 0;
+ 			
+ 			for (int k = 0; k < far.dates.size() - 1; k++) {
+ 				Collections.swap(far.dates, j, (j + 1) % far.dates.size());
+			
+ 	 			j++;
+ 			}
+		}
+ 		
+ 		// It will return available dates for this week and the next 3, meaning that the available
+ 		// dates are set by professors only once, but can be changed for all the days issued.
+		for (HashMap<String, Integer> date : far.dates) {
+			nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("startHour"));
+			nextAvailableDate.set(Calendar.MINUTE, 0);
+			nextAvailableDate.set(Calendar.SECOND, 0);
+			
+			availableDate = nextAvailableDate.getTime();
+			selectedProfessor.addAvailableTimeslot((int)(availableDate.getTime() / 1000));
+			
+			nextAvailableDate.add(Calendar.DAY_OF_YEAR, 1);
+		}
  		
  		return selectedProfessor.getAvailableTimeslots();
  	}
