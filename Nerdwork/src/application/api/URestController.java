@@ -218,8 +218,8 @@ public class URestController {
     			 JSONObject tempData = (JSONObject)arrayData.get(i);
     			 HashMap<String, Integer> dateElement = new HashMap<String, Integer>();
     			 dateElement.put("day", ((Number)tempData.get("day")).intValue());
-    			 dateElement.put("startHour", ((Number)tempData.get("day")).intValue());
-    			 dateElement.put("endHour", ((Number)tempData.get("day")).intValue());
+    			 dateElement.put("startHour", ((Number)tempData.get("startHour")).intValue());
+    			 dateElement.put("endHour", ((Number)tempData.get("endHour")).intValue());
     			 dates.add(dateElement);
     		 }
     		 return new FAvailabilityResponse(true, dates);
