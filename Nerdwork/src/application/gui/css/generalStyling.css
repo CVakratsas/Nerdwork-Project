@@ -4,13 +4,21 @@
 	-fx-text-fill:  #3889c4;
 }
 
+#closeImageView:hover {
+	-fx-cursor: hand;
+}
+
+.button:hover {
+	-fx-cursor: hand;
+}
+
 .button:pressed {
-	-fx-background-color: #3889c4 ;
+	-fx-background-color: #3889c4;
 	-fx-text-fill: #FFF;
 }
 
 #whiteButton:hover {
-	-fx-background-color: #3889c4 ;
+	-fx-background-color: #3889c4;
 	-fx-text-fill:  #FFF;
 }
 
@@ -31,7 +39,7 @@
 }
 
 #blueButton:pressed {
-	-fx-background-color: #3889c4 ;
+	-fx-background-color: #3889c4;
 }
 
 #forgotPasswordLabel {
@@ -40,4 +48,16 @@
 
 #forgotPasswordLabel:pressed {
 	-fx-text-fill:  #1F4E6F;
+}
+
+#forgotPasswordLabel:hover {
+	-fx-cursor: hand;
+}
+
+#lowerMenuHBox {
+	-fx-background-color: #3889c4;
+}
+
+#upperMenuHBox {
+	-fx-background-color: #3889c4;
 }
