@@ -7,9 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="580.0" maxWidth="1280.0" minHeight="580.0" minWidth="1280.0" prefHeight="580.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gui.classes.MyCoursesAddCourseController">
@@ -19,7 +17,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="1166.0" layoutY="25.0" mnemonicParsing="false" onAction="#switchToMyCourses" prefHeight="30.0" prefWidth="89.0" text="Επιστροφή">
+      <Button layoutX="1165.0" layoutY="26.0" maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" mnemonicParsing="false" onAction="#switchToMyCourses" prefHeight="30.0" prefWidth="90.0" text="Επιστροφή">
          <font>
             <Font size="14.0" />
          </font>
@@ -33,7 +31,6 @@
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="80.0" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="97.0" text="Απεγγραφή" GridPane.columnIndex="1">
@@ -49,32 +46,6 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                     <children>
-                        <Label text="Λειτουργικά Συστήματα">
-                           <font>
-                              <Font name="Segoe UI" size="18.0" />
-                           </font>
-                        </Label>
-                        <Label text="Ρουμελιώτης Εμμανουήλ">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <GridPane.margin>
-                        <Insets left="10.0" />
-                     </GridPane.margin>
-                  </VBox>
-                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <children>
-                        <Button layoutX="32.0" layoutY="25.0" mnemonicParsing="false" text="+">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </Pane>
                </children>
             </GridPane>
          </content>
