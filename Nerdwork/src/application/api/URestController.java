@@ -346,6 +346,14 @@ public class URestController {
     	 return r.statusCode==200;
      }
      
+     public boolean setPassword(String oldPassword, String newPassword) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("oldPassword", oldPassword);
+    	 obj.put("newPassword", newPassword);
+    	 FRestResponse r = requestComponent.Post("/api/auth/password/", obj);
+    	 return r.statusCode==200;
+     }
+	
      /*
      Συνάρτηση για εγγραφη νεου χρηστη
    */
