@@ -9,11 +9,10 @@
 package application.functinonality;
 
 import java.util.ArrayList;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-
-import application.Timeslot.Availability;
 
 public class Professor extends User {
 	
@@ -137,30 +136,30 @@ public class Professor extends User {
 	 * by a student and his request of appointment at that timeslot is marked as PENDING),
 	 * as parameter and is a void type method
 	 */
-	public void acceptAppointment(Timeslot timeslot) {
-		int i = 0;
-		Student student = timeslot.getStudent();
-		
-		// Accept the selected appointment:
-		for (Timeslot t: timeslots) {
-			if (timeslot.getStudent().equals(student) && timeslot.getDate().equals(t.getDate())) {
-				t.setAvailability(Availability.RESERVED);
-				pendingAppointments.remove(timeslot);
-		
-			}
-		}
-		
-		// Deny automatically all others:
-		// ������ ���� ��� ����������� ��������� ��� deny
-		while (i < pendingAppointments.size()) {
-			if (pendingAppointments.get(i).getDate().equals(timeslot.getDate())) {
-				pendingAppointments.remove(pendingAppointments.get(i));
-				i -= 1; // Because we remove the current element
-			}
-			
-			i += 1;
-		}
-	}
+//	public void acceptAppointment(Timeslot timeslot) {
+//		int i = 0;
+//		Student student = timeslot.getStudent();
+//		
+//		// Accept the selected appointment:
+//		for (Timeslot t: timeslots) {
+//			if (timeslot.getStudent().equals(student) && timeslot.getDate().equals(t.getDate())) {
+//				t.setAvailability(Availability.RESERVED);
+//				pendingAppointments.remove(timeslot);
+//		
+//			}
+//		}
+//		
+//		// Deny automatically all others:
+//		// ������ ���� ��� ����������� ��������� ��� deny
+//		while (i < pendingAppointments.size()) {
+//			if (pendingAppointments.get(i).getDate().equals(timeslot.getDate())) {
+//				pendingAppointments.remove(pendingAppointments.get(i));
+//				i -= 1; // Because we remove the current element
+//			}
+//			
+//			i += 1;
+//		}
+//	}
 
 	/*
 	 * Method used for denial of appointment requests of Student class objects,
@@ -170,15 +169,15 @@ public class Professor extends User {
 	 * by a student and his request of appointment at that timeslot is marked as PENDING),
 	 * as parameter and is a void type method
 	 */
-	public void denyAppointment(Timeslot timeslot) {
-		int pIndex; // Index of timeslot parameter
-		
-		pIndex = timeslots.indexOf(timeslot);
-		timeslots.get(pIndex).setStudent(null);
-		
-		timeslots.get(pIndex).setAvailability(Availability.AVAILABLE);
-		pendingAppointments.remove(timeslot);
-	}
+//	public void denyAppointment(Timeslot timeslot) {
+//		int pIndex; // Index of timeslot parameter
+//		
+//		pIndex = timeslots.indexOf(timeslot);
+//		timeslots.get(pIndex).setStudent(null);
+//		
+//		timeslots.get(pIndex).setAvailability(Availability.AVAILABLE);
+//		pendingAppointments.remove(timeslot);
+//	}
 	
 	/*
 	 * Method used for canceling reserved appointments of Student class objects,
@@ -187,13 +186,13 @@ public class Professor extends User {
 	 * reserved for an appointmetn with "this" Professor class object),
 	 * as parameter and is a void type method
 	 */
-	public void cancelAppointment(Timeslot timeslot) {
-		Integer pIndex;
-		
-		pIndex = timeslots.indexOf(timeslot);
-		timeslots.get(pIndex).setStudent(null);
-		timeslots.get(pIndex).setAvailability(Availability.AVAILABLE);
-	}
+//	public void cancelAppointment(Timeslot timeslot) {
+//		Integer pIndex;
+//		
+//		pIndex = timeslots.indexOf(timeslot);
+//		timeslots.get(pIndex).setStudent(null);
+//		timeslots.get(pIndex).setAvailability(Availability.AVAILABLE);
+//	}
 	
 	/*
 	 * Method used to check if "this" Professor object already contains 

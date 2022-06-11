@@ -102,9 +102,9 @@ public class Student extends User {
 	 * by "this" Student object for the appointment), as parameters and is a void
 	 * type method
 	 */
-	public void cancelAppointment(Professor professor, Timeslot timeslot) {
-		professor.cancelAppointment(timeslot);
-	}
+//	public void cancelAppointment(Professor professor, Timeslot timeslot) {
+//		professor.cancelAppointment(timeslot);
+//	}
 	
 	/*User Getters and Setters methods are here*/
 

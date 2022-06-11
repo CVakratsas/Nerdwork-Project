@@ -18,6 +18,12 @@ import java.util.regex.Pattern;
 
 import org.json.simple.parser.ParseException;
 
+import application.api.FAvailabilityResponse;
+import application.api.FLoginResponse;
+import application.api.FProfessorsResponse;
+import application.api.FSubjectsResponse;
+import application.api.URestController;
+
 public class GuiController {
 	
 	// Class attributes

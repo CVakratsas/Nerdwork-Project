@@ -27,9 +27,9 @@ public class HomePageController {
 	@FXML
 	private VBox calendarPane;
 	
-	public ArrayList<Course> getArray() {
-		return courses;
-	}
+//	public ArrayList<Course> getArray() {
+//		return courses;
+//	}
 	
 	@FXML
 	private void initialize() {
@@ -39,28 +39,28 @@ public class HomePageController {
         calendarPane.getChildren().add(calendar);
     }
 	
-	public void switchToMyCourses(ActionEvent event) throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/MyCourses.fxml"));
-		root = loader.load();
-		
-		MyCoursesController myCoursesController = loader.getController();
-		courses = new ArrayList<Course>();
-		Course c1 = new Course("smrid21037", "Αλγόριθμοι", "Σαμαράς");
-		Course c2 = new Course("smrid21085", "Προγραμματισμός Διαδικτύου", "Κασκάλης");
-		Course c3 = new Course("smrid21022", "Δίκτυα", "Τρακατέλης");
-		courses.add(c1);
-		courses.add(c2);
-		courses.add(c3);
-		myCoursesController.load(courses);
-		// TODO
-//		GeneralController generalController = new GeneralController();
-//		myCoursesController.load(generalController.getCourses());
-		
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
-	}
+//	public void switchToMyCourses(ActionEvent event) throws IOException {
+//		FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/MyCourses.fxml"));
+//		root = loader.load();
+//		
+//		MyCoursesController myCoursesController = loader.getController();
+//		courses = new ArrayList<Course>();
+//		Course c1 = new Course("smrid21037", "Αλγόριθμοι", "Σαμαράς");
+//		Course c2 = new Course("smrid21085", "Προγραμματισμός Διαδικτύου", "Κασκάλης");
+//		Course c3 = new Course("smrid21022", "Δίκτυα", "Τρακατέλης");
+//		courses.add(c1);
+//		courses.add(c2);
+//		courses.add(c3);
+//		myCoursesController.load(courses);
+//		// TODO
+////		GeneralController generalController = new GeneralController();
+////		myCoursesController.load(generalController.getCourses());
+//		
+//		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+//		scene = new Scene(root);
+//		stage.setScene(scene);
+//		stage.show();
+//	}
 	
 }
 
