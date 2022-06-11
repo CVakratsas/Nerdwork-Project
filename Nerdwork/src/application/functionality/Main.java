@@ -1,7 +1,10 @@
-package application;
+package application.functionality;
 
+import application.api.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 import org.json.simple.parser.ParseException;
 
@@ -10,13 +13,15 @@ public class Main  {
 	public static void main(String[] args) throws IOException, ParseException {
 		//GUI Controller creation
 		GuiController controller = GuiController.getInstance();
+		URestController restController = new URestController();
 		
 		//Login section
+		//controller.register("ics1234", "1234abcde!@V", "Wilhelm von List", "ics1234@uom.edu.gr");
 		System.out.print("Login: ");
-		System.out.println(controller.login("example", "12345678"));
+		System.out.println(controller.login("ics1234", "1234abcde!@V"));
 		System.out.println("--------------------");
 		
-		System.out.println(controller.getAllProfessors().get(13).getDisplayName());
+		System.out.println(controller.getAllProfessors().get(0).getDisplayName());
 		System.out.println("--------------------");
 		/*
 		//All courses section
@@ -65,7 +70,7 @@ public class Main  {
 			System.out.println();
 			System.out.println("ProfId: " + p.getProfessorId() + ", " + "UserId: " + p.getUserId() + ", " +"Name: " + p.getDisplayName() + ", "
 			+ "Email: " + p.getEmail() + ", " + "Office: " + p.getOffice() + ", " + "Phone: " + p.getPhone() + ", " 
-			+ "Photo: " + p.getProfilePhoto() + ", " + "Rating: " + p.getRating() + ", " + "My rating: " + controller.getMyProfessorRating(p.getProfessorId()));
+			+ "Photo: " + p.getProfilePhoto() + ", " + "Rating: " + p.getRating() + ", " + "My rating: " + controller.getMyProfessorRating(p));
 		}
 		System.out.println("--------------------");
 		
@@ -80,13 +85,45 @@ public class Main  {
 		//To be continued...
 		
 		// Setting new available dates for professor Aλεξανδροπούλου Ευγενία
-		System.out.println("Attempt a set of available date: " + controller.setAvailableDate(2, 11, 13));
-		System.out.println("Change previous available date: " + controller.setAvailableDate(2, 16, 18)); // I don't know if it changes, since it encounters problems with connecting to the get available dates side of the api.
-		controller.setAvailableDate(3, 12, 15);
-		controller.setAvailableDate(5, 12, 16);
+		System.out.println("Attempt a set of available date: " + controller.setAvailableTimeslot(2, 11, 13));
+		System.out.println("Change previous available date: " + controller.setAvailableTimeslot(2, 16, 18)); // I don't know if it changes, since it encounters problems with connecting to the get available dates side of the api.
+		controller.setAvailableTimeslot(3, 12, 15);
+		controller.setAvailableTimeslot(5, 12, 16);
 		
-		for (Timeslot t : controller.getAvailableTimeslots("Αλεξανδροπούλου Ευγενία")) {
-			System.out.println(t.getDate() + ": " + t.getDateTimestamp());
+		
+		// Use of getAvailableTimeslots
+		ArrayList<Timeslot> timelsotsAvailable = controller.getAvailableTimeslots(controller.getAllProfessors().get(0));
+		ArrayList<HashMap<String, Date>> appointmentsAvailable = new ArrayList<>();
+		
+		// Here it returns all the available appointments:
+		for (Timeslot t : timelsotsAvailable) {
+			appointmentsAvailable = t.getAvailableAppointments();
+		
+			// Here it returns the date data in a printable for our purposes way
+			// Note: it only returns the day of the month, the start and end hour of the appointment:
+			ArrayList<HashMap<String, Integer>> appointmentTimeslotsToBePresentedInGui = new ArrayList<HashMap<String, Integer>>();
+	
+			for (HashMap<String, Date> appointmentAvailable : appointmentsAvailable) {
+				HashMap<String, Integer> element;
+				
+				element = Timeslot.getDateInfo(appointmentAvailable.get("startHour"));
+				appointmentTimeslotsToBePresentedInGui.add(element);
+				
+				element = Timeslot.getDateInfo(appointmentAvailable.get("endHour"));
+				appointmentTimeslotsToBePresentedInGui.add(element);
+			}
+			
+			// Print them:
+			for (int i = 0 ; i < appointmentTimeslotsToBePresentedInGui.size() - 1; i += 2) {
+				System.out.print("Day: " + appointmentTimeslotsToBePresentedInGui.get(i).get("day") + "/" + appointmentTimeslotsToBePresentedInGui.get(i).get("month"));
+				System.out.println(" starting at: " + appointmentTimeslotsToBePresentedInGui.get(i).get("hour") + ":" + appointmentTimeslotsToBePresentedInGui.get(i).get("minutes") + " and ending at: " + appointmentTimeslotsToBePresentedInGui.get(i + 1).get("hour") + ":" + appointmentTimeslotsToBePresentedInGui.get(i + 1).get("minutes"));
+			}
+		
+			System.out.println("\n\n");
 		}
+		
+		// Request an appointment from professor 0.
+		System.out.println(controller.requestAppointment(controller.getProfessorById(1), 5, 12, 13, 0));
+		System.out.println(restController.getBookedTimestamps(1));
 	}
 }
