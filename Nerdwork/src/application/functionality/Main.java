@@ -16,12 +16,14 @@ public class Main  {
 		URestController restController = new URestController();
 		
 		//Login section
-		//controller.register("ics1234", "1234abcde!@V", "Wilhelm von List", "ics1234@uom.edu.gr");
+		// "probatos", "beeeH1234@" Student
+		// "example1", "123456789Ab!" Professor Manos Roumeliotis
+		System.out.println(controller.register("example1", "123456789Ab!", "Manos Roumeliotis", "manosroum@uom.edu.gr"));
 		System.out.print("Login: ");
-		System.out.println(controller.login("ics1234", "1234abcde!@V"));
+		System.out.println(controller.login("probatos", "beeeH1234@"));
 		System.out.println("--------------------");
 		
-		System.out.println(controller.getAllProfessors().get(0).getDisplayName());
+		System.out.println(controller.getAllProfessors().get(8).getDisplayName());
 		System.out.println("--------------------");
 		/*
 		//All courses section
@@ -68,7 +70,7 @@ public class Main  {
 		System.out.println("All professors in the database: ");
 		for (Professor p : controller.getAllProfessors()) {
 			System.out.println();
-			System.out.println("ProfId: " + p.getProfessorId() + ", " + "UserId: " + p.getUserId() + ", " +"Name: " + p.getDisplayName() + ", "
+			System.out.println("ProfId: " + p.getUserName() + ", " + "UserId: " + p.getUserId() + ", " +"Name: " + p.getDisplayName() + ", "
 			+ "Email: " + p.getEmail() + ", " + "Office: " + p.getOffice() + ", " + "Phone: " + p.getPhone() + ", " 
 			+ "Photo: " + p.getProfilePhoto() + ", " + "Rating: " + p.getRating() + ", " + "My rating: " + controller.getMyProfessorRating(p));
 		}
@@ -87,12 +89,13 @@ public class Main  {
 		// Setting new available dates for professor Aλεξανδροπούλου Ευγενία
 		System.out.println("Attempt a set of available date: " + controller.setAvailableTimeslot(2, 11, 13));
 		System.out.println("Change previous available date: " + controller.setAvailableTimeslot(2, 16, 18)); // I don't know if it changes, since it encounters problems with connecting to the get available dates side of the api.
+		
 		controller.setAvailableTimeslot(3, 12, 15);
 		controller.setAvailableTimeslot(5, 12, 16);
 		
 		
 		// Use of getAvailableTimeslots
-		ArrayList<Timeslot> timelsotsAvailable = controller.getAvailableTimeslots(controller.getAllProfessors().get(0));
+		ArrayList<Timeslot> timelsotsAvailable = controller.getAvailableTimeslots(controller.getAllProfessors().get(8));
 		ArrayList<HashMap<String, Date>> appointmentsAvailable = new ArrayList<>();
 		
 		// Here it returns all the available appointments:
@@ -123,7 +126,7 @@ public class Main  {
 		}
 		
 		// Request an appointment from professor 0.
-		System.out.println(controller.requestAppointment(controller.getProfessorById(1), 5, 12, 13, 0));
-		System.out.println(restController.getBookedTimestamps(1));
+		System.out.println(controller.requestAppointment(controller.getProfessorById(1), 5, 17, 12, 30));
+		System.out.println(restController.getMyAppointments());
 	}
 }

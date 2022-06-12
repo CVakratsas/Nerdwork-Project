@@ -356,55 +356,138 @@ public class GuiController {
  	 * professor is available for appointments) and receives an int type variable, representing 
  	 * the professor's unique id.
  	 */
- 	public ArrayList<Timeslot> getAvailableTimeslots(Professor selectedProfessor) throws IOException, ParseException {
+  	public ArrayList<Timeslot> getAvailableTimeslots(Professor selectedProfessor) throws IOException, ParseException {
  		Calendar nextAvailableDate = Calendar.getInstance(); // Next date the professor set as available
  		Date availableDateStart; // For temporary storage and parsing of data to a Date object
  		Date availableDateEnd;
  		int weekday; // The Calendar.DAY_OF_WEEK attribute, for the available date
  		int indexOfWeekday = 0; // It's index in the far.dates ArrayList.
- 		
+
  		FAvailabilityResponse far = controller.getAvailabilityDates(selectedProfessor.getProfessorId());
- 		
- 		// Matching the today's day with the correct one from the dates ArrayList:
- 		for (HashMap<String, Integer> date : far.dates) {
- 			if (date.get("day").equals(nextAvailableDate.get(Calendar.DAY_OF_WEEK))) {
- 				weekday = date.get("day");
- 				break;
- 			}
- 			
- 			indexOfWeekday++;
- 		}
- 		
- 		// Reform the dates ArrayList, so that weekday is the first element
- 		
-		// The operation will be done as many times as the element needs to become first
-		// In this case, its distance from the first element is that number.
-		for (int i = 0; i < indexOfWeekday; i++) {
- 			int j = 0;
- 			
- 			for (int k = 0; k < far.dates.size() - 1; k++) {
- 				Collections.swap(far.dates, j, (j + 1) % far.dates.size());
-			
- 	 			j++;
- 			}
+ 		System.out.println(far.dates);
+		
+	 	// Here we fill the far.dates with all the unavailable dates. This is done 
+	 	// in order to more easily get the distances between two days (though 
+	 	// we do not calculate distances. We just move on to the next available date, when 
+	 	// we spot an unavailable).
+		if (far.dates.size() < 7) {	
+	 		for (int i = 0; i < far.dates.size(); i++) {
+				if (i < far.dates.size() - 1) {
+					if ((far.dates.get(i + 1).get("day") - far.dates.get(i).get("day")) > 1) {
+						for (int j = far.dates.get(i).get("day") + 1; j < far.dates.get(i + 1).get("day"); j++) {
+							HashMap<String, Integer> unavailableDay = new HashMap<String, Integer>();
+							
+							i++;
+							
+							unavailableDay.put("unavailableDay", j);
+							far.dates.add(i, unavailableDay);
+						}
+					}
+				}
+				// Used to check the first and last elements of far.dates, to see if they match 
+				// to the first and last day of the week (starting from 0 as Sunday)
+				else {
+					if (far.dates.get(0).get("day") > 0)
+						for (int j = 0; j < far.dates.get(j).get("day"); j++) {
+							HashMap<String, Integer> unavailableDay = new HashMap<String, Integer>();
+							
+							unavailableDay.put("unavailableDay", j);
+							far.dates.add(j, unavailableDay);
+						}
+					System.out.println(far.dates.get(far.dates.size() - 1).get("day"));
+					if (far.dates.get(far.dates.size() - 1).get("day") < 6)
+						for (int j = far.dates.size(); j <= 6; j++) {
+							HashMap<String, Integer> unavailableDay = new HashMap<String, Integer>();
+							
+							unavailableDay.put("unavailableDay", j);
+							far.dates.add(j, unavailableDay);
+						}
+					
+					break;
+				}
+			}
 		}
- 		
+		
+		// Matching the today's day with the correct one from the dates ArrayList:
+	 	while (true) {	
+ 			for (HashMap<String, Integer> date : far.dates) {
+		 		if (!date.keySet().contains("unavailableDay"))	
+ 					if (date.get("day").equals(nextAvailableDate.get(Calendar.DAY_OF_WEEK) - 1)) {
+		 				weekday = date.get("day");
+		 				break;
+		 			}
+	 			
+	 			indexOfWeekday++;
+	 		}
+ 			
+ 			// The condition below is used to check if the professor is not available for all days 
+ 			// of the week. In that case we may not be able to find a day of the week that is truly contained
+ 			// in far.dates, so we run the loop again, until indexOfWeekday, actually finds a matching day in far.dates.
+ 			// Found current day or the nearest one to the current day
+ 			if (indexOfWeekday < far.dates.size())
+ 				break;
+ 			
+ 			// Next day, that may match one of the days in far.dates
+ 			nextAvailableDate.add(Calendar.DAY_OF_YEAR, 1);
+ 			indexOfWeekday = 0;
+	 	}
+	 	
+	 	// Reset the calendar object.
+	 	
+		// Reform the dates ArrayList, so that weekday is the first element
+	 	
+		// First we duplicate far.dates, in order to keep safe its values, for 
+ 		// the future array reformation:
+		ArrayList<HashMap<String, Integer>> farDatesCopy = new ArrayList<HashMap<String, Integer>>();
+		
+		for (HashMap<String, Integer> date : far.dates) {
+			HashMap<String, Integer> farDatesCopyElement = new HashMap<String, Integer>(); // The elements of far.dates copy. It will store a copy each far.dates element.
+ 			
+			if (!date.keySet().contains("unavailableDay")) {
+	 			farDatesCopyElement.put("day", date.get("day"));
+				farDatesCopyElement.put("startHour", date.get("startHour"));
+				farDatesCopyElement.put("endHour", date.get("endHour"));
+			}
+			
+			else {
+				farDatesCopyElement.put("unavailableDay", date.get("unavailableDay"));
+			}
+			
+			farDatesCopy.add(farDatesCopyElement);
+		}
+
+
+		// Here we use the far.dates copy, in order to change its values.
+		// We also add a "none" key to the days that the professor is not available
+		for (int i = 0; i < far.dates.size(); i++) {
+			far.dates.set(i, farDatesCopy.get(indexOfWeekday));
+			
+			indexOfWeekday = (indexOfWeekday + 1) % far.dates.size();
+			System.out.println(far.dates.get(i));
+		}
+		
  		// It will return available dates for this week and the next 3, meaning that the available
  		// dates are set by professors only once, but can be changed for all the days issued.
-		for (HashMap<String, Integer> date : far.dates) {
-			nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("startHour"));
-			nextAvailableDate.set(Calendar.MINUTE, 0);
-			nextAvailableDate.set(Calendar.SECOND, 0);
-
-			availableDateStart = nextAvailableDate.getTime();
+	
+		
+		for (HashMap<String, Integer> date : far.dates) {			
 			
-			nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("endHour"));
-			nextAvailableDate.set(Calendar.MINUTE, 0);
-			nextAvailableDate.set(Calendar.SECOND, 0);
-			
-			availableDateEnd = nextAvailableDate.getTime();
-			
-			selectedProfessor.addAvailableTimeslot((int)(availableDateStart.getTime() / 1000), (int)(availableDateEnd.getTime() / 1000));
+			if (!date.keySet().contains("unavailableDay")) {
+				
+				nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("startHour"));
+				nextAvailableDate.set(Calendar.MINUTE, 0);
+				nextAvailableDate.set(Calendar.SECOND, 0);
+	
+				availableDateStart = nextAvailableDate.getTime();
+				
+				nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("endHour"));
+				nextAvailableDate.set(Calendar.MINUTE, 0);
+				nextAvailableDate.set(Calendar.SECOND, 0);
+				
+				availableDateEnd = nextAvailableDate.getTime();
+				
+				selectedProfessor.addAvailableTimeslot((int)(availableDateStart.getTime() / 1000), (int)(availableDateEnd.getTime() / 1000));
+			}			
 			
 			nextAvailableDate.add(Calendar.DAY_OF_YEAR, 1);
 		}
