@@ -1,5 +1,4 @@
-/*
- * Student class, containing methods and attributes for the Student
+* Student class, containing methods and attributes for the Student
  * objects' functionalities, such as add or remove course, rating and
  * requesting/canceling an appointment with a Professor.
  */
@@ -24,8 +23,8 @@ public class Student extends User {
 	
 	/*Student Constructor is here*/
 	
-	public Student(String userId, String username, String displayName, int accountType) {
-		super(userId, username, displayName, accountType);
+	public Student(String userId, String username, String displayName) {
+		super(userId, username, displayName);
 		this.gpa = null;
 		courseGrades = new ArrayList<>();
 	}

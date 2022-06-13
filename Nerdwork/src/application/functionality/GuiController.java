@@ -41,6 +41,7 @@ public class GuiController {
  	// The 2 types of User:
  	private Student student;
  	private Professor professor;
+ 	private int accountTypeLoggedIn;
  	
  	// Constructor:
  	private GuiController() throws IOException, ParseException {
@@ -75,16 +76,17 @@ public class GuiController {
  		FLoginResponse flr;
  		
  		flr = controller.doLogin(username, password);
+ 		accountTypeLoggedIn = flr.accountType;
  		
  		if (flr.isSuccess) {
-	 		if (flr.accountType == 0) {
+	 		if (accountTypeLoggedIn == 0) {
 	 			professor = null;
-	 			student = new Student(flr.userId, flr.username, flr.displayName, flr.accountType);
+	 			student = new Student(flr.userId, flr.username, flr.displayName);
 	 			student.setEmail(controller.getUserProfile(student.getUserId()).email);
 	 		}
 	 		else {
 	 			student = null;
-	 			professor = new Professor(flr.userId, flr.username, flr.displayName, flr.accountType, flr.associatedProfessorId);
+	 			professor = new Professor(flr.userId, flr.username, flr.displayName, flr.associatedProfessorId);
 	 			professor.setBio(controller.getUserProfile(professor.getUserId()).bio);
 	 		}
  		}
@@ -356,7 +358,7 @@ public class GuiController {
  	 * professor is available for appointments) and receives an int type variable, representing 
  	 * the professor's unique id.
  	 */
-  	public ArrayList<Timeslot> getAvailableTimeslots(Professor selectedProfessor) throws IOException, ParseException {
+ 	public ArrayList<Timeslot> getAvailableTimeslots(Professor selectedProfessor) throws IOException, ParseException {
  		Calendar nextAvailableDate = Calendar.getInstance(); // Next date the professor set as available
  		Date availableDateStart; // For temporary storage and parsing of data to a Date object
  		Date availableDateEnd;
@@ -364,8 +366,10 @@ public class GuiController {
  		int indexOfWeekday = 0; // It's index in the far.dates ArrayList.
 
  		FAvailabilityResponse far = controller.getAvailabilityDates(selectedProfessor.getProfessorId());
- 		System.out.println(far.dates);
 		
+ 		if (far.dates.isEmpty())
+ 			return null;
+ 		
 	 	// Here we fill the far.dates with all the unavailable dates. This is done 
 	 	// in order to more easily get the distances between two days (though 
 	 	// we do not calculate distances. We just move on to the next available date, when 
@@ -394,7 +398,7 @@ public class GuiController {
 							unavailableDay.put("unavailableDay", j);
 							far.dates.add(j, unavailableDay);
 						}
-					System.out.println(far.dates.get(far.dates.size() - 1).get("day"));
+
 					if (far.dates.get(far.dates.size() - 1).get("day") < 6)
 						for (int j = far.dates.size(); j <= 6; j++) {
 							HashMap<String, Integer> unavailableDay = new HashMap<String, Integer>();
@@ -435,42 +439,27 @@ public class GuiController {
 	 	// Reset the calendar object.
 	 	
 		// Reform the dates ArrayList, so that weekday is the first element
-	 	
-		// First we duplicate far.dates, in order to keep safe its values, for 
- 		// the future array reformation:
+	 	// We do this by making a copy of far.dates, which will have as first 
+	 	// element, the element at index indexOfWeekday, in the far.dates. Its
+	 	// second element will be the far.dates.get((indexOfWeekday + 1) % 7), so
+	 	// that we can get appointments from today utnil the next week.
 		ArrayList<HashMap<String, Integer>> farDatesCopy = new ArrayList<HashMap<String, Integer>>();
 		
-		for (HashMap<String, Integer> date : far.dates) {
-			HashMap<String, Integer> farDatesCopyElement = new HashMap<String, Integer>(); // The elements of far.dates copy. It will store a copy each far.dates element.
- 			
-			if (!date.keySet().contains("unavailableDay")) {
-	 			farDatesCopyElement.put("day", date.get("day"));
-				farDatesCopyElement.put("startHour", date.get("startHour"));
-				farDatesCopyElement.put("endHour", date.get("endHour"));
-			}
-			
-			else {
-				farDatesCopyElement.put("unavailableDay", date.get("unavailableDay"));
-			}
-			
-			farDatesCopy.add(farDatesCopyElement);
-		}
-
-
-		// Here we use the far.dates copy, in order to change its values.
-		// We also add a "none" key to the days that the professor is not available
 		for (int i = 0; i < far.dates.size(); i++) {
-			far.dates.set(i, farDatesCopy.get(indexOfWeekday));
+			HashMap<String, Integer> farDatesElement = new HashMap<String, Integer>();
 			
-			indexOfWeekday = (indexOfWeekday + 1) % far.dates.size();
-			System.out.println(far.dates.get(i));
+			for (String key : far.dates.get(indexOfWeekday).keySet()) 
+				farDatesElement.put(key, far.dates.get(indexOfWeekday).get(key));
+		
+			farDatesCopy.add(farDatesElement);
+			
+			indexOfWeekday = (indexOfWeekday + 1) % 7; // Keep a logical flow of weekdays.
 		}
-		
- 		// It will return available dates for this week and the next 3, meaning that the available
- 		// dates are set by professors only once, but can be changed for all the days issued.
 	
-		
-		for (HashMap<String, Integer> date : far.dates) {			
+		// Here the Integer data, will be converted into a date timestamp, with the
+		// help of the the Calendar and Date Java classes and will be used to create
+		// available Timeslot objects
+		for (HashMap<String, Integer> date : farDatesCopy) {			
 			
 			if (!date.keySet().contains("unavailableDay")) {
 				
@@ -497,11 +486,8 @@ public class GuiController {
  	
  	public boolean requestAppointment(Professor professor, int month, int day, int hour, int minutes) throws IOException {
  		Calendar appointmentDate = Calendar.getInstance();
- 		TimeZone tz = TimeZone.getTimeZone("GMT");
  		
- 		appointmentDate.setTimeZone(tz);
- 		
- 		appointmentDate.set(Calendar.MONTH, month);
+ 		appointmentDate.set(Calendar.MONTH, month - 1);
  		appointmentDate.set(Calendar.DAY_OF_MONTH, day);
  		appointmentDate.set(Calendar.HOUR_OF_DAY, hour);
  		appointmentDate.set(Calendar.MINUTE, minutes);
@@ -509,21 +495,29 @@ public class GuiController {
  		appointmentDate.set(Calendar.MILLISECOND, 0);
  		
  		Date appointmentTimestamp = appointmentDate.getTime();
- 		System.out.println((int)(appointmentTimestamp.getTime() / 1000));
+ 		
  		return controller.bookAppointment(professor.getProfessorId(), (int)(appointmentTimestamp.getTime() / 1000));
  	}
  	
- 	public ArrayList<Timeslot> getRequestedTimeslots(Professor selectedProfessor) throws IOException, ParseException{
- 		Calendar nextAvailableDate = Calendar.getInstance(); // Next date the professor set as available
- 		Date availableDateStart; // For temporary storage and parsing of data to a Date object
- 		Date availableDateEnd;
- 		int weekday; // The Calendar.DAY_OF_WEEK attribute, for the available date
- 		int indexOfWeekday = 0; // It's index in the far.dates ArrayList.
+ 	public ArrayList<Timeslot> getRequestedAppointments() throws IOException, ParseException {
+ 		Calendar nextRequestedDate = Calendar.getInstance();
+ 		Date requestedDate;
+ 		User user;
  		
- 	 	ArrayList<Integer>  = controller.getBookedTimestamps(selectedProfessor.getProfessorId());
+ 		if (accountTypeLoggedIn == 0) {
+ 			user = this.student;
+ 		}
+ 		else {
+ 			user = this.professor;
+ 		}
  		
+ 		ArrayList<FAppointmentsResponse> far = controller.getMyAppointments();
  		
- 		return;
+ 		for (FAppointmentsResponse timeslotParser : far) {
+ 			user.addRequestedAppointment(new Timeslot(timeslotParser.id, timeslotParser.studentId, timeslotParser.professorId, timeslotParser.dateTimestamp, (timeslotParser.dateTimestamp + 1800), timeslotParser.status, timeslotParser.created_at));
+ 		}
+ 		
+ 		return user.getRequestedTimelsots();
  	}
  	
  	public boolean setDisplayName(String newDisplayName) throws IOException {

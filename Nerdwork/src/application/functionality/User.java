@@ -18,7 +18,7 @@ public abstract class User {
 	protected String username;
 	protected String email;
 	protected String displayName;
-	protected int accountType;
+	protected ArrayList<Timeslot> requestedAppointments;
 	/*
 	 * The above five attributes keep track of personal Student/Professor,
 	 * concerning the profile they have built.
@@ -29,13 +29,13 @@ public abstract class User {
 	
 	/*User Constructor is here*/
 	
-	public User(String userId, String username, String displayName, int accountType) {
+	public User(String userId, String username, String displayName) {
 		this.userId = userId;
 		this.username = username;
 		this.displayName = displayName;
-		this.accountType = accountType;
 		myCourses = new ArrayList<>();
 		myAppointments = new ArrayList<>();
+		requestedAppointments = new ArrayList<Timeslot>();
 	}
 	
 	/*User methods (except getters and setters) are here*/
@@ -90,6 +90,18 @@ public abstract class User {
 	
 	public String getDisplayName() {
 		return displayName;
+	}
+	
+	public void addRequestedAppointment(Timeslot appointment) {
+		requestedAppointments.add(appointment);
+	}
+	
+	public void removeRequestedAppointment(Timeslot appointment) {
+		requestedAppointments.remove(appointment);
+	}
+	
+	public ArrayList<Timeslot> getRequestedTimelsots(){
+		return requestedAppointments;
 	}
 
 	public String getEmail() {

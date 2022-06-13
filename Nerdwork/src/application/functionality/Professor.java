@@ -26,13 +26,12 @@ public class Professor extends User {
 	private ArrayList<Timeslot> availableTimeslots; // A Professor's available Timeslots
 	private ArrayList<Timeslot> reservedTimeslots; // A Professor's booked Timeslots
 	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the professor
-	private ArrayList<Timeslot> pendingAppointments; // Appointments that have not been accepted by "this" Professor object yet
 	
 	/*Professor Constructor is here*/
 	
 	// Constructor for getting professor information as student.
 	public Professor(String displayName, int professorId, String email, String profilePhoto, String phone, String office, float rating) {
-		super(Integer.toString(professorId), null, displayName, 1);
+		super(Integer.toString(professorId), null, displayName);
 		this.professorId = professorId;
 		this.email = email;
 		this.profilePhoto = profilePhoto;
@@ -42,17 +41,15 @@ public class Professor extends User {
 		availableTimeslots = new ArrayList<Timeslot>();
 		reservedTimeslots = new ArrayList<Timeslot>();
 		studentsRated = new ArrayList<>();
-		pendingAppointments = new ArrayList<>();
 	}
 	
 	// Constructor for professor login
-	public Professor(String userId, String username, String displayName, int accountType, int professorId) {
-		super(userId, username, displayName, accountType);
+	public Professor(String userId, String username, String displayName, int professorId) {
+		super(userId, username, displayName);
 		this.professorId = professorId;
 		availableTimeslots = new ArrayList<Timeslot>();
 		reservedTimeslots = new ArrayList<Timeslot>();
 		studentsRated = new ArrayList<>();
-		pendingAppointments = new ArrayList<>();
 	}
 	
 	/* Professor methods regarding course are here: */
@@ -164,7 +161,7 @@ public class Professor extends User {
 	}
 
 	public ArrayList<Timeslot> getRequestedAppointments() {
-		return pendingAppointments;
+		return requestedAppointments;
 	}
 	
 	public void setBio(String bio) {

@@ -18,9 +18,9 @@ public class Main  {
 		//Login section
 		// "probatos", "beeeH1234@" Student
 		// "example1", "123456789Ab!" Professor Manos Roumeliotis
-		System.out.println(controller.register("example1", "123456789Ab!", "Manos Roumeliotis", "manosroum@uom.edu.gr"));
+		//System.out.println(controller.register("example1", "123456789Ab!", "Manos Roumeliotis", "manosroum@uom.edu.gr"));
 		System.out.print("Login: ");
-		System.out.println(controller.login("probatos", "beeeH1234@"));
+		System.out.println(controller.login("example1", "123456789Ab!"));
 		System.out.println("--------------------");
 		
 		System.out.println(controller.getAllProfessors().get(8).getDisplayName());
@@ -92,6 +92,7 @@ public class Main  {
 		
 		controller.setAvailableTimeslot(3, 12, 15);
 		controller.setAvailableTimeslot(5, 12, 16);
+		System.out.println("--------------------");
 		
 		
 		// Use of getAvailableTimeslots
@@ -126,7 +127,21 @@ public class Main  {
 		}
 		
 		// Request an appointment from professor 0.
-		System.out.println(controller.requestAppointment(controller.getProfessorById(1), 5, 17, 12, 30));
-		System.out.println(restController.getMyAppointments());
+		//System.out.println(controller.requestAppointment(controller.getProfessorById(9), 5, 17, 12, 30));
+		
+		
+		System.out.println("--------------------");
+		System.out.println("Get requested appointments of student: \n");
+		
+		ArrayList<Timeslot> requested = controller.getRequestedAppointments();
+		
+		for (Timeslot t : requested) {
+			HashMap<String, Date> element = t.getRequestedAppointment();
+			HashMap<String, Integer> startDatePrint = Timeslot.getDateInfo(element.get("startHour"));
+			HashMap<String, Integer> endDatePrint = Timeslot.getDateInfo(element.get("endHour"));
+			
+			System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
+			System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
+		}
 	}
 }
