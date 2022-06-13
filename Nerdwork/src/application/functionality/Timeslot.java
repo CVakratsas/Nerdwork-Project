@@ -32,8 +32,8 @@ public class Timeslot {
 		this.endHourTimestamp = endHourTimestamp;
 	}
 	
-	// Constructor used for Timeslots at when a Student requested an appointment
-	public Timeslot(int id, String studentId, int professorId, int startHoutTimestamp, int endHourTimestamp, int status, String created_at) {
+	// Constructor used for Timeslots when a Student requested an appointment
+	public Timeslot(int id, String studentId, int professorId, int startHourTimestamp, int endHourTimestamp, int status, String created_at) {
 		this.id = id;
 		this.studentId = studentId;
 		this.professorId = professorId;
@@ -53,7 +53,7 @@ public class Timeslot {
 		
 		calendarTimestamp.setTime(date);
 		
-		availableDate.put("month", calendarTimestamp.get(Calendar.MONTH));
+		availableDate.put("month", calendarTimestamp.get(Calendar.MONTH) + 1);
 		availableDate.put("day", calendarTimestamp.get(Calendar.DAY_OF_MONTH));
 		availableDate.put("hour", calendarTimestamp.get(Calendar.HOUR_OF_DAY));
 		availableDate.put("minutes", calendarTimestamp.get(Calendar.MINUTE));
@@ -86,6 +86,17 @@ public class Timeslot {
 		}
 		
 		return totalAppointments;
+	}
+	
+	public HashMap<String, Date> getRequestedAppointment(){
+		HashMap<String, Date> appointment = new HashMap<String, Date>();
+		Date dateStartTimestamp = new Date((long)startHourTimestamp * 1000);
+		Date dateEndTimestamp = new Date((long)endHourTimestamp * 1000);
+		
+		appointment.put("startHour", dateStartTimestamp);
+		appointment.put("endHour", dateEndTimestamp);
+		
+		return appointment; 
 	}
 
 	public int getId() {

@@ -1,4 +1,4 @@
-* Student class, containing methods and attributes for the Student
+/* Student class, containing methods and attributes for the Student
  * objects' functionalities, such as add or remove course, rating and
  * requesting/canceling an appointment with a Professor.
  */

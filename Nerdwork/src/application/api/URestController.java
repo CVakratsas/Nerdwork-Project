@@ -89,7 +89,6 @@ public class URestController {
      
      public ArrayList<FSubjectsResponse> getAllSubjects() throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/subjects");
-    	 System.out.println(r.responseContent);
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
@@ -264,7 +263,6 @@ public class URestController {
      
      public ArrayList<FAppointmentsResponse> getMyAppointments() throws IOException, ParseException{
     	 FRestResponse r = requestComponent.Get("/api/appointments");
-    	 System.out.println(r.responseContent);
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
@@ -346,10 +344,18 @@ public class URestController {
     	 return r.statusCode==200;
      }
      
+     public boolean setPassword(String oldPassword, String newPassword) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("oldPassword", oldPassword);
+    	 obj.put("newPassword", newPassword);
+    	 FRestResponse r = requestComponent.Post("/api/auth/password/", obj);
+    	 return r.statusCode==200;
+     }
+     
      /*
      Συνά�?τηση για εγγ�?αφη νεου χ�?ηστη
    */
-     
+          
      public boolean doRegister(String username, String password, String displayName, String email) throws IOException{
     	 JSONObject obj = new JSONObject();
     	 obj.put("username", username);
