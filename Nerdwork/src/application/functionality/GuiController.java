@@ -370,48 +370,36 @@ public class GuiController {
  		if (far.dates.isEmpty())
  			return null;
  		
-	 	// Here we fill the far.dates with all the unavailable dates. This is done 
-	 	// in order to more easily get the distances between two days (though 
-	 	// we do not calculate distances. We just move on to the next available date, when 
-	 	// we spot an unavailable).
+	 	// Here we fill the far.dates with all the unavailable dates. This part
+ 		// works as if the far.dates array contained all of the days of the week.
+ 		// When it encounters the missing ones it adds them and continues at where it stopped.
 		if (far.dates.size() < 7) {	
-	 		for (int i = 0; i < far.dates.size(); i++) {
-				if (i < far.dates.size() - 1) {
-					if ((far.dates.get(i + 1).get("day") - far.dates.get(i).get("day")) > 1) {
-						for (int j = far.dates.get(i).get("day") + 1; j < far.dates.get(i + 1).get("day"); j++) {
-							HashMap<String, Integer> unavailableDay = new HashMap<String, Integer>();
-							
-							i++;
-							
-							unavailableDay.put("unavailableDay", j);
-							far.dates.add(i, unavailableDay);
-						}
-					}
-				}
-				// Used to check the first and last elements of far.dates, to see if they match 
-				// to the first and last day of the week (starting from 0 as Sunday)
-				else {
-					if (far.dates.get(0).get("day") > 0)
-						for (int j = 0; j < far.dates.get(j).get("day"); j++) {
-							HashMap<String, Integer> unavailableDay = new HashMap<String, Integer>();
-							
-							unavailableDay.put("unavailableDay", j);
-							far.dates.add(j, unavailableDay);
-						}
-
-					if (far.dates.get(far.dates.size() - 1).get("day") < 6)
-						for (int j = far.dates.size(); j <= 6; j++) {
-							HashMap<String, Integer> unavailableDay = new HashMap<String, Integer>();
-							
-							unavailableDay.put("unavailableDay", j);
-							far.dates.add(j, unavailableDay);
-						}
-					
-					break;
-				}
-			}
+	 		int nextDay = 1; // Next of Sunday (0). We hypothetically take far.dates as an array with all days of week.
+	 		
+	 		for (int i = 0; i < 7; i++) {
+	 			
+	 			if (i == 6) // For checking, if the last element is correct.
+	 				i--;
+	 			
+	 			if (nextDay - far.dates.get(i).get("day") != 1){
+	 				int daysToCoverFrom = (nextDay - far.dates.get(i).get("day") > 1) ? (far.dates.get(i).get("day") + 1) : (nextDay - 1); // Start of missing days
+	 				int daysToCoverUntil = (nextDay - far.dates.get(i).get("day") > 1) ? (7) : (far.dates.get(i).get("day")); // End of missing days
+	 				
+	 				for (int j = daysToCoverFrom; j < daysToCoverUntil; j++) {
+	 					HashMap<String, Integer> unavailableDay = new HashMap<String, Integer>();
+	 					
+	 					unavailableDay.put("unavailableDay", j);
+	 					far.dates.add(j, unavailableDay);
+	 				
+	 					i++;
+	 					nextDay++; // It will reach the value of the day in index i.
+	 				}
+	 			}
+	 			
+	 			nextDay++; // Get next day from the day at index i.
+	 		}
 		}
-		
+			
 		// Matching the today's day with the correct one from the dates ArrayList:
 	 	while (true) {	
  			for (HashMap<String, Integer> date : far.dates) {
