@@ -1,8 +1,10 @@
 package application.gui.classes;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
+import org.json.simple.parser.ParseException;
+
+import application.functinonality.GuiController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,9 +13,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class LoginController {
 	
@@ -22,15 +32,60 @@ public class LoginController {
 	private Parent root;
 	
 	@FXML
-	ImageView close;
+	private Button signInButton;
+	@FXML
+	private TextField username;
+	@FXML
+	private PasswordField password;
+	@FXML
+	private ImageView close;
+	
+	public void login(ActionEvent event) throws IOException, ParseException {
+		
+		GuiController guiController = new GuiController();
+		boolean answer = guiController.login(username.getText(), password.getText());
+		
+		if(answer) {
+			stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+			stage.setScene(createScene(loadHomePage()));
+		}
+		else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle(null);
+			alert.setHeaderText("Invalid Iput Data");
+			alert.setContentText("Credentials do not match with an account");
+			alert.initStyle(StageStyle.UTILITY);
+			alert.showAndWait();
+		}
+	}
+	
+	private BorderPane loadHomePage() throws IOException {
+	      FXMLLoader loader = new FXMLLoader();
+
+	      BorderPane mainPane = (BorderPane) loader.load(getClass().getResourceAsStream(Navigator.MenuBars));
+
+	      MenuBarsController mainController = loader.getController();
+
+	      Navigator.setMainController(mainController);
+	      Navigator.loadCenter(Navigator.HomePage);
+
+	      return mainPane;
+	}
+	
+	private Scene createScene(Pane mainPane) {
+	      Scene scene = new Scene(mainPane);
+
+//	      scene.getStylesheets().setAll(
+//	          getClass().getResource("fullpackstyling.css").toExternalForm()
+//	      );
+
+	      return scene;
+	}
 	
 	public void switchToRegister(ActionEvent event) throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/Register.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(Navigator.RegisterPage));
 		root = loader.load();
-		
-		RegisterController registerController = loader.getController();
-		registerController.getFocus();
-		
+				
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
 		stage.setScene(scene);

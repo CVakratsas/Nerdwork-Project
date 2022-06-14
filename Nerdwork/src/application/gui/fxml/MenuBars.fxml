@@ -8,32 +8,32 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/generalStyling.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gui.classes.MenuController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@/application/gui/css/generalStyling.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gui.classes.MenuBarsController">
    <center>
    </center>
    <bottom>
       <HBox alignment="CENTER" prefWidth="1280.0" style="-fx-background-color: #3889c4;" BorderPane.alignment="CENTER">
          <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false">
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#switchToHomePage">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
                <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="40.0">
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icons/house.png" />
+                        <Image url="@/application/gui/icons/house.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false">
+            <Button mnemonicParsing="false" onAction="#switchToMyCourses">
                <HBox.margin>
                   <Insets left="60.0" right="30.0" />
                </HBox.margin>
                <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="40.0">
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icons/book.png" />
+                        <Image url="@/application/gui/icons/book.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -43,9 +43,9 @@
                   <Insets left="30.0" right="60.0" />
                </HBox.margin>
                <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="40.0">
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icons/professor.png" />
+                        <Image url="@/application/gui/icons/professor.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -55,9 +55,9 @@
                   <Insets />
                </HBox.margin>
                <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="40.0">
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icons/settings.png" />
+                        <Image url="@/application/gui/icons/settings.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -74,25 +74,24 @@
    <top>
       <AnchorPane prefHeight="73.0" prefWidth="600.0" style="-fx-background-color: #3889c4;" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="14.0" layoutY="12.0">
+            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="14.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icons/logo_only.png" />
+                  <Image url="@/application/gui/icons/logo_only.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="540.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="45.0" fitWidth="200.0" layoutX="540.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icons/name_only.png" />
+                  <Image url="@/application/gui/icons/name_only.png" />
                </image>
             </ImageView>
-            <ImageView id="closeImageView" fx:id="close" fitWidth="30.0" layoutX="1236.0" layoutY="22.0" onMousePressed="#closeWindow" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="close" fitHeight="40.0" fitWidth="40.0" layoutX="1226.0" layoutY="17.0" onMousePressed="#closeWindow" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                <image>
-                  <Image url="@../icons/close.png" />
+                  <Image url="@/application/gui/icons/close.png" />
                </image>
             </ImageView>
-         </children>
-      </AnchorPane>
+         </children></AnchorPane>
    </top>
    <center>
-      <AnchorPane prefWidth="1280.0" BorderPane.alignment="CENTER" />
+      <AnchorPane fx:id="centerHolder" prefWidth="1280.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>
