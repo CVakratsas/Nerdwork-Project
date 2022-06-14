@@ -7,18 +7,17 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-
 public class Main extends Application {
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage stage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Login.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource(Navigator.LoginPage));
 			Scene scene = new Scene(root);
-			primaryStage.setTitle("Nerdwork");
-			primaryStage.setResizable(false);
-			primaryStage.initStyle(StageStyle.UNDECORATED);
-			primaryStage.setScene(scene);
-			primaryStage.show();
+			stage.setScene(scene);
+			stage.setTitle("Nerdwork");
+			stage.setResizable(false);
+			stage.initStyle(StageStyle.UNDECORATED);
+			stage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
