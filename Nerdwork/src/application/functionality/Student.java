@@ -1,10 +1,9 @@
-/*
- * Student class, containing methods and attributes for the Student
+/* Student class, containing methods and attributes for the Student
  * objects' functionalities, such as add or remove course, rating and
  * requesting/canceling an appointment with a Professor.
  */
 
-package application.functinonality;
+package application.functionality;
 
 import java.util.ArrayList;
 
@@ -24,8 +23,8 @@ public class Student extends User {
 	
 	/*Student Constructor is here*/
 	
-	public Student(String userId, String username, String displayName, int accountType) {
-		super(userId, username, displayName, accountType);
+	public Student(String userId, String username, String displayName) {
+		super(userId, username, displayName);
 		this.gpa = null;
 		courseGrades = new ArrayList<>();
 	}
@@ -78,32 +77,6 @@ public class Student extends User {
 		pIndex = myCourses.indexOf(course);
 		courseGrades.remove(pIndex);
 		super.removeCourse(course);
-	}
-	
-	/*Student methods regarding appointments are here*/
-	
-	/*
-	 * Method used to request an appointment with a Professor object at a certain
-	 * date and hour (timeslot).
-	 * requestAppointment, receives a Professor object (professor with whom "this 
-	 * Student object wants to meet) and a Timeslot object (the timeslot selected
-	 * by "this" Student object for the appointment), as parameters and is a void
-	 * type method
-	 */
-	public void requestAppointment(Professor professor, Timeslot timeslot) {
-		professor.addAppointmentRequest(this, timeslot);
-	}
-	
-	/*
-	 * Method used to cancel a reserved appointment with a Professor object at a certain
-	 * date and hour (timeslot).
-	 * cancelAppointment, receives a Professor object (professor with whom "this 
-	 * Student object wanted to meet) and a Timeslot object (the timeslot selected
-	 * by "this" Student object for the appointment), as parameters and is a void
-	 * type method
-	 */
-	public void cancelAppointment(Professor professor, Timeslot timeslot) {
-		professor.cancelAppointment(timeslot);
 	}
 	
 	/*User Getters and Setters methods are here*/

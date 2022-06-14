@@ -3,9 +3,10 @@ package application.gui.classes;
 import java.io.IOException;
 import org.controlsfx.control.Rating;
 import org.json.simple.parser.ParseException;
-import application.functinonality.Course;
-import application.functinonality.GuiController;
-import application.functinonality.Professor;
+
+import application.functionality.Course;
+import application.functionality.GuiController;
+import application.functionality.Professor;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

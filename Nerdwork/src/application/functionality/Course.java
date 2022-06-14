@@ -6,7 +6,7 @@
  * provided by the class.
  */
 
-package application.functinonality;
+package application.functionality;
 
 import java.util.ArrayList;
 
