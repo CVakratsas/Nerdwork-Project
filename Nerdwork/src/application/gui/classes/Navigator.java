@@ -12,6 +12,8 @@ public class Navigator {
     public static final String MyCourses = "/application/gui/fxml/MyCourses.fxml";
     public static final String MyCoursesAddCourse = "/application/gui/fxml/MyCoursesAddCourse.fxml";
     public static final String HomePage = "/application/gui/fxml/HomePage.fxml";
+    public static final String ProfessorProfile = "/application/gui/fxml/ProfessorProfile.fxml";
+    public static final String CourseProfile = "/application/gui/fxml/CourseProfile.fxml";
 
     private static MenuBarsController menuBarsController;
 
