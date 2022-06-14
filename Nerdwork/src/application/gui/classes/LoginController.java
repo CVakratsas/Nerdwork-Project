@@ -1,10 +1,8 @@
 package application.gui.classes;
 
 import java.io.IOException;
-
 import org.json.simple.parser.ParseException;
-
-import application.functinonality.GuiController;
+import application.functionality.GuiController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,10 +12,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -42,8 +40,7 @@ public class LoginController {
 	
 	public void login(ActionEvent event) throws IOException, ParseException {
 		
-		GuiController guiController = new GuiController();
-		boolean answer = guiController.login(username.getText(), password.getText());
+		boolean answer = GuiController.getInstance().login(username.getText(), password.getText());
 		
 		if(answer) {
 			stage = (Stage)((Node)event.getSource()).getScene().getWindow();

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 import org.json.simple.parser.ParseException;
 
-import application.functinonality.Course;
-import application.functinonality.GuiController;
-import application.functinonality.Professor;
+import application.functionality.Course;
+import application.functionality.GuiController;
+import application.functionality.Professor;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -30,9 +30,8 @@ public class MyCoursesController {
 	@FXML
 	private void initialize() {
 		try {
-			GuiController guiController = new GuiController();
-			guiController.login("probatos", "beeeH1234@");
-			myCourses = guiController.getEnrolledCourses();
+			GuiController.getInstance().login("probatos", "beeeH1234@");
+			myCourses = GuiController.getInstance().getEnrolledCourses();
 			load(myCourses);
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();

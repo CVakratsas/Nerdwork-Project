@@ -1,10 +1,13 @@
 package application.gui.classes;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import application.functinonality.Course;
-import application.functinonality.GuiController;
-import application.functinonality.Professor;
+
+import org.json.simple.parser.ParseException;
+
+import application.functionality.Course;
+import application.functionality.GuiController;
+import application.functionality.Professor;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -25,28 +28,10 @@ public class MyCoursesAddCourseController {
 	private GridPane coursesPane;
 	
 	@FXML
-	private void initialize() {
-		// Try and catch to see if DB data where loaded
-		try {
-			GuiController guiController = new GuiController();
-			guiController.login("probatos", "beeeH1234@");
-			courses = guiController.getAllCourses();
-			load(courses);
-		}
-		catch (Exception e){
-			System.out.println("Did not load from DB");
-			
-			Professor p1 = new Professor("Σαμαράς Νικόλαος", 22, "sam@gmail.com", "thisTextIsAPhoto", "6987", "335", (float) 7.2);
-			Professor p2 = new Professor("Σακελλαρίου Ηλίας", 22, "sam@gmail.com", "thisTextIsAPhoto", "6987", "335", (float) 7.2);
-			Professor p3 = new Professor("Καρακασίδης Αλέξανδρος", 22, "sam@gmail.com", "thisTextIsAPhoto", "6987", "335", (float) 7.2);
-			ArrayList<Professor> profsArray = new ArrayList<Professor>(Arrays.asList(p1,p2,p3));
-			Course c1 = new Course("id11", "Ανάλυση Αλγορίθμων", new ArrayList<String>(Arrays.asList("id22", "id77")), (float) 7.2, 4, profsArray);
-			Course c2 = new Course("id11", "Διαδικαστικός Προγραμματισμός", new ArrayList<String>(Arrays.asList("id22", "id77")), (float) 7.2, 4, profsArray);
-			Course c3 = new Course("id11", "Μαθηματική Ανάλυση", new ArrayList<String>(Arrays.asList("id22", "id77")), (float) 7.2, 4, profsArray);
-			ArrayList<Course> coursesArray = new ArrayList<Course>(Arrays.asList(c1,c2,c3));
-			
-			load(coursesArray);
-		}
+	private void initialize() throws IOException, ParseException {
+		GuiController.getInstance().login("probatos", "beeeH1234@");
+		courses = GuiController.getInstance().getAllCourses();
+		load(courses);
 	}
 	
 	public void load(ArrayList<Course> array) {
@@ -84,7 +69,6 @@ public class MyCoursesAddCourseController {
 			// Adding
 			RowConstraints row = new RowConstraints(80);
 			coursesPane.getRowConstraints().add(row);
-			
 			
 			coursesPane.add(courseBox, 0, i + 1);
 			coursesPane.add(buttonBox, 1, i + 1);

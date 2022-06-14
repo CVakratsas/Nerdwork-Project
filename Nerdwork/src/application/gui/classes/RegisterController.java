@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.json.simple.parser.ParseException;
 
-import application.functinonality.GuiController;
+import application.functionality.GuiController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,13 +14,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -38,8 +36,8 @@ public class RegisterController {
 	private ImageView close;
 	
 	public void register(ActionEvent event) throws IOException, ParseException {
-		GuiController guiController = new GuiController();
-		boolean answer = guiController.register(username.getText(), password.getText(), nickname.getText(), email.getText());
+		
+		boolean answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText());
 		
 		if(answer) {
 			Alert alert = new Alert(AlertType.INFORMATION);

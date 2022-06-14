@@ -79,7 +79,6 @@ public class Student extends User {
 		super.removeCourse(course);
 	}
 	
-<<<<<<< HEAD:Nerdwork/src/application/functinonality/Student.java
 	/*Student methods regarding appointments are here*/
 	
 	/*
@@ -90,9 +89,9 @@ public class Student extends User {
 	 * by "this" Student object for the appointment), as parameters and is a void
 	 * type method
 	 */
-	public void requestAppointment(Professor professor, Timeslot timeslot) {
-		professor.addAppointmentRequest(this, timeslot);
-	}
+//	public void requestAppointment(Professor professor, Timeslot timeslot) {
+//		professor.addAppointmentRequest(this, timeslot);
+//	}
 	
 	/*
 	 * Method used to cancel a reserved appointment with a Professor object at a certain
@@ -106,8 +105,6 @@ public class Student extends User {
 //		professor.cancelAppointment(timeslot);
 //	}
 	
-=======
->>>>>>> e480f00bae6a168a28913d64ae5caa7324dfaced:Nerdwork/src/application/functionality/Student.java
 	/*User Getters and Setters methods are here*/
 
 	public Double getGpa() {
