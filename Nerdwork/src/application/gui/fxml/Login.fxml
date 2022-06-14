@@ -26,18 +26,18 @@
          <children>
             <Pane prefHeight="720.0" prefWidth="640.0" style="-fx-background-color: #fff;">
                <children>
-                  <TextField layoutX="160.0" layoutY="150.0" prefHeight="50.0" prefWidth="300.0" promptText="Email">
+                  <TextField fx:id="username" layoutX="160.0" layoutY="150.0" prefHeight="50.0" prefWidth="300.0" promptText="Email">
                      <font>
                         <Font name="Segoe UI" size="14.0" />
                      </font>
                   </TextField>
-                  <PasswordField layoutX="160.0" layoutY="235.0" prefHeight="50.0" prefWidth="300.0" promptText="Password">
+                  <PasswordField fx:id="password" layoutX="160.0" layoutY="235.0" prefHeight="50.0" prefWidth="300.0" promptText="Password">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </PasswordField>
                   <Label id="forgotPasswordLabel" alignment="CENTER" layoutX="170.0" layoutY="312.0" prefHeight="30.0" prefWidth="120.0" text="Forgot Password" />
-                  <Button id="whiteButton" alignment="CENTER" contentDisplay="CENTER" layoutX="330.0" layoutY="312.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" text="Sgn In" />
+                  <Button id="whiteButton" fx:id="signInButton" alignment="CENTER" contentDisplay="CENTER" layoutX="330.0" layoutY="312.0" mnemonicParsing="false" onAction="#login" prefHeight="30.0" prefWidth="120.0" text="Sgn In" />
                   <Separator layoutX="160.0" layoutY="364.0" prefHeight="13.0" prefWidth="300.0" />
                   <Label alignment="CENTER" layoutX="258.0" layoutY="359.0" prefHeight="23.0" prefWidth="90.0" style="-fx-background-color: #fff;" text="Or register as a" textFill="#5b5a5a">
                      <font>

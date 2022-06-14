@@ -31,7 +31,7 @@ public class MyCoursesController {
 	private void initialize() {
 		try {
 			GuiController guiController = new GuiController();
-			guiController.login("example", "12345678");
+			guiController.login("probatos", "beeeH1234@");
 			myCourses = guiController.getEnrolledCourses();
 			load(myCourses);
 		} catch (IOException | ParseException e) {

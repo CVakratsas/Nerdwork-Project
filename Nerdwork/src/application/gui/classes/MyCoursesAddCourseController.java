@@ -29,7 +29,7 @@ public class MyCoursesAddCourseController {
 		// Try and catch to see if DB data where loaded
 		try {
 			GuiController guiController = new GuiController();
-			guiController.login("example", "12345678");
+			guiController.login("probatos", "beeeH1234@");
 			courses = guiController.getAllCourses();
 			load(courses);
 		}
