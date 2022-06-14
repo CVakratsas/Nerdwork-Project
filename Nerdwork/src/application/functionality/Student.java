@@ -1,10 +1,9 @@
-/*
- * Student class, containing methods and attributes for the Student
+/* Student class, containing methods and attributes for the Student
  * objects' functionalities, such as add or remove course, rating and
  * requesting/canceling an appointment with a Professor.
  */
 
-package application.functinonality;
+package application.functionality;
 
 import java.util.ArrayList;
 
@@ -24,8 +23,8 @@ public class Student extends User {
 	
 	/*Student Constructor is here*/
 	
-	public Student(String userId, String username, String displayName, int accountType) {
-		super(userId, username, displayName, accountType);
+	public Student(String userId, String username, String displayName) {
+		super(userId, username, displayName);
 		this.gpa = null;
 		courseGrades = new ArrayList<>();
 	}
@@ -80,6 +79,7 @@ public class Student extends User {
 		super.removeCourse(course);
 	}
 	
+<<<<<<< HEAD:Nerdwork/src/application/functinonality/Student.java
 	/*Student methods regarding appointments are here*/
 	
 	/*
@@ -106,6 +106,8 @@ public class Student extends User {
 //		professor.cancelAppointment(timeslot);
 //	}
 	
+=======
+>>>>>>> e480f00bae6a168a28913d64ae5caa7324dfaced:Nerdwork/src/application/functionality/Student.java
 	/*User Getters and Setters methods are here*/
 
 	public Double getGpa() {

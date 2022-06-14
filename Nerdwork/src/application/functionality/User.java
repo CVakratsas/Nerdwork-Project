@@ -4,13 +4,13 @@
  * used, but with a different outcome for each.
  */
 
-package application.functinonality;
+package application.functionality;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class User {
+public abstract class User {
 	
 	/*User attributes are here*/
 
@@ -18,7 +18,8 @@ public class User {
 	protected String username;
 	protected String email;
 	protected String displayName;
-	protected int accountType;
+	protected ArrayList<Timeslot> requestedAppointments;
+	private ArrayList<Timeslot> reservedAppointments; 
 	/*
 	 * The above five attributes keep track of personal Student/Professor,
 	 * concerning the profile they have built.
@@ -29,13 +30,14 @@ public class User {
 	
 	/*User Constructor is here*/
 	
-	public User(String userId, String username, String displayName, int accountType) {
+	public User(String userId, String username, String displayName) {
 		this.userId = userId;
 		this.username = username;
 		this.displayName = displayName;
-		this.accountType = accountType;
 		myCourses = new ArrayList<>();
 		myAppointments = new ArrayList<>();
+		requestedAppointments = new ArrayList<Timeslot>();
+		reservedAppointments = new ArrayList<Timeslot>();
 	}
 	
 	/*User methods (except getters and setters) are here*/
@@ -76,6 +78,10 @@ public class User {
 	
 	/*User Getters and Setters methods are here*/
 	
+	protected void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -90,6 +96,38 @@ public class User {
 	
 	public String getDisplayName() {
 		return displayName;
+	}
+	
+	public void addRequestedAppointment(Timeslot appointment) {
+		requestedAppointments.add(appointment);
+	}
+	
+	public void removeRequestedAppointment(Timeslot appointment) {
+		requestedAppointments.remove(appointment);
+	}
+	
+	public void clearRequestedAppointments() {
+		requestedAppointments.clear();
+	}
+	
+	public ArrayList<Timeslot> getRequestedAppointments(){
+		return requestedAppointments;
+	}
+	
+	public ArrayList<Timeslot> getReservedAppointments() {
+		return reservedAppointments;
+	}
+	
+	public void addReservedAppointment(Timeslot appointment) {
+		reservedAppointments.add(appointment);
+	}
+	
+	public void removeReservedAppointment(Timeslot appointment) {
+		reservedAppointments.remove(appointment);
+	}
+	
+	public void clearReservedAppointments() {
+		reservedAppointments.clear();
 	}
 
 	public String getEmail() {
