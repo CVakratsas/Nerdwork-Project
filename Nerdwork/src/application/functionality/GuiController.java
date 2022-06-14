@@ -78,6 +78,9 @@ public class GuiController {
  		flr = controller.doLogin(username, password);
  		accountTypeLoggedIn = flr.accountType;
  		
+ 		// Call one of the most important methods:
+ 		getAllProfessors(); // Users keep track of their appointments, though there is no such connection in the database.
+ 		
  		if (flr.isSuccess) {
 	 		if (accountTypeLoggedIn == 0) {
 	 			professor = null;
@@ -86,7 +89,9 @@ public class GuiController {
 	 		}
 	 		else {
 	 			student = null;
-	 			professor = new Professor(flr.userId, flr.username, flr.displayName, flr.associatedProfessorId);
+	 			professor = getProfessorById(flr.associatedProfessorId);
+	 			professor.setUserame(flr.username);
+	 			professor.setUserId(flr.userId);
 	 			professor.setBio(controller.getUserProfile(professor.getUserId()).bio);
 	 		}
  		}
@@ -278,7 +283,7 @@ public class GuiController {
  	}
  	
  	public Professor getProfessorById(int professorId) throws IOException, ParseException {
- 		for (Professor p : getAllProfessors()) {
+ 		for (Professor p : allProfessors) {
  			if (p.getProfessorId() == professorId) {
  				return p;
  			}
@@ -321,7 +326,7 @@ public class GuiController {
  	}
  	
  	public Timeslot getAvailableTimeslotById(int timeslotId) throws IOException, ParseException {
- 		for (Professor professor : getAllProfessors())
+ 		for (Professor professor : allProfessors)
  			for (Timeslot availableTimeslot : professor.getAvailableTimeslots())
  				if (availableTimeslot.getId() == timeslotId)
  					return availableTimeslot;
@@ -330,7 +335,7 @@ public class GuiController {
  	}
  	
  	public Timeslot getRequestedTimeslotsById(int timeslotId) throws IOException, ParseException {
-		for (Professor professor : getAllProfessors())
+		for (Professor professor : allProfessors)
  			for (Timeslot requestedTimeslot : professor.getRequestedAppointments())
  				if (requestedTimeslot.getId() == timeslotId)
  					return requestedTimeslot;
@@ -339,8 +344,8 @@ public class GuiController {
  	}
  	
  	public Timeslot getReservedTimeslotById(int timeslotId) throws IOException, ParseException {
-		for (Professor professor : getAllProfessors())
- 			for (Timeslot reservedTimeslot : professor.getReservedTimeslots())
+		for (Professor professor : allProfessors)
+ 			for (Timeslot reservedTimeslot : professor.getReservedAppointments())
  				if (reservedTimeslot.getId() == timeslotId)
  					return reservedTimeslot;
  		
@@ -355,7 +360,12 @@ public class GuiController {
  	 * int type variables as parameters (the day, the starting hour and the ending hour, that
  	 * the professor will be available for appointments).
  	 */
- 	public boolean setAvailableTimeslot(int day, int startHour, int endHour) throws IOException {
+ 	public boolean setAvailableTimeslot(int day, int startHour, int endHour) throws IOException, ParseException {
+ 		boolean success = controller.setAvailabilityDates(day, startHour, endHour);
+ 		
+ 		if (success)
+ 			getAvailableTimeslots(professor);
+ 		
  		return controller.setAvailabilityDates(day, startHour, endHour); 
  	}
  	
@@ -368,14 +378,14 @@ public class GuiController {
  	 * the professor's unique id.
  	 */
  	public ArrayList<Timeslot> getAvailableTimeslots(Professor selectedProfessor) throws IOException, ParseException {
- 		Calendar nextAvailableDate = Calendar.getInstance(); // Next date the professor set as available
+ 		Calendar nextAvailableDate = Calendar.getInstance(TimeZone.getTimeZone("GMT")); // Next date the professor set as available
  		Date availableDateStart; // For temporary storage and parsing of data to a Date object
  		Date availableDateEnd;
  		int weekday; // The Calendar.DAY_OF_WEEK attribute, for the available date
  		int indexOfWeekday = 0; // It's index in the far.dates ArrayList.
-
+ 		
  		FAvailabilityResponse far = controller.getAvailabilityDates(selectedProfessor.getProfessorId());
-		
+ 		
  		if (far.dates.isEmpty())
  			return null;
  		
@@ -451,6 +461,8 @@ public class GuiController {
 			indexOfWeekday = (indexOfWeekday + 1) % 7; // Keep a logical flow of weekdays.
 		}
 	
+		allProfessors.get(selectedProfessor.getProfessorId() - 1).clearAvailableTimeslots();
+		
 		// Here the Integer data, will be converted into a date timestamp, with the
 		// help of the the Calendar and Date Java classes and will be used to create
 		// available Timeslot objects
@@ -475,12 +487,14 @@ public class GuiController {
 			
 			nextAvailableDate.add(Calendar.DAY_OF_YEAR, 1);
 		}
- 		
+ 	
+		allProfessors.set((selectedProfessor.getProfessorId() - 1), selectedProfessor);
+		
  		return selectedProfessor.getAvailableTimeslots();
  	}
  	
- 	public boolean requestAppointment(Professor professor, int month, int day, int hour, int minutes) throws IOException {
- 		Calendar appointmentDate = Calendar.getInstance();
+ 	public boolean requestAppointment(Professor selectedProfessor, int month, int day, int hour, int minutes) throws IOException, ParseException {
+ 		Calendar appointmentDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
  		
  		appointmentDate.set(Calendar.MONTH, month - 1);
  		appointmentDate.set(Calendar.DAY_OF_MONTH, day);
@@ -490,12 +504,15 @@ public class GuiController {
  		appointmentDate.set(Calendar.MILLISECOND, 0);
  		
  		Date appointmentTimestamp = appointmentDate.getTime();
+ 		System.out.println(appointmentTimestamp);
+ 		System.out.println(appointmentTimestamp.getTime() / 1000);
+ 		getProfessorById(selectedProfessor.getProfessorId()).addRequestedAppointment(new Timeslot((int)(appointmentTimestamp.getTime() / 1000), (int)(appointmentTimestamp.getTime() / 1000) +1800));
  		
- 		return controller.bookAppointment(professor.getProfessorId(), (int)(appointmentTimestamp.getTime() / 1000));
+ 		return controller.bookAppointment(selectedProfessor.getProfessorId(), (int)(appointmentTimestamp.getTime() / 1000));
  	}
  	
  	public ArrayList<Timeslot> getRequestedAppointments() throws IOException, ParseException {
- 		Calendar nextRequestedDate = Calendar.getInstance();
+ 		Calendar nextRequestedDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));;
  		Date requestedDate;
  		User user;
  		
@@ -508,11 +525,13 @@ public class GuiController {
  		
  		ArrayList<FAppointmentsResponse> far = controller.getMyAppointments();
  		
- 		for (FAppointmentsResponse timeslotParser : far) {
- 			user.addRequestedAppointment(new Timeslot(timeslotParser.id, timeslotParser.studentId, timeslotParser.professorId, timeslotParser.dateTimestamp, (timeslotParser.dateTimestamp + 1800), timeslotParser.status, timeslotParser.created_at));
- 		}
+ 		user.clearRequestedAppointments();
  		
- 		return user.getRequestedTimelsots();
+ 		for (FAppointmentsResponse timeslotParser : far) 
+ 			if (timeslotParser.status == 0)
+ 				user.addRequestedAppointment(new Timeslot(timeslotParser.id, timeslotParser.studentId, timeslotParser.professorId, timeslotParser.dateTimestamp, (timeslotParser.dateTimestamp + 1800), timeslotParser.status, timeslotParser.created_at));
+ 		
+ 		return user.getRequestedAppointments();
  	}
  	
  	public boolean acceptAppointmentRequest(Timeslot requestedAppointment) throws IOException {
@@ -523,28 +542,18 @@ public class GuiController {
  		return controller.cancelAppointment(requestedAppointment.getId());
  	}
  	
- 	public ArrayList<Timeslot> getReservedTimeslots(Professor selectedProfessor){
+ 	public ArrayList<Timeslot> getReservedTimeslots(Professor selectedProfessor) throws IOException, ParseException{
+ 		ArrayList<Integer> reservedStartingTimestamps = controller.getBookedTimestamps(selectedProfessor.getProfessorId());
  		
+ 		for (Integer timestamp : reservedStartingTimestamps) {
+ 			selectedProfessor.addReservedAppointment(new Timeslot(timestamp, timestamp + 1800));
+ 		}
+ 		
+ 		return selectedProfessor.getReservedAppointments();
  	}
  	
- 	public boolean setDisplayName(String newDisplayName) throws IOException {
- 		return controller.setDisplayName(newDisplayName);
- 	}
- 	
- 	public String getDisplayNameStudent() {
- 		return student.getDisplayName();
- 	}
- 	
- 	public String getDisplayNameProfessor() {
- 		return professor.getDisplayName();
- 	}
- 	
- 	public String getUserNameStudent() {
- 		return student.getUserName();
- 	}
- 	
- 	public String getUserNameProfessor() {
- 		return professor.getUserName();
+ 	public boolean setDisplayName(Student student) throws IOException {
+ 		return controller.setDisplayName(student.getDisplayName());
  	}
  	
 	public String changePassword(String oldPassword, String newPassword) throws IOException {
@@ -559,13 +568,17 @@ public class GuiController {
  		
  		return message;
  	}
- 	
- 	public String getEmailStudent() {
- 		return student.getEmail();
+ 
+ 	public int getAccountTypeLoggedIn() {
+ 		return accountTypeLoggedIn;
  	}
  	
- 	public String getEmailProfessor() {
- 		return professor.getEmail();
+ 	public Student getStudentLoggedIn() {
+ 		return student;
+ 	}
+ 	
+ 	public Professor getProfessorLoggedIn() {
+ 		return professor;
  	}
  	
 	/*

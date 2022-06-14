@@ -13,17 +13,17 @@ public class Main  {
 	public static void main(String[] args) throws IOException, ParseException {
 		//GUI Controller creation
 		GuiController controller = GuiController.getInstance();
-		URestController restController = new URestController();
 		
 		//Login section
 		// "probatos", "beeeH1234@" Student
+		// "arnis", "123456789Ab!" Student2
 		// "example1", "123456789Ab!" Professor Manos Roumeliotis
-		//System.out.println(controller.register("example1", "123456789Ab!", "Manos Roumeliotis", "manosroum@uom.edu.gr"));
+		//System.out.println(controller.register("arnis", "123456789Ab!", "Arnakis", "arnis@uom.edu.gr"));
 		System.out.print("Login: ");
 		System.out.println(controller.login("example1", "123456789Ab!"));
 		System.out.println("--------------------");
 		
-		System.out.println(controller.getAllProfessors().get(8).getDisplayName());
+		System.out.println(controller.getAllProfessors().get(8).getProfessorId());
 		System.out.println("--------------------");
 		/*
 		//All courses section
@@ -87,12 +87,12 @@ public class Main  {
 		//To be continued...
 		
 		// Setting new available dates for professor Aλεξανδροπούλου Ευγενία
-		System.out.println("Attempt a set of available date: " + controller.setAvailableTimeslot(2, 11, 13));
-		System.out.println("Change previous available date: " + controller.setAvailableTimeslot(2, 16, 18)); // I don't know if it changes, since it encounters problems with connecting to the get available dates side of the api.
-		
-		controller.setAvailableTimeslot(3, 12, 15);
-		controller.setAvailableTimeslot(5, 12, 16);
-		System.out.println("--------------------");
+//		System.out.println("Attempt a set of available date: " + controller.setAvailableTimeslot(2, 11, 13));
+//		System.out.println("Change previous available date: " + controller.setAvailableTimeslot(2, 16, 18)); // I don't know if it changes, since it encounters problems with connecting to the get available dates side of the api.
+//		
+//		controller.setAvailableTimeslot(3, 12, 15);
+//		controller.setAvailableTimeslot(5, 12, 16);
+//		System.out.println("--------------------");
 		
 		
 //		// Use of getAvailableTimeslots
@@ -127,7 +127,7 @@ public class Main  {
 //		}
 		
 		// Request an appointment from professor 0.
-		//System.out.println(controller.requestAppointment(controller.getProfessorById(9), 6, 15, 12, 30));
+		//System.out.println(controller.requestAppointment(controller.getProfessorById(9), 6, 17, 14, 30));
 		
 		
 		ArrayList<Timeslot> available = controller.getAvailableTimeslots(controller.getAllProfessors().get(8));
@@ -152,16 +152,34 @@ public class Main  {
 			HashMap<String, Integer> startDatePrint = Timeslot.getDateInfo(element.get("startHour"));
 			HashMap<String, Integer> endDatePrint = Timeslot.getDateInfo(element.get("endHour"));
 			
+			System.out.print("Id: " + t.getId() + " ");
 			System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
 			System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
 		}
 		
-		System.out.println("--------------------");
-		System.out.println("Accept an appointment");
-		
-		controller.acceptAppointmentRequest(controller.getRequestedTimeslotsById(requested.get(0).getId()));
+//		System.out.println("--------------------");
+//		System.out.println("Accept an appointment");
+//		
+//		controller.acceptAppointmentRequest(controller.getRequestedTimeslotsById(7));
+
+		//controller.rejectAppointmentRequested(controller.getRequestedTimeslotsById(5));
 	
 		for (Timeslot t : available) {
+			HashMap<String, Date> element = t.getAppointment();
+			HashMap<String, Integer> startDatePrint = Timeslot.getDateInfo(element.get("startHour"));
+			HashMap<String, Integer> endDatePrint = Timeslot.getDateInfo(element.get("endHour"));
+			
+			System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
+			System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
+
+		}
+		
+		System.out.println("--------------------");
+		System.out.println("Reserved Timeslots:");
+		
+		ArrayList<Timeslot> reserved = controller.getReservedTimeslots(controller.getAllProfessors().get(8));
+		
+		for (Timeslot t : reserved) {
 			HashMap<String, Date> element = t.getAppointment();
 			HashMap<String, Integer> startDatePrint = Timeslot.getDateInfo(element.get("startHour"));
 			HashMap<String, Integer> endDatePrint = Timeslot.getDateInfo(element.get("endHour"));

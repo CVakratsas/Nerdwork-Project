@@ -24,7 +24,6 @@ public class Professor extends User {
 	private int professorId;
 	private float rating;
 	private ArrayList<Timeslot> availableTimeslots; // A Professor's available Timeslots
-	private ArrayList<Timeslot> reservedTimeslots; // A Professor's booked Timeslots
 	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the professor
 	
 	/*Professor Constructor is here*/
@@ -39,7 +38,6 @@ public class Professor extends User {
 		this.office = office;
 		this.rating = rating;
 		availableTimeslots = new ArrayList<Timeslot>();
-		reservedTimeslots = new ArrayList<Timeslot>();
 		studentsRated = new ArrayList<>();
 	}
 	
@@ -48,7 +46,6 @@ public class Professor extends User {
 		super(userId, username, displayName);
 		this.professorId = professorId;
 		availableTimeslots = new ArrayList<Timeslot>();
-		reservedTimeslots = new ArrayList<Timeslot>();
 		studentsRated = new ArrayList<>();
 	}
 	
@@ -151,10 +148,6 @@ public class Professor extends User {
 	
 	public ArrayList<Timeslot> getAvailableTimeslots() {
 		return availableTimeslots;
-	}
-	
-	public ArrayList<Timeslot> getReservedTimeslots() {
-		return reservedTimeslots;
 	}
 	
 	public String getPhone() {

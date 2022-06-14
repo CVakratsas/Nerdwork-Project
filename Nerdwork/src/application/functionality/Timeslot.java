@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 public class Timeslot {
 	
@@ -48,7 +49,7 @@ public class Timeslot {
 	 * in a Date format.
 	 */
 	public static HashMap<String, Integer> getDateInfo(Date date) {
-		Calendar calendarTimestamp = Calendar.getInstance();
+		Calendar calendarTimestamp = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 		HashMap<String, Integer> availableDate = new HashMap<>();
 		
 		calendarTimestamp.setTime(date);
