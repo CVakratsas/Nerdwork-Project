@@ -545,6 +545,8 @@ public class GuiController {
  	public ArrayList<Timeslot> getReservedTimeslots(Professor selectedProfessor) throws IOException, ParseException{
  		ArrayList<Integer> reservedStartingTimestamps = controller.getBookedTimestamps(selectedProfessor.getProfessorId());
  		
+ 		selectedProfessor.clearReservedAppointments();
+ 		
  		for (Integer timestamp : reservedStartingTimestamps) {
  			selectedProfessor.addReservedAppointment(new Timeslot(timestamp, timestamp + 1800));
  		}
