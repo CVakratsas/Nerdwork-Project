@@ -95,40 +95,52 @@ public class Main  {
 		System.out.println("--------------------");
 		
 		
-		// Use of getAvailableTimeslots
-		ArrayList<Timeslot> timelsotsAvailable = controller.getAvailableTimeslots(controller.getAllProfessors().get(8));
-		ArrayList<HashMap<String, Date>> appointmentsAvailable = new ArrayList<>();
-		
-		// Here it returns all the available appointments:
-		for (Timeslot t : timelsotsAvailable) {
-			appointmentsAvailable = t.getAvailableAppointments();
-		
-			// Here it returns the date data in a printable for our purposes way
-			// Note: it only returns the day of the month, the start and end hour of the appointment:
-			ArrayList<HashMap<String, Integer>> appointmentTimeslotsToBePresentedInGui = new ArrayList<HashMap<String, Integer>>();
-	
-			for (HashMap<String, Date> appointmentAvailable : appointmentsAvailable) {
-				HashMap<String, Integer> element;
-				
-				element = Timeslot.getDateInfo(appointmentAvailable.get("startHour"));
-				appointmentTimeslotsToBePresentedInGui.add(element);
-				
-				element = Timeslot.getDateInfo(appointmentAvailable.get("endHour"));
-				appointmentTimeslotsToBePresentedInGui.add(element);
-			}
-			
-			// Print them:
-			for (int i = 0 ; i < appointmentTimeslotsToBePresentedInGui.size() - 1; i += 2) {
-				System.out.print("Day: " + appointmentTimeslotsToBePresentedInGui.get(i).get("day") + "/" + appointmentTimeslotsToBePresentedInGui.get(i).get("month"));
-				System.out.println(" starting at: " + appointmentTimeslotsToBePresentedInGui.get(i).get("hour") + ":" + appointmentTimeslotsToBePresentedInGui.get(i).get("minutes") + " and ending at: " + appointmentTimeslotsToBePresentedInGui.get(i + 1).get("hour") + ":" + appointmentTimeslotsToBePresentedInGui.get(i + 1).get("minutes"));
-			}
-		
-			System.out.println("\n\n");
-		}
+//		// Use of getAvailableTimeslots
+//		ArrayList<Timeslot> timelsotsAvailable = controller.getAvailableTimeslots(controller.getAllProfessors().get(8));
+//		ArrayList<HashMap<String, Date>> appointmentsAvailable = new ArrayList<>();
+//		
+//		// Here it returns all the available appointments:
+//		for (Timeslot t : timelsotsAvailable) {
+//			appointmentsAvailable = t.getAvailableAppointments();
+//		
+//			// Here it returns the date data in a printable for our purposes way
+//			// Note: it only returns the day of the month, the start and end hour of the appointment:
+//			ArrayList<HashMap<String, Integer>> appointmentTimeslotsToBePresentedInGui = new ArrayList<HashMap<String, Integer>>();
+//	
+//			for (HashMap<String, Date> appointmentAvailable : appointmentsAvailable) {
+//				HashMap<String, Integer> element;
+//				
+//				element = Timeslot.getDateInfo(appointmentAvailable.get("startHour"));
+//				appointmentTimeslotsToBePresentedInGui.add(element);
+//				
+//				element = Timeslot.getDateInfo(appointmentAvailable.get("endHour"));
+//				appointmentTimeslotsToBePresentedInGui.add(element);
+//			}
+//			
+//			// Print them:
+//			for (int i = 0 ; i < appointmentTimeslotsToBePresentedInGui.size() - 1; i += 2) {
+//				System.out.print("Day: " + appointmentTimeslotsToBePresentedInGui.get(i).get("day") + "/" + appointmentTimeslotsToBePresentedInGui.get(i).get("month"));
+//				System.out.println(" starting at: " + appointmentTimeslotsToBePresentedInGui.get(i).get("hour") + ":" + appointmentTimeslotsToBePresentedInGui.get(i).get("minutes") + " and ending at: " + appointmentTimeslotsToBePresentedInGui.get(i + 1).get("hour") + ":" + appointmentTimeslotsToBePresentedInGui.get(i + 1).get("minutes"));
+//			}
+//		
+//			System.out.println("\n\n");
+//		}
 		
 		// Request an appointment from professor 0.
-		//System.out.println(controller.requestAppointment(controller.getProfessorById(9), 5, 17, 12, 30));
+		//System.out.println(controller.requestAppointment(controller.getProfessorById(9), 6, 15, 12, 30));
 		
+		
+		ArrayList<Timeslot> available = controller.getAvailableTimeslots(controller.getAllProfessors().get(8));
+		
+		for (Timeslot t : available) {
+			HashMap<String, Date> element = t.getAppointment();
+			HashMap<String, Integer> startDatePrint = Timeslot.getDateInfo(element.get("startHour"));
+			HashMap<String, Integer> endDatePrint = Timeslot.getDateInfo(element.get("endHour"));
+			
+			System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
+			System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
+
+		}
 		
 		System.out.println("--------------------");
 		System.out.println("Get requested appointments of student: \n");
@@ -136,12 +148,27 @@ public class Main  {
 		ArrayList<Timeslot> requested = controller.getRequestedAppointments();
 		
 		for (Timeslot t : requested) {
-			HashMap<String, Date> element = t.getRequestedAppointment();
+			HashMap<String, Date> element = t.getAppointment();
 			HashMap<String, Integer> startDatePrint = Timeslot.getDateInfo(element.get("startHour"));
 			HashMap<String, Integer> endDatePrint = Timeslot.getDateInfo(element.get("endHour"));
 			
 			System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
 			System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
+		}
+		
+		System.out.println("--------------------");
+		System.out.println("Accept an appointment");
+		
+		controller.acceptAppointmentRequest(controller.getRequestedTimeslotsById(requested.get(0).getId()));
+	
+		for (Timeslot t : available) {
+			HashMap<String, Date> element = t.getAppointment();
+			HashMap<String, Integer> startDatePrint = Timeslot.getDateInfo(element.get("startHour"));
+			HashMap<String, Integer> endDatePrint = Timeslot.getDateInfo(element.get("endHour"));
+			
+			System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
+			System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
+
 		}
 	}
 }

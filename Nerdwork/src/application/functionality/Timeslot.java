@@ -60,35 +60,8 @@ public class Timeslot {
 		
 		return availableDate;
 	}
-	
-	public ArrayList<HashMap<String, Date>> getAvailableAppointments() {
-		ArrayList<HashMap<String, Date>> totalAppointments = new ArrayList<HashMap<String, Date>>(); // Keeps track of all available appointments in a timeslot.
-		Date dateStartTimestamp = new Date((long)startHourTimestamp * 1000);
-		Date dateEndTimestamp = new Date((long)endHourTimestamp * 1000);
-		// The two above objects, are used only for the if condition.
-		int appointmentStartHourTimestamp = startHourTimestamp; // The start hour of the available hours of a professor for a student.
-		int appointmentEndHourTimestamp = startHourTimestamp + 1800; // The end hour of the available hours of a professor for a student.
-		
-		// The condition means: The appointments that can be made from starting hour
-		// to end hour. Appointments last for 30 minutes each.
-		for (int i = 0; i < ((dateEndTimestamp.getTime() - dateStartTimestamp.getTime()) / 1000) / 1800; i++) {
-			HashMap<String, Date> appointmentDuration = new HashMap<String, Date>(); // Two arguments, together representing the duration of an appointment.
-			Date appointmentDateStartHourTimestamp = new Date((long)appointmentStartHourTimestamp * 1000);
-			Date appointmentDateEndHourTimestamp = new Date((long)appointmentEndHourTimestamp * 1000);
-			
-			appointmentDuration.put("startHour", appointmentDateStartHourTimestamp);
-			appointmentDuration.put("endHour", appointmentDateEndHourTimestamp);
-			
-			totalAppointments.add(appointmentDuration);
-			
-			appointmentStartHourTimestamp = appointmentEndHourTimestamp;
-			appointmentEndHourTimestamp += 1800; 
-		}
-		
-		return totalAppointments;
-	}
-	
-	public HashMap<String, Date> getRequestedAppointment(){
+
+	public HashMap<String, Date> getAppointment(){
 		HashMap<String, Date> appointment = new HashMap<String, Date>();
 		Date dateStartTimestamp = new Date((long)startHourTimestamp * 1000);
 		Date dateEndTimestamp = new Date((long)endHourTimestamp * 1000);
@@ -109,6 +82,14 @@ public class Timeslot {
 
 	public int getProfessorId() {
 		return professorId;
+	}
+	
+	public int getStartHourTimestamp() {
+		return startHourTimestamp;
+	}
+	
+	public int getEndHourTimestamp() {
+		return endHourTimestamp;
 	}
 
 	public int getDay() {

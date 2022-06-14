@@ -329,6 +329,15 @@ public class GuiController {
  		return null;
  	}
  	
+ 	public Timeslot getRequestedTimeslotsById(int timeslotId) throws IOException, ParseException {
+		for (Professor professor : getAllProfessors())
+ 			for (Timeslot requestedTimeslot : professor.getRequestedAppointments())
+ 				if (requestedTimeslot.getId() == timeslotId)
+ 					return requestedTimeslot;
+ 		
+ 		return null;
+ 	}
+ 	
  	public Timeslot getReservedTimeslotById(int timeslotId) throws IOException, ParseException {
 		for (Professor professor : getAllProfessors())
  			for (Timeslot reservedTimeslot : professor.getReservedTimeslots())
@@ -399,11 +408,11 @@ public class GuiController {
 	 			nextDay++; // Get next day from the day at index i.
 	 		}
 		}
-			
+		
 		// Matching the today's day with the correct one from the dates ArrayList:
 	 	while (true) {	
  			for (HashMap<String, Integer> date : far.dates) {
-		 		if (!date.keySet().contains("unavailableDay"))	
+				if (!date.keySet().contains("unavailableDay"))	
  					if (date.get("day").equals(nextAvailableDate.get(Calendar.DAY_OF_WEEK) - 1)) {
 		 				weekday = date.get("day");
 		 				break;
@@ -423,8 +432,6 @@ public class GuiController {
  			nextAvailableDate.add(Calendar.DAY_OF_YEAR, 1);
  			indexOfWeekday = 0;
 	 	}
-	 	
-	 	// Reset the calendar object.
 	 	
 		// Reform the dates ArrayList, so that weekday is the first element
 	 	// We do this by making a copy of far.dates, which will have as first 
@@ -506,6 +513,18 @@ public class GuiController {
  		}
  		
  		return user.getRequestedTimelsots();
+ 	}
+ 	
+ 	public boolean acceptAppointmentRequest(Timeslot requestedAppointment) throws IOException {
+ 		return controller.acceptAppointment(requestedAppointment.getId());
+ 	}
+ 	
+ 	public boolean rejectAppointmentRequested(Timeslot requestedAppointment) throws IOException {
+ 		return controller.cancelAppointment(requestedAppointment.getId());
+ 	}
+ 	
+ 	public ArrayList<Timeslot> getReservedTimeslots(Professor selectedProfessor){
+ 		
  	}
  	
  	public boolean setDisplayName(String newDisplayName) throws IOException {
