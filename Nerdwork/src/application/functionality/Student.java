@@ -52,30 +52,6 @@ public class Student extends User {
 		gpa /= courseGrades.size();
 	}
 	
-	/* Student methods regarding courses are here: */
-	
-	/*
-	 * Method used to add the courses (updating myCourses, via the super class User)
-	 * that "this" Student object wants to attend to. 
-	 * addCourse receives a Course object (course to add) as parameters and is a void 
-	 * type method.
-	 */
-	public void addCourse(Course course) {
-		super.addCourse(course);
-		courseGrades.add(null);
-	}
-	
-	/*
-	 * Method used to remove the courses (updating myCourses, via the super class User)
-	 * that "this" Student object wants to quit from. 
-	 * removeCourse receives a Course object (course to remove), as parameters and is 
-	 * a void type method.
-	 */
-	public void removeCourse(Course course) {
-		courseGrades.remove(course);
-		super.removeCourse(course);
-	}
-	
 	/*User Getters and Setters methods are here*/
 
 	public Double getGpa() {

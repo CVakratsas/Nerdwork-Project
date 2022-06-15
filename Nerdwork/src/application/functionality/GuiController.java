@@ -41,7 +41,6 @@ public class GuiController {
 	// Class attributes
 	private URestController controller; // Not to be user by GUI.
  	private ArrayList<Course> allCourses; // All courses.
- 	private ArrayList<Course> myCourses; // Courses taught by "this" professor/Courses attended by "this" student.
  	private ArrayList<Professor> allProfessors;
  	// The 2 types of User:
  	private User user;
@@ -50,7 +49,6 @@ public class GuiController {
  	private GuiController() throws IOException, ParseException {
  		controller = new URestController();
  		allCourses = new ArrayList<Course>();
- 		myCourses = new ArrayList<Course>();
  		allProfessors = new ArrayList<Professor>();
  	}
  	
@@ -110,33 +108,33 @@ public class GuiController {
 		
 		// The first if statement is used to check if the user has already accessed the page 
  		// for all courses. In that way we do not spend time refilling the array.
-	
-		allCourses.clear();
-		
-		// The following part of the code is used to get the professors from the database
- 		// This is done, in order to find out the Professor objects who teach each course
-		// (otherwise, only their professorId will be known to each Course object).
-		ArrayList<FProfessorsResponse> fpr = controller.getAllProfessors();
- 		
- 		if (allProfessors.size() != fpr.size()) {
- 			allProfessors.clear();
- 			
-	 		for (FProfessorsResponse i : fpr)
-	 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating));
+ 		if (allCourses.size() != fsr.size()) {
+			allCourses.clear();
+			
+			// The following part of the code is used to get the professors from the database
+	 		// This is done, in order to find out the Professor objects who teach each course
+			// (otherwise, only their professorId will be known to each Course object).
+			ArrayList<FProfessorsResponse> fpr = controller.getAllProfessors();
+	 		
+	 		if (allProfessors.size() != fpr.size()) {
+	 			allProfessors.clear();
+	 			
+		 		for (FProfessorsResponse i : fpr)
+		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating));
+	 		}
+	 		// allProfessors, now contains all the professors contained in the database
+			
+			for (FSubjectsResponse i : fsr) 
+				allCourses.add(new Course(i.id, i.name, i.associatedProfessors, i.rating, i.semester, allProfessors));
  		}
- 		// allProfessors, now contains all the professors contained in the database
-		
-		for (FSubjectsResponse i : fsr) 
-			allCourses.add(new Course(i.id, i.name, i.associatedProfessors, i.rating, i.semester, allProfessors));
- 		
  		
  		return allCourses;
  	}
  	
  	public Course getCourseById(String courseId) throws IOException, ParseException {
- 		for (Course c : getAllCourses()) {
- 			if (c.getId().equals(courseId)) {
- 				return c;
+ 		for (Course course : allCourses) {
+ 			if (course.getId().equals(courseId)) {
+ 				return course;
  			}
  		}
  		
@@ -149,8 +147,13 @@ public class GuiController {
  	 * It returns false if the enrollment failed (student already enrolled)
  	 * or because of the http request failure.
  	 */
- 	public boolean courseEnrollment(String id) throws IOException {
- 		return controller.enrollSubject(id);
+ 	public boolean courseEnrollment(String courseId) throws IOException, ParseException {
+ 		boolean success = controller.enrollSubject(courseId);
+ 		
+ 		if (success)
+ 			user.addCourse(getCourseById(courseId));
+ 		
+ 		return success;
  	}
 
  	/*
@@ -159,8 +162,13 @@ public class GuiController {
  	 * It returns false if the disenrollment failed (student not enrolled)
  	 * or because of the http request failure.
  	 */
- 	public boolean courseDisenrollment(String id) throws IOException {
- 		return controller.disenrollSubject(id);
+ 	public boolean courseDisenrollment(String courseId) throws IOException, ParseException {
+ 		boolean success = controller.disenrollSubject(courseId);
+ 		
+ 		if (success)
+ 			user.removeCourse(getCourseById(courseId));
+ 		
+ 		return success;
  	}
  	
  	/*
@@ -173,16 +181,16 @@ public class GuiController {
  		
  		// The first if statement is used to check if the user has already accessed the page 
  		// for his courses. In that way we do not spend time refilling the array.
- 		if (enrolledCourses.size() != myCourses.size()) {
- 			myCourses.clear();
- 			
+ 		if (user.getMyCourses().size() != enrolledCourses.size()) {
+			user.clearMyCourses();
+			
 			for (int i = 0; i < enrolledCourses.size(); i++) 
 				for (int j = 0; j < allCourses.size(); j++)	
 					if (enrolledCourses.get(i).equals(allCourses.get(j).getId()))
-						myCourses.add(allCourses.get(j));
+						user.addCourse(allCourses.get(j));
  		}
  		
- 		return myCourses;
+ 		return user.getMyCourses();
  	}
  	
  	/*
@@ -198,7 +206,7 @@ public class GuiController {
  		int indexOfRatedCourse = 0;
  		
  		// Checking if the course the Student chose to rate is attended by him
-		for (Course course : myCourses) {
+		for (Course course : user.getMyCourses()) {
 			if (course.getId().equals(selectedCourse.getId())) {
 					success = controller.setSubjectRating(stars, selectedCourse.getId());
 					break;
@@ -211,7 +219,7 @@ public class GuiController {
  		if (success) {
  			float rating = controller.getSubjectRating(selectedCourse.getId());
  			
- 			myCourses.get(indexOfRatedCourse).setRating(rating); // Update allCourses
+ 			user.getMyCourses().get(indexOfRatedCourse).setRating(rating); // Update allCourses
  			
  			// Update myCourses
  			for (int i = 0; i < allCourses.size(); i++) {
@@ -251,12 +259,12 @@ public class GuiController {
  	 * ECTS and gets a Course object as a parameter, which defines 
  	 * the selected course.
  	 */
- 	public int getCourseECTS(Course course) {
- 		return course.getECTS();
+ 	public int getCourseECTS(Course selectedCourse) {
+ 		return selectedCourse.getECTS();
  	}
  	
- 	public int getCourseSemester(Course course) {
- 		return course.getSemester();
+ 	public int getCourseSemester(Course selectedCourse) {
+ 		return selectedCourse.getSemester();
  	}
  	
  	/*
@@ -284,9 +292,9 @@ public class GuiController {
  	}
  	
  	public Professor getProfessorById(int professorId) throws IOException, ParseException {
- 		for (Professor p : allProfessors) {
- 			if (p.getProfessorId() == professorId) {
- 				return p;
+ 		for (Professor professor : allProfessors) {
+ 			if (professor.getProfessorId() == professorId) {
+ 				return professor;
  			}
  		}
  		
@@ -481,8 +489,8 @@ public class GuiController {
  		return selectedProfessor.getReservedAppointments();
  	}
  	
- 	public boolean setDisplayName(Student student) throws IOException {
- 		return controller.setDisplayName(student.getDisplayName());
+ 	public boolean setDisplayName(User user) throws IOException {
+ 		return controller.setDisplayName(user.getDisplayName());
  	}
  	
 	public String changePassword(String oldPassword, String newPassword) throws IOException {

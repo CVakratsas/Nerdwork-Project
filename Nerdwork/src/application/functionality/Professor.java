@@ -43,50 +43,6 @@ public class Professor extends User {
 		availableTimeslots = new ArrayList<Timeslot>();
 	}
 	
-	/* Professor methods regarding course are here: */
-	
-	/*
-	 * Method used to set a value at the name attribute of a course 
-	 * object.
-	 * editCourseName, receives a Course class object (course object
-	 * to set a value at its name attribute) and a String class object
-	 * (the value that the Course.name attribute will be set at), as parameters
-	 * and is a void type method.
-	 */
-	public void editCourseName(Course course, String name) {
-		course.setName(name);
-	}
-	
-	/*
-	 * Method used to set a value at the orientation attribute of a course 
-	 * object.
-	 * editCourseOrientation, receives a Course class object (course object
-	 * to set a value at its orientation attribute) and a String class object
-	 * (the value that the Course.orientation attribute will be set at), as parameters
-	 * and is a void type method.
-	 */
-	public void editCourseOrientation(Course course, String orientation) {
-		course.setOrientation(orientation);
-	}
-	
-	/*
-	 * Method used to set a value at the semester attribute of a course 
-	 * object.
-	 * editCourseName, receives a Course class object (course object
-	 * to set a value at its semester attribute) and a Integer class object
-	 * (the value that the Course.semester attribute will be set at), as parameters
-	 * and is a void type method.
-	 */
-	public void editCourseSemester(Course course, Integer semester) {
-		course.setSemester(semester);
-	}
-	
-	/*
-	 * Method used to delete a Timeslot for appointment requests (remove it from "this" Calendar).
-	 * removeAvailableDate, receives a Timeslot class object (the timeslot to be deleted), 
-	 * as a parameter and is a void type method.
-	 */
-	
 	/*
 	 * Method that is used to get the courses a professor is teaching.
 	 * The method returns an ArrayList of Course class objects and receives 
@@ -131,8 +87,10 @@ public class Professor extends User {
 		for (int i = 0; i < ((dateEndTimestamp.getTime() - dateStartTimestamp.getTime()) / 1000) / 1800; i++) {
 			Date appointmentDateStartHourTimestamp = new Date((long)appointmentStartHourTimestamp * 1000);
 			Date appointmentDateEndHourTimestamp = new Date((long)appointmentEndHourTimestamp * 1000);
+			Timeslot timeslot = new Timeslot((int)(appointmentDateStartHourTimestamp.getTime() / 1000), (int)(appointmentDateEndHourTimestamp.getTime() / 1000));
 			
-			availableTimeslots.add(new Timeslot((int)(appointmentDateStartHourTimestamp.getTime() / 1000), (int)(appointmentDateEndHourTimestamp.getTime() / 1000)));
+			if (!timeslot.checkOutdated())
+				availableTimeslots.add(timeslot);
 			
 			appointmentStartHourTimestamp = appointmentEndHourTimestamp;
 			appointmentEndHourTimestamp += 1800; 

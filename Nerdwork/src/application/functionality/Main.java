@@ -19,12 +19,12 @@ public class Main  {
 		// "example1", "123456789Ab!" Professor Manos Roumeliotis
 		//System.out.println(controller.register("arnis", "123456789Ab!", "Arnakis", "arnis@uom.edu.gr"));
 		System.out.print("Login: ");
-		System.out.println(controller.login("example1", "123456789Ab!"));
+		System.out.println(controller.login("probatos", "beeeH1234@"));
 		System.out.println("--------------------");
 		
 		System.out.println(controller.getAllProfessors().get(8).getProfessorId());
 		System.out.println("--------------------");
-		/*
+		
 		//All courses section
 		System.out.println("All courses in the database: ");
 		for (Course c : controller.getAllCourses()) {
@@ -39,7 +39,8 @@ public class Main  {
 		for (Course c : controller.getEnrolledCourses()) {
 			System.out.println();
 			System.out.println("Id: " + c.getId() + ", " + "Name: " + c.getName() + ", " + "Semester: " + c.getSemester()
-			+ ", " + "ECTS: " + c.getECTS() + ", " + "Rating: " + c.getRating() + ", " + "My rating: " + controller.getMyCourseRating(c.getId()));
+			+ ", " + "ECTS: " + c.getECTS() + ", " + "Rating: " + c.getRating() + ", " + "My rating: " + controller.getMyCourseRating(controller.getCourseById(c.getId())));
+
 		}
 		System.out.println("--------------------");
 		
@@ -50,7 +51,8 @@ public class Main  {
 		for (Course c : controller.getEnrolledCourses()) {
 			System.out.println();
 			System.out.println("Id: " + c.getId() + ", " + "Name: " + c.getName() + ", " + "Semester: " + c.getSemester()
-			+ ", " + "ECTS: " + c.getECTS() + ", " + "Rating: " + c.getRating() + ", " + "My rating: " + controller.getMyCourseRating(c.getId()));
+			+ ", " + "ECTS: " + c.getECTS() + ", " + "Rating: " + c.getRating() + ", " + "My rating: " + controller.getMyCourseRating(controller.getCourseById(c.getId())));
+
 		}
 		System.out.println("--------------------");
 		
@@ -61,7 +63,7 @@ public class Main  {
 		for (Course c : controller.getEnrolledCourses()) {
 			System.out.println();
 			System.out.println("Id: " + c.getId() + ", " + "Name: " + c.getName() + ", " + "Semester: " + c.getSemester()
-			+ ", " + "ECTS: " + c.getECTS() + ", " + "Rating: " + c.getRating() + ", " + "My rating: " + controller.getMyCourseRating(c.getId()));
+			+ ", " + "ECTS: " + c.getECTS() + ", " + "Rating: " + c.getRating() + ", " + "My rating: " + controller.getMyCourseRating(controller.getCourseById(c.getId())));
 		}
 		System.out.println("--------------------");
 		
@@ -74,7 +76,7 @@ public class Main  {
 			+ "Photo: " + p.getProfilePhoto() + ", " + "Rating: " + p.getRating() + ", " + "My rating: " + controller.getMyProfessorRating(p));
 		}
 		System.out.println("--------------------");
-		
+		/*
 		//Rate a professor
 		System.out.println("Rating professor 14 (achat), 4 stars: ");
 		System.out.println("This should return false in case I have already rated professor 14: " + controller.rateProfessor(4, 14));
@@ -83,15 +85,13 @@ public class Main  {
 		+ controller.getAllProfessors().get(13).getRating() + ", " + "My rating: " + controller.getMyProfessorRating(14));
 		System.out.println("--------------------");
 		*/
-		//To be continued...
-		
 		// Setting new available dates for professor Aλεξανδροπούλου Ευγενία
 //		System.out.println("Attempt a set of available date: " + controller.setAvailableTimeslot(2, 11, 13));
 //		System.out.println("Change previous available date: " + controller.setAvailableTimeslot(2, 16, 18)); // I don't know if it changes, since it encounters problems with connecting to the get available dates side of the api.
 //		
 //		controller.setAvailableTimeslot(3, 12, 15);
 //		controller.setAvailableTimeslot(5, 12, 16);
-		System.out.println("--------------------");
+	/*	System.out.println("--------------------");
 		System.out.println("Set a new available Timeslot");
 	
 		controller.setAvailableTimeslot(0, 21, 23);
@@ -107,9 +107,10 @@ public class Main  {
 			HashMap<String, Integer> startDatePrint = Timeslot.getDateInfo(element.get("startHour"));
 			HashMap<String, Integer> endDatePrint = Timeslot.getDateInfo(element.get("endHour"));
 			
-			System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
-			System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
-
+			if (!t.checkOutdated()) {
+				System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
+				System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
+			}
 		}
 		
 		System.out.println("--------------------");
@@ -122,10 +123,11 @@ public class Main  {
 			HashMap<String, Integer> startDatePrint = Timeslot.getDateInfo(element.get("startHour"));
 			HashMap<String, Integer> endDatePrint = Timeslot.getDateInfo(element.get("endHour"));
 			
-			System.out.print("Id: " + t.getId() + " ");
-			System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
-			System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
-		}
+			if (!t.checkOutdated()) {
+				System.out.print("Id: " + t.getId() + " ");
+				System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
+				System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
+			}		}
 		
 //		System.out.println("--------------------");
 //		System.out.println("Accept an appointment");
@@ -139,9 +141,10 @@ public class Main  {
 			HashMap<String, Integer> startDatePrint = Timeslot.getDateInfo(element.get("startHour"));
 			HashMap<String, Integer> endDatePrint = Timeslot.getDateInfo(element.get("endHour"));
 			
-			System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
-			System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
-
+			if (!t.checkOutdated()) {
+				System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
+				System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
+			}
 		}
 		
 		System.out.println("--------------------");
@@ -154,9 +157,10 @@ public class Main  {
 			HashMap<String, Integer> startDatePrint = Timeslot.getDateInfo(element.get("startHour"));
 			HashMap<String, Integer> endDatePrint = Timeslot.getDateInfo(element.get("endHour"));
 			
-			System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
-			System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
-
-		}
+			if (!t.checkOutdated()) {
+				System.out.print("Day: " + startDatePrint.get("day") + "/" + startDatePrint.get("month"));
+				System.out.println(" starting at: " + startDatePrint.get("hour") + ":" + startDatePrint.get("minutes") + " and ending at: " + endDatePrint.get("hour") + ":" + endDatePrint.get("minutes"));
+			}
+		}*/
 	}
 }
