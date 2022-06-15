@@ -52,62 +52,6 @@ public class Student extends User {
 		gpa /= courseGrades.size();
 	}
 	
-	/* Student methods regarding courses are here: */
-	
-	/*
-	 * Method used to add the courses (updating myCourses, via the super class User)
-	 * that "this" Student object wants to attend to. 
-	 * addCourse receives a Course object (course to add) as parameters and is a void 
-	 * type method.
-	 */
-	public void addCourse(Course course) {
-		super.addCourse(course);
-		courseGrades.add(null);
-	}
-	
-	/*
-	 * Method used to remove the courses (updating myCourses, via the super class User)
-	 * that "this" Student object wants to quit from. 
-	 * removeCourse receives a Course object (course to remove), as parameters and is 
-	 * a void type method.
-	 */
-	public void removeCourse(Course course) {
-		Integer pIndex;
-		
-		pIndex = myCourses.indexOf(course);
-		courseGrades.remove(pIndex);
-		super.removeCourse(course);
-	}
-	
-<<<<<<< HEAD:Nerdwork/src/application/functinonality/Student.java
-	/*Student methods regarding appointments are here*/
-	
-	/*
-	 * Method used to request an appointment with a Professor object at a certain
-	 * date and hour (timeslot).
-	 * requestAppointment, receives a Professor object (professor with whom "this 
-	 * Student object wants to meet) and a Timeslot object (the timeslot selected
-	 * by "this" Student object for the appointment), as parameters and is a void
-	 * type method
-	 */
-	public void requestAppointment(Professor professor, Timeslot timeslot) {
-		professor.addAppointmentRequest(this, timeslot);
-	}
-	
-	/*
-	 * Method used to cancel a reserved appointment with a Professor object at a certain
-	 * date and hour (timeslot).
-	 * cancelAppointment, receives a Professor object (professor with whom "this 
-	 * Student object wanted to meet) and a Timeslot object (the timeslot selected
-	 * by "this" Student object for the appointment), as parameters and is a void
-	 * type method
-	 */
-//	public void cancelAppointment(Professor professor, Timeslot timeslot) {
-//		professor.cancelAppointment(timeslot);
-//	}
-	
-=======
->>>>>>> e480f00bae6a168a28913d64ae5caa7324dfaced:Nerdwork/src/application/functionality/Student.java
 	/*User Getters and Setters methods are here*/
 
 	public Double getGpa() {
@@ -116,9 +60,5 @@ public class Student extends User {
 
 	public ArrayList<Double> getCourseGrades() {
 		return courseGrades;
-	}
-	
-	public void setEmail(String email) {
-		this.email = email;
 	}
 }

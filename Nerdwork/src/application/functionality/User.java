@@ -7,8 +7,6 @@
 package application.functionality;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class User {
 	
@@ -18,6 +16,7 @@ public abstract class User {
 	protected String username;
 	protected String email;
 	protected String displayName;
+	private String bio;
 	protected ArrayList<Timeslot> requestedAppointments;
 	private ArrayList<Timeslot> reservedAppointments; 
 	/*
@@ -52,32 +51,6 @@ public abstract class User {
 		return userId;
 	}
 	
-	/* User methods regarding courses are here: */
-	
-	/*
-	 * Method that a adds a course (course that will be taught by Professor/attended by Student)
-	 * object in the myCourses array list of "this" User object. 
-	 * addCourse, gets a Course object (course to add), as a parameter 
-	 * and is a void type method
-	 */
-	public void addCourse(Course course) {
-		if(!myCourses.contains(course)) {
-			myCourses.add(course);
-		}
-	}
-	
-	/*
-	 * Method that a removes a course (course taught by Professor/attended by Student)
-	 * object from the myCourses array list of "this" User object. 
-	 * removeCourse, gets a Course object (course to remove), as a parameter 
-	 * and is a void type method
-	 */
-	public void removeCourse(Course course) {
-		myCourses.remove(course);
-	}
-	
-	/*User Getters and Setters methods are here*/
-	
 	protected void setUserId(String userId) {
 		this.userId = userId;
 	}
@@ -99,7 +72,8 @@ public abstract class User {
 	}
 	
 	public void addRequestedAppointment(Timeslot appointment) {
-		requestedAppointments.add(appointment);
+		if (!appointment.checkOutdated())
+			requestedAppointments.add(appointment);
 	}
 	
 	public void removeRequestedAppointment(Timeslot appointment) {
@@ -119,7 +93,8 @@ public abstract class User {
 	}
 	
 	public void addReservedAppointment(Timeslot appointment) {
-		reservedAppointments.add(appointment);
+		if (!appointment.checkOutdated())
+			reservedAppointments.add(appointment);
 	}
 	
 	public void removeReservedAppointment(Timeslot appointment) {
@@ -132,5 +107,33 @@ public abstract class User {
 
 	public String getEmail() {
 		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	public String getBio() {
+		return bio;
+	}
+	
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
+	
+	public ArrayList<Course> getMyCourses(){
+		return myCourses;
+	}
+	
+	public void clearMyCourses() {
+		myCourses.clear();
+	}
+	
+	public void addCourse(Course course) {
+		myCourses.add(course);
+	}
+	
+	public void removeCourse(Course course) {
+		myCourses.remove(course);
 	}
 }
