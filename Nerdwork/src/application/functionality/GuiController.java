@@ -10,18 +10,23 @@
 
 package application.functionality;
 
-import application.api.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 
 import org.json.simple.parser.ParseException;
+
+import application.api.FAppointmentsResponse;
+import application.api.FAvailabilityResponse;
+import application.api.FLoginResponse;
+import application.api.FProfessorsResponse;
+import application.api.FSubjectsResponse;
+import application.api.URestController;
 
 public class GuiController {
 	
@@ -39,9 +44,7 @@ public class GuiController {
  	private ArrayList<Course> myCourses; // Courses taught by "this" professor/Courses attended by "this" student.
  	private ArrayList<Professor> allProfessors;
  	// The 2 types of User:
- 	private Student student;
- 	private Professor professor;
- 	private int accountTypeLoggedIn;
+ 	private User user;
  	
  	// Constructor:
  	private GuiController() throws IOException, ParseException {
@@ -76,23 +79,21 @@ public class GuiController {
  		FLoginResponse flr;
  		
  		flr = controller.doLogin(username, password);
- 		accountTypeLoggedIn = flr.accountType;
  		
  		// Call one of the most important methods:
  		getAllProfessors(); // Users keep track of their appointments, though there is no such connection in the database.
  		
  		if (flr.isSuccess) {
-	 		if (accountTypeLoggedIn == 0) {
-	 			professor = null;
-	 			student = new Student(flr.userId, flr.username, flr.displayName);
-	 			student.setEmail(controller.getUserProfile(student.getUserId()).email);
+	 		if (flr.accountType == 0) {
+	 			user = new Student(flr.userId, flr.username, flr.displayName);
+	 			user.setEmail(controller.getUserProfile(user.getUserId()).email);
 	 		}
 	 		else {
-	 			student = null;
-	 			professor = getProfessorById(flr.associatedProfessorId);
-	 			professor.setUserame(flr.username);
-	 			professor.setUserId(flr.userId);
-	 			professor.setBio(controller.getUserProfile(professor.getUserId()).bio);
+	 			user = null;
+	 			user = getProfessorById(flr.associatedProfessorId);
+	 			user.setUserame(flr.username);
+	 			user.setUserId(flr.userId);
+	 			user.setBio(controller.getUserProfile(user.getUserId()).bio);
 	 		}
  		}
 
@@ -109,25 +110,25 @@ public class GuiController {
 		
 		// The first if statement is used to check if the user has already accessed the page 
  		// for all courses. In that way we do not spend time refilling the array.
- 		if (allCourses.size() != fsr.size()) {
- 			allCourses.clear();
+	
+		allCourses.clear();
+		
+		// The following part of the code is used to get the professors from the database
+ 		// This is done, in order to find out the Professor objects who teach each course
+		// (otherwise, only their professorId will be known to each Course object).
+		ArrayList<FProfessorsResponse> fpr = controller.getAllProfessors();
+ 		
+ 		if (allProfessors.size() != fpr.size()) {
+ 			allProfessors.clear();
  			
- 			// The following part of the code is used to get the professors from the database
- 	 		// This is done, in order to find out the Professor objects who teach each course
- 			// (otherwise, only their professorId will be known to each Course object).
- 			ArrayList<FProfessorsResponse> fpr = controller.getAllProfessors();
- 	 		
- 	 		if (allProfessors.size() != fpr.size()) {
- 	 			allProfessors.clear();
- 	 			
- 		 		for (FProfessorsResponse i : fpr)
- 		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating));
- 	 		}
- 	 		// allProfessors, now contains all the professors contained in the database
- 			
- 			for (FSubjectsResponse i : fsr) 
- 				allCourses.add(new Course(i.id, i.name, i.associatedProfessors, i.rating, i.semester, allProfessors));
+	 		for (FProfessorsResponse i : fpr)
+	 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating));
  		}
+ 		// allProfessors, now contains all the professors contained in the database
+		
+		for (FSubjectsResponse i : fsr) 
+			allCourses.add(new Course(i.id, i.name, i.associatedProfessors, i.rating, i.semester, allProfessors));
+ 		
  		
  		return allCourses;
  	}
@@ -362,11 +363,12 @@ public class GuiController {
  	 */
  	public boolean setAvailableTimeslot(int day, int startHour, int endHour) throws IOException, ParseException {
  		boolean success = controller.setAvailabilityDates(day, startHour, endHour);
+ 		Professor p = (Professor) user;
  		
  		if (success)
- 			getAvailableTimeslots(professor);
+ 			getAvailableTimeslots(getProfessorById(p.getProfessorId()));
  		
- 		return controller.setAvailabilityDates(day, startHour, endHour); 
+ 		return success; 
  	}
  	
  	/*
@@ -381,109 +383,45 @@ public class GuiController {
  		Calendar nextAvailableDate = Calendar.getInstance(TimeZone.getTimeZone("GMT")); // Next date the professor set as available
  		Date availableDateStart; // For temporary storage and parsing of data to a Date object
  		Date availableDateEnd;
- 		int weekday; // The Calendar.DAY_OF_WEEK attribute, for the available date
- 		int indexOfWeekday = 0; // It's index in the far.dates ArrayList.
+		int i = 0;
+		boolean firstAvailableDayOfWeekFound = false;
  		
  		FAvailabilityResponse far = controller.getAvailabilityDates(selectedProfessor.getProfessorId());
  		
  		if (far.dates.isEmpty())
  			return null;
- 		
-	 	// Here we fill the far.dates with all the unavailable dates. This part
- 		// works as if the far.dates array contained all of the days of the week.
- 		// When it encounters the missing ones it adds them and continues at where it stopped.
-		if (far.dates.size() < 7) {	
-	 		int nextDay = 1; // Next of Sunday (0). We hypothetically take far.dates as an array with all days of week.
-	 		
-	 		for (int i = 0; i < 7; i++) {
-	 			
-	 			if (i == 6) // For checking, if the last element is correct.
-	 				i--;
-	 			
-	 			if (nextDay - far.dates.get(i).get("day") != 1){
-	 				int daysToCoverFrom = (nextDay - far.dates.get(i).get("day") > 1) ? (far.dates.get(i).get("day") + 1) : (nextDay - 1); // Start of missing days
-	 				int daysToCoverUntil = (nextDay - far.dates.get(i).get("day") > 1) ? (7) : (far.dates.get(i).get("day")); // End of missing days
-	 				
-	 				for (int j = daysToCoverFrom; j < daysToCoverUntil; j++) {
-	 					HashMap<String, Integer> unavailableDay = new HashMap<String, Integer>();
-	 					
-	 					unavailableDay.put("unavailableDay", j);
-	 					far.dates.add(j, unavailableDay);
-	 				
-	 					i++;
-	 					nextDay++; // It will reach the value of the day in index i.
-	 				}
-	 			}
-	 			
-	 			nextDay++; // Get next day from the day at index i.
-	 		}
-		}
-		
-		// Matching the today's day with the correct one from the dates ArrayList:
-	 	while (true) {	
- 			for (HashMap<String, Integer> date : far.dates) {
-				if (!date.keySet().contains("unavailableDay"))	
- 					if (date.get("day").equals(nextAvailableDate.get(Calendar.DAY_OF_WEEK) - 1)) {
-		 				weekday = date.get("day");
-		 				break;
-		 			}
-	 			
-	 			indexOfWeekday++;
-	 		}
- 			
- 			// The condition below is used to check if the professor is not available for all days 
- 			// of the week. In that case we may not be able to find a day of the week that is truly contained
- 			// in far.dates, so we run the loop again, until indexOfWeekday, actually finds a matching day in far.dates.
- 			// Found current day or the nearest one to the current day
- 			if (indexOfWeekday < far.dates.size())
- 				break;
- 			
- 			// Next day, that may match one of the days in far.dates
- 			nextAvailableDate.add(Calendar.DAY_OF_YEAR, 1);
- 			indexOfWeekday = 0;
-	 	}
-	 	
-		// Reform the dates ArrayList, so that weekday is the first element
-	 	// We do this by making a copy of far.dates, which will have as first 
-	 	// element, the element at index indexOfWeekday, in the far.dates. Its
-	 	// second element will be the far.dates.get((indexOfWeekday + 1) % 7), so
-	 	// that we can get appointments from today utnil the next week.
-		ArrayList<HashMap<String, Integer>> farDatesCopy = new ArrayList<HashMap<String, Integer>>();
-		
-		for (int i = 0; i < far.dates.size(); i++) {
-			HashMap<String, Integer> farDatesElement = new HashMap<String, Integer>();
-			
-			for (String key : far.dates.get(indexOfWeekday).keySet()) 
-				farDatesElement.put(key, far.dates.get(indexOfWeekday).get(key));
-		
-			farDatesCopy.add(farDatesElement);
-			
-			indexOfWeekday = (indexOfWeekday + 1) % 7; // Keep a logical flow of weekdays.
-		}
 	
 		allProfessors.get(selectedProfessor.getProfessorId() - 1).clearAvailableTimeslots();
 		
 		// Here the Integer data, will be converted into a date timestamp, with the
 		// help of the the Calendar and Date Java classes and will be used to create
 		// available Timeslot objects
-		for (HashMap<String, Integer> date : farDatesCopy) {			
+		
+		while (i < 7) {
+			for (HashMap<String, Integer> date : far.dates) {
+				if (nextAvailableDate.get(Calendar.DAY_OF_WEEK) - 1 == date.get("day")) {
+					
+					firstAvailableDayOfWeekFound = true;
+					
+					nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("startHour"));
+					nextAvailableDate.set(Calendar.MINUTE, 0);
+					nextAvailableDate.set(Calendar.SECOND, 0);
+
+					availableDateStart = nextAvailableDate.getTime();
+
+					nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("endHour"));
+					nextAvailableDate.set(Calendar.MINUTE, 0);
+					nextAvailableDate.set(Calendar.SECOND, 0);
+
+					availableDateEnd = nextAvailableDate.getTime();
+					
+					selectedProfessor.addAvailableTimeslot((int)(availableDateStart.getTime() / 1000), (int)(availableDateEnd.getTime() / 1000));
+					
+				}
+			}
 			
-			if (!date.keySet().contains("unavailableDay")) {
-				
-				nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("startHour"));
-				nextAvailableDate.set(Calendar.MINUTE, 0);
-				nextAvailableDate.set(Calendar.SECOND, 0);
-	
-				availableDateStart = nextAvailableDate.getTime();
-				
-				nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("endHour"));
-				nextAvailableDate.set(Calendar.MINUTE, 0);
-				nextAvailableDate.set(Calendar.SECOND, 0);
-				
-				availableDateEnd = nextAvailableDate.getTime();
-				
-				selectedProfessor.addAvailableTimeslot((int)(availableDateStart.getTime() / 1000), (int)(availableDateEnd.getTime() / 1000));
-			}			
+			if (firstAvailableDayOfWeekFound)
+				i++;
 			
 			nextAvailableDate.add(Calendar.DAY_OF_YEAR, 1);
 		}
@@ -512,17 +450,6 @@ public class GuiController {
  	}
  	
  	public ArrayList<Timeslot> getRequestedAppointments() throws IOException, ParseException {
- 		Calendar nextRequestedDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));;
- 		Date requestedDate;
- 		User user;
- 		
- 		if (accountTypeLoggedIn == 0) {
- 			user = this.student;
- 		}
- 		else {
- 			user = this.professor;
- 		}
- 		
  		ArrayList<FAppointmentsResponse> far = controller.getMyAppointments();
  		
  		user.clearRequestedAppointments();
@@ -571,18 +498,10 @@ public class GuiController {
  		return message;
  	}
  
- 	public int getAccountTypeLoggedIn() {
- 		return accountTypeLoggedIn;
- 	}
- 	
- 	public Student getStudentLoggedIn() {
- 		return student;
- 	}
- 	
- 	public Professor getProfessorLoggedIn() {
- 		return professor;
- 	}
- 	
+	public User getUser() {
+		return user;
+	}
+	
 	/*
 	 * Method for setting a password for "this" Users object and also check
 	 * if the inputed password has been written according to our password pattern.

@@ -1,6 +1,5 @@
 package application.functionality;
 
-import application.api.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -92,39 +91,10 @@ public class Main  {
 //		
 //		controller.setAvailableTimeslot(3, 12, 15);
 //		controller.setAvailableTimeslot(5, 12, 16);
-//		System.out.println("--------------------");
-		
-		
-//		// Use of getAvailableTimeslots
-//		ArrayList<Timeslot> timelsotsAvailable = controller.getAvailableTimeslots(controller.getAllProfessors().get(8));
-//		ArrayList<HashMap<String, Date>> appointmentsAvailable = new ArrayList<>();
-//		
-//		// Here it returns all the available appointments:
-//		for (Timeslot t : timelsotsAvailable) {
-//			appointmentsAvailable = t.getAvailableAppointments();
-//		
-//			// Here it returns the date data in a printable for our purposes way
-//			// Note: it only returns the day of the month, the start and end hour of the appointment:
-//			ArrayList<HashMap<String, Integer>> appointmentTimeslotsToBePresentedInGui = new ArrayList<HashMap<String, Integer>>();
-//	
-//			for (HashMap<String, Date> appointmentAvailable : appointmentsAvailable) {
-//				HashMap<String, Integer> element;
-//				
-//				element = Timeslot.getDateInfo(appointmentAvailable.get("startHour"));
-//				appointmentTimeslotsToBePresentedInGui.add(element);
-//				
-//				element = Timeslot.getDateInfo(appointmentAvailable.get("endHour"));
-//				appointmentTimeslotsToBePresentedInGui.add(element);
-//			}
-//			
-//			// Print them:
-//			for (int i = 0 ; i < appointmentTimeslotsToBePresentedInGui.size() - 1; i += 2) {
-//				System.out.print("Day: " + appointmentTimeslotsToBePresentedInGui.get(i).get("day") + "/" + appointmentTimeslotsToBePresentedInGui.get(i).get("month"));
-//				System.out.println(" starting at: " + appointmentTimeslotsToBePresentedInGui.get(i).get("hour") + ":" + appointmentTimeslotsToBePresentedInGui.get(i).get("minutes") + " and ending at: " + appointmentTimeslotsToBePresentedInGui.get(i + 1).get("hour") + ":" + appointmentTimeslotsToBePresentedInGui.get(i + 1).get("minutes"));
-//			}
-//		
-//			System.out.println("\n\n");
-//		}
+		System.out.println("--------------------");
+		System.out.println("Set a new available Timeslot");
+	
+		controller.setAvailableTimeslot(0, 21, 23);
 		
 		// Request an appointment from professor 0.
 		//System.out.println(controller.requestAppointment(controller.getProfessorById(9), 6, 17, 14, 30));

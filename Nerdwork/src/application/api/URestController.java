@@ -2,7 +2,7 @@ package application.api;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -258,6 +258,7 @@ public class URestController {
     	 obj.put("startHour", startHour);
     	 obj.put("endHour", endHour);
     	 FRestResponse r = requestComponent.Post("/api/appointments/availability/", obj);
+    	 System.out.println(r.responseContent);
     	 return r.statusCode==200;
      }
      

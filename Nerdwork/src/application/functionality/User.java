@@ -7,8 +7,6 @@
 package application.functionality;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class User {
 	
@@ -18,6 +16,7 @@ public abstract class User {
 	protected String username;
 	protected String email;
 	protected String displayName;
+	private String bio;
 	protected ArrayList<Timeslot> requestedAppointments;
 	private ArrayList<Timeslot> reservedAppointments; 
 	/*
@@ -132,5 +131,17 @@ public abstract class User {
 
 	public String getEmail() {
 		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	public String getBio() {
+		return bio;
+	}
+	
+	public void setBio(String bio) {
+		this.bio = bio;
 	}
 }

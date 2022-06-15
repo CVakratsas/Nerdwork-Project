@@ -72,10 +72,7 @@ public class Student extends User {
 	 * a void type method.
 	 */
 	public void removeCourse(Course course) {
-		Integer pIndex;
-		
-		pIndex = myCourses.indexOf(course);
-		courseGrades.remove(pIndex);
+		courseGrades.remove(course);
 		super.removeCourse(course);
 	}
 	
@@ -87,9 +84,5 @@ public class Student extends User {
 
 	public ArrayList<Double> getCourseGrades() {
 		return courseGrades;
-	}
-	
-	public void setEmail(String email) {
-		this.email = email;
 	}
 }
