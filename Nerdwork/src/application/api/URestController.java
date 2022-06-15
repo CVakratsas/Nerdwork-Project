@@ -258,7 +258,6 @@ public class URestController {
     	 obj.put("startHour", startHour);
     	 obj.put("endHour", endHour);
     	 FRestResponse r = requestComponent.Post("/api/appointments/availability/", obj);
-    	 System.out.println(r.responseContent);
     	 return r.statusCode==200;
      }
      
