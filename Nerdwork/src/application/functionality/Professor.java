@@ -9,9 +9,7 @@
 package application.functionality;
 
 import java.util.ArrayList;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 public class Professor extends User {
 	
@@ -19,13 +17,11 @@ public class Professor extends User {
 	
 	private String phone;
 	private String profilePhoto;
-	private String bio;
 	private String office;
 	private int professorId;
 	private float rating;
 	private ArrayList<Timeslot> availableTimeslots; // A Professor's available Timeslots
-	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the professor
-	
+		
 	/*Professor Constructor is here*/
 	
 	// Constructor for getting professor information as student.
@@ -38,7 +34,6 @@ public class Professor extends User {
 		this.office = office;
 		this.rating = rating;
 		availableTimeslots = new ArrayList<Timeslot>();
-		studentsRated = new ArrayList<>();
 	}
 	
 	// Constructor for professor login
@@ -46,52 +41,7 @@ public class Professor extends User {
 		super(userId, username, displayName);
 		this.professorId = professorId;
 		availableTimeslots = new ArrayList<Timeslot>();
-		studentsRated = new ArrayList<>();
 	}
-	
-	/* Professor methods regarding course are here: */
-	
-	/*
-	 * Method used to set a value at the name attribute of a course 
-	 * object.
-	 * editCourseName, receives a Course class object (course object
-	 * to set a value at its name attribute) and a String class object
-	 * (the value that the Course.name attribute will be set at), as parameters
-	 * and is a void type method.
-	 */
-	public void editCourseName(Course course, String name) {
-		course.setName(name);
-	}
-	
-	/*
-	 * Method used to set a value at the orientation attribute of a course 
-	 * object.
-	 * editCourseOrientation, receives a Course class object (course object
-	 * to set a value at its orientation attribute) and a String class object
-	 * (the value that the Course.orientation attribute will be set at), as parameters
-	 * and is a void type method.
-	 */
-	public void editCourseOrientation(Course course, String orientation) {
-		course.setOrientation(orientation);
-	}
-	
-	/*
-	 * Method used to set a value at the semester attribute of a course 
-	 * object.
-	 * editCourseName, receives a Course class object (course object
-	 * to set a value at its semester attribute) and a Integer class object
-	 * (the value that the Course.semester attribute will be set at), as parameters
-	 * and is a void type method.
-	 */
-	public void editCourseSemester(Course course, Integer semester) {
-		course.setSemester(semester);
-	}
-	
-	/*
-	 * Method used to delete a Timeslot for appointment requests (remove it from "this" Calendar).
-	 * removeAvailableDate, receives a Timeslot class object (the timeslot to be deleted), 
-	 * as a parameter and is a void type method.
-	 */
 	
 	/*
 	 * Method that is used to get the courses a professor is teaching.
@@ -137,8 +87,10 @@ public class Professor extends User {
 		for (int i = 0; i < ((dateEndTimestamp.getTime() - dateStartTimestamp.getTime()) / 1000) / 1800; i++) {
 			Date appointmentDateStartHourTimestamp = new Date((long)appointmentStartHourTimestamp * 1000);
 			Date appointmentDateEndHourTimestamp = new Date((long)appointmentEndHourTimestamp * 1000);
+			Timeslot timeslot = new Timeslot((int)(appointmentDateStartHourTimestamp.getTime() / 1000), (int)(appointmentDateEndHourTimestamp.getTime() / 1000));
 			
-			availableTimeslots.add(new Timeslot((int)(appointmentDateStartHourTimestamp.getTime() / 1000), (int)(appointmentDateEndHourTimestamp.getTime() / 1000)));
+			if (!timeslot.checkOutdated())
+				availableTimeslots.add(timeslot);
 			
 			appointmentStartHourTimestamp = appointmentEndHourTimestamp;
 			appointmentEndHourTimestamp += 1800; 
@@ -162,20 +114,12 @@ public class Professor extends User {
 		return profilePhoto;
 	}
 
-	public String getBio() {
-		return bio;
-	}
-
 	public float getRating() {
 		return rating;
 	}
 
 	public ArrayList<Timeslot> getRequestedAppointments() {
 		return requestedAppointments;
-	}
-	
-	public void setBio(String bio) {
-		this.bio = bio;
 	}
 	
 	public void setRating(float rating) {

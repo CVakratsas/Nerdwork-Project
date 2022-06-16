@@ -6,9 +6,6 @@
 
 package application.functionality;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,9 +18,6 @@ public class Timeslot {
 	private int professorId;
 	private int startHourTimestamp; // Seconds since 1st January 1970 00:00:00 for startHour
 	private int endHourTimestamp; // // Seconds since 1st January 1970 00:00:00 for endHour
-	private int day; // Stores the day of month of the appointment
-	private int startHour; // Stores the starting hour of the appointment
-	private int endHour; // Stores the ending hour of the appointment
 	private int status; //0 = Not Confirmed, 1 = Confirmed, 2 = Cancelled
 	private String created_at;
 	
@@ -31,6 +25,7 @@ public class Timeslot {
 	public Timeslot(int startHourTimestamp, int endHourTimestamp) {
 		this.startHourTimestamp = startHourTimestamp;
 		this.endHourTimestamp = endHourTimestamp;
+		status = -1;
 	}
 	
 	// Constructor used for Timeslots when a Student requested an appointment
@@ -72,6 +67,20 @@ public class Timeslot {
 		
 		return appointment; 
 	}
+	
+	public boolean checkOutdated() {
+		Calendar day = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		Date dayTimestamp = day.getTime();
+		boolean outdated = false;
+
+		if (((int)(dayTimestamp.getTime() / 1000)) > startHourTimestamp && status != 1)
+			outdated = true;
+		
+		else if (((int)(dayTimestamp.getTime() / 1000)) > endHourTimestamp)
+			outdated = true;
+		
+		return outdated;
+	}
 
 	public int getId() {
 		return id;
@@ -91,18 +100,6 @@ public class Timeslot {
 	
 	public int getEndHourTimestamp() {
 		return endHourTimestamp;
-	}
-
-	public int getDay() {
-		return day;
-	}
-
-	public int getStartHour() {
-		return startHour;
-	}
-
-	public int getEndHour() {
-		return endHour;
 	}
 
 	public int getStatus() {

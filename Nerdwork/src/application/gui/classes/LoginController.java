@@ -1,7 +1,9 @@
 package application.gui.classes;
 
 import java.io.IOException;
+
 import org.json.simple.parser.ParseException;
+
 import application.functionality.GuiController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
