@@ -1,7 +1,7 @@
 /*
  * Class User is the superclass of both Student and Professor
  * subclasses. It contains mostly methods, that are commonly
- * used, but with a different outcome for each.
+ * used for both.
  */
 
 package application.functionality;
@@ -17,36 +17,24 @@ public abstract class User {
 	protected String email;
 	protected String displayName;
 	private String bio;
-	protected ArrayList<Timeslot> requestedAppointments;
-	private ArrayList<Timeslot> reservedAppointments; 
 	/*
 	 * The above five attributes keep track of personal Student/Professor,
 	 * concerning the profile they have built.
 	 */
 	
-	protected ArrayList<Course> myCourses; // Courses attended by Students or taught by Professors
-	protected ArrayList<Timeslot> myAppointments; // Appointments made by Students, and available timeslots, for appointment with a Professor
-	
-	/*User Constructor is here*/
+	protected ArrayList<Course> myCourses; // Courses attended by Students or taught by Professors	
+	protected ArrayList<Timeslot> requestedAppointments;
+	private ArrayList<Timeslot> reservedAppointments; 
 	
 	public User(String userId, String username, String displayName) {
 		this.userId = userId;
 		this.username = username;
 		this.displayName = displayName;
 		myCourses = new ArrayList<>();
-		myAppointments = new ArrayList<>();
 		requestedAppointments = new ArrayList<Timeslot>();
 		reservedAppointments = new ArrayList<Timeslot>();
 	}
 	
-	/*User methods (except getters and setters) are here*/
-	
-	/*
-	 * Method that parses the this.id attribute to a String
-	 * (overlaps the toString Java method).
-	 * toString, has no parameters and returns a String variable 
-	 * (the name attribute, of "this" User object).
-	 */
 	public String toString() {
 		return userId;
 	}
@@ -69,6 +57,10 @@ public abstract class User {
 	
 	public String getDisplayName() {
 		return displayName;
+	}
+	
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 	
 	public void addRequestedAppointment(Timeslot appointment) {

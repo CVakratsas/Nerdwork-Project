@@ -1,4 +1,5 @@
 package application.api;
+
 import java.util.ArrayList;
 
 public class FSubjectsResponse {
@@ -7,6 +8,7 @@ public class FSubjectsResponse {
     public ArrayList<String> associatedProfessors;
     public float rating;
     public int semester;
+    
     public FSubjectsResponse(String id, String name, ArrayList<String>associatedProfessors, float rating, int semester) {
     	this.id = id;
     	this.name = name;

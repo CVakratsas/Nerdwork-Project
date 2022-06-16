@@ -87,7 +87,7 @@ public class Main  {
 		*/
 		// Setting new available dates for professor Aλεξανδροπούλου Ευγενία
 //		System.out.println("Attempt a set of available date: " + controller.setAvailableTimeslot(2, 11, 13));
-//		System.out.println("Change previous available date: " + controller.setAvailableTimeslot(2, 16, 18)); // I don't know if it changes, since it encounters problems with connecting to the get available dates side of the api.
+//		System.out.println("Change previous available date: " + controller.setAvailableTimeslot(2, 16, 18)); 
 //		
 //		controller.setAvailableTimeslot(3, 12, 15);
 //		controller.setAvailableTimeslot(5, 12, 16);
