@@ -20,7 +20,6 @@ public class Course {
 	private static final int ECTS = 5;
 	private int semester;
 	private float rating;
-	private ArrayList<Student> studentsRated; // List that contains all the students who have rated the course
 	private ArrayList<Professor> associatedProfessors; // Professors teaching each lesson
 	
 	
