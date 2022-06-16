@@ -54,6 +54,7 @@ public class CourseProfileController {
 	
 	
 	private void setProfileDescription() throws IOException, ParseException {
+		
 		//Course Description
 		name.setText(course.getName());
 		rating.setRating(course.getRating());
@@ -83,6 +84,7 @@ public class CourseProfileController {
 			box.getChildren().add(picture);
 			box.getChildren().add(name);
 			box.setId(p.getUserId());
+			box.setStyle("-fx-cursor: hand");
 
 			//Loads selected Professor profile
 			box.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
@@ -116,14 +118,8 @@ public class CourseProfileController {
 	
 	public void switchToCourseProfile(Event event, Course c) throws IOException, ParseException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(Navigator.CourseProfile));
-		root = loader.load();
+		Navigator.setCenter(loader);
 		CourseProfileController courseProfileController = loader.getController();
-		
 		courseProfileController.load(c);
-		
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
 	}
 }

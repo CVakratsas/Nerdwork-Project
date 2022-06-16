@@ -42,6 +42,7 @@ public class MyCoursesController {
 	public void load(ArrayList<Course> array) {
 		int counter = array.size();
 		for (int i = 0; i < counter; i++) {
+			
 			// Labels creation
 			Label labelCourse = new Label(myCourses.get(i).getName());
 			

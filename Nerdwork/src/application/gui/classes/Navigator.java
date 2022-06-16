@@ -2,6 +2,9 @@ package application.gui.classes;
 
 import java.io.IOException;
 
+import org.json.simple.parser.ParseException;
+
+import application.functionality.Course;
 import javafx.fxml.FXMLLoader;
 
 public class Navigator {
@@ -23,6 +26,7 @@ public class Navigator {
 
     public static void loadCenter(String fxml) {
         try {
+        	
         	menuBarsController.setCenter(
                     FXMLLoader.load(
                         Navigator.class.getResource(
@@ -33,5 +37,9 @@ public class Navigator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    public static void setCenter(FXMLLoader loader) throws IOException {
+    	menuBarsController.setCenter(loader.load());
     }
 }

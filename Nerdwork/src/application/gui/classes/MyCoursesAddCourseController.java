@@ -66,11 +66,8 @@ public class MyCoursesAddCourseController {
 
 				@Override
 				public void handle(MouseEvent arg0) {
-					
 					try {
-						CourseProfileController controller = new CourseProfileController();
-						controller.load(array.get(temp_i));
-						Navigator.loadCenter(Navigator.CourseProfile);
+						new CourseProfileController().switchToCourseProfile(arg0, array.get(temp_i));
 					} catch (IOException | ParseException e) {
 						e.printStackTrace();
 					}
@@ -87,6 +84,7 @@ public class MyCoursesAddCourseController {
 			addButton.setPrefSize(30, 30);
 			addButton.setMinSize(30, 30);
 			addButton.setMaxSize(30, 30);
+			addButton.setId(array.get(i).getId());
 			
 			// Assign EventHandler to addButton
 			addButton.setOnAction(new EventHandler<ActionEvent>() {
