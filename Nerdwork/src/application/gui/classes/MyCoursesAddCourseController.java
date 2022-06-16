@@ -9,11 +9,13 @@ import application.functionality.Course;
 import application.functionality.GuiController;
 import application.functionality.Professor;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
@@ -29,14 +31,18 @@ public class MyCoursesAddCourseController {
 	
 	@FXML
 	private void initialize() throws IOException, ParseException {
-		GuiController.getInstance().login("probatos", "beeeH1234@");
 		courses = GuiController.getInstance().getAllCourses();
-		load(courses);
+		loadCourses(courses);
 	}
 	
-	public void load(ArrayList<Course> array) {
+	public void loadCourses(ArrayList<Course> array) {
+		
 		int counter = array.size();
+		// For every course
 		for (int i = 0; i < counter; i++) {
+			// Setting i as a final variable for the event handlers
+			final int temp_i = i;
+			
 			// Labels creation
 			Label labelCourse = new Label(courses.get(i).getName());
 			
@@ -51,22 +57,59 @@ public class MyCoursesAddCourseController {
 			labelCourse.setFont(Font.font("Segoe UI", 18.0));
 			labelProf.setFont(Font.font("Segoe UI", 16.0));
 			
-			// VBox creation
+			// Course VBox creation
 			VBox courseBox = new VBox(labelCourse, labelProf);
 			courseBox.setAlignment(Pos.CENTER_LEFT);
 			courseBox.setPrefHeight(200.0);
 			courseBox.prefWidth(100.0);
+			courseBox.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle(MouseEvent arg0) {
+					
+					try {
+						CourseProfileController controller = new CourseProfileController();
+						controller.load(array.get(temp_i));
+						Navigator.loadCenter(Navigator.CourseProfile);
+					} catch (IOException | ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				
+			});
 			
-			// VBox button creation
+			// Settings style of the courseBox
+			courseBox.setStyle("-fx-cursor: hand");
+			
+			// Button creation
 			Button addButton = new Button("+");
 			addButton.setFont(Font.font("Sefoe UI", FontWeight.BOLD, 14.0));
-			VBox buttonBox = new VBox(addButton);
 			addButton.setPrefSize(30, 30);
 			addButton.setMinSize(30, 30);
 			addButton.setMaxSize(30, 30);
+			
+			// Assign EventHandler to addButton
+			addButton.setOnAction(new EventHandler<ActionEvent>() {
+				
+				@Override
+				public void handle(ActionEvent arg0) {
+					try {
+						//TODO
+						System.out.println("This is: " + array.get(temp_i).getName());
+						System.out.println(GuiController.getInstance().courseEnrollment(array.get(temp_i).getId()));
+					} catch (IOException | ParseException e) {
+						System.out.println("Error occured when the couseEnrollment method was invoked");
+						e.printStackTrace();
+					}
+				}
+				
+			});
+			
+			// VBox for the button
+			VBox buttonBox = new VBox(addButton);
 			buttonBox.setAlignment(Pos.CENTER);
 			
-			// Adding
+			// Adding the whole row
 			RowConstraints row = new RowConstraints(80);
 			coursesPane.getRowConstraints().add(row);
 			
@@ -76,7 +119,6 @@ public class MyCoursesAddCourseController {
 		}
 	}
 	
-	@FXML
 	public void switchToMyCourses(ActionEvent event) {
 		Navigator.loadCenter(Navigator.MyCourses);
 	}

@@ -1,8 +1,10 @@
 package application.gui.classes;
 
 import java.io.IOException;
+
 import org.controlsfx.control.Rating;
 import org.json.simple.parser.ParseException;
+
 import application.functionality.Course;
 import application.functionality.GuiController;
 import application.functionality.Professor;
@@ -113,7 +115,7 @@ public class CourseProfileController {
 	
 	
 	public void switchToCourseProfile(Event event, Course c) throws IOException, ParseException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/CourseProfile.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(Navigator.CourseProfile));
 		root = loader.load();
 		CourseProfileController courseProfileController = loader.getController();
 		

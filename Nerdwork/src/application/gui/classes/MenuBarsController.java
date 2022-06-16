@@ -20,12 +20,10 @@ public class MenuBarsController {
     	centerHolder.getChildren().setAll(node);
     }
     
-    @FXML
 	public void switchToMyCourses(ActionEvent event) {
 		Navigator.loadCenter(Navigator.MyCourses);
     }
     
-    @FXML
 	public void switchToHomePage(ActionEvent event) {
 		Navigator.loadCenter(Navigator.HomePage);
     }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.skin.DatePickerSkin;
 import javafx.scene.layout.VBox;
 
@@ -12,6 +13,8 @@ public class HomePageController {
 	
 	@FXML
 	private VBox calendarPane;
+	@FXML
+	private TextArea bio;
 	
 	@FXML
 	private void initialize() {
@@ -21,28 +24,8 @@ public class HomePageController {
         calendarPane.getChildren().add(calendar);
     }
 	
+	public void load() {
+		
+	}
+	
 }
-
-//class Course {
-//	private String id;
-//	private String name;
-//	private String professor;
-//	
-//	public Course(String id, String name, String professor) {
-//		this.id = id;
-//		this.name = name;
-//		this.professor = professor;
-//	}
-//
-//	public String getId() {
-//		return id;
-//	}
-//
-//	public String getName() {
-//		return name;
-//	}
-//
-//	public String getProfessor() {
-//		return professor;
-//	}
-//}

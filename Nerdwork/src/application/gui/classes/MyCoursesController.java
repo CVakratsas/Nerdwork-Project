@@ -9,6 +9,7 @@ import application.functionality.Course;
 import application.functionality.GuiController;
 import application.functionality.Professor;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -30,7 +31,6 @@ public class MyCoursesController {
 	@FXML
 	private void initialize() {
 		try {
-			GuiController.getInstance().login("probatos", "beeeH1234@");
 			myCourses = GuiController.getInstance().getEnrolledCourses();
 			load(myCourses);
 		} catch (IOException | ParseException e) {
@@ -62,16 +62,34 @@ public class MyCoursesController {
 			courseBox.setPrefHeight(200.0);
 			courseBox.prefWidth(100.0);
 			
-			// VBox button creation
+			// Button creation
 			Button deleteButton = new Button("-");
 			deleteButton.setFont(Font.font("Sefoe UI", FontWeight.BOLD, 14.0));
 			deleteButton.setPrefSize(30, 30);
 			deleteButton.setMinSize(30, 30);
 			deleteButton.setMaxSize(30, 30);
+			
+			// Assign EventHandler to deleteButton
+			final int tempI = i;
+			deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent arg0) {
+					try {
+						GuiController.getInstance().courseDisenrollment(array.get(tempI).getId());
+					} catch (IOException | ParseException e) {
+						System.out.println("Error occured when the couseDisenrollment method was invoked");
+						e.printStackTrace();
+					}
+				}
+				
+			});
+			
+			// VBox for the button
 			VBox buttonBox = new VBox(deleteButton);
 			buttonBox.setAlignment(Pos.CENTER);
 			
-			// Adding
+			// Adding the whole row
 			RowConstraints row = new RowConstraints(80);
 			coursesPane.getRowConstraints().add(row);
 			
