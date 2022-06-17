@@ -51,8 +51,8 @@ public class LoginController {
 		else {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle(null);
-			alert.setHeaderText("Invalid Iput Data");
-			alert.setContentText("Credentials do not match with an account");
+			alert.setHeaderText("Λανθασμένα στοιχεία");
+			alert.setContentText("Δεν υπάρχει λογαριασμός που να αντιστοιχεί στα παραπάνω διαπιστευτήρια");
 			alert.initStyle(StageStyle.UTILITY);
 			alert.showAndWait();
 		}
@@ -81,8 +81,18 @@ public class LoginController {
 	      return scene;
 	}
 	
-	public void switchToRegister(ActionEvent event) throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(Navigator.RegisterPage));
+	public void switchToRegisterAsStudent(ActionEvent event) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(Navigator.RegisterPageStudent));
+		root = loader.load();
+				
+		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
+	
+	public void switchToRegisterAsProfessor(ActionEvent event) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(Navigator.RegisterPageProfessor));
 		root = loader.load();
 				
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();

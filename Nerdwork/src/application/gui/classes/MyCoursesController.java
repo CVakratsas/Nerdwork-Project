@@ -54,9 +54,9 @@ public class MyCoursesController {
 			
 			// Get all professors
 			ArrayList<Professor> profs = myCourses.get(i).getProfessors();
-			String profsString = "";
-			for(Professor prof: profs) {
-				profsString += prof.getDisplayName();
+			String profsString = profs.get(0).getDisplayName();
+			for(int x=1; x<profs.size()-1; x++) {
+				profsString += ", " + profs.get(x).getDisplayName();
 			}
 			Label labelProf = new Label(profsString);
 			
@@ -99,6 +99,7 @@ public class MyCoursesController {
 				public void handle(ActionEvent arg0) {
 					try {
 						GuiController.getInstance().courseDisenrollment(array.get(tempI).getId());
+						new MenuBarsController().switchToMyCourses(arg0);
 					} catch (IOException | ParseException e) {
 						System.out.println("Error occured when the couseDisenrollment method was invoked");
 						e.printStackTrace();

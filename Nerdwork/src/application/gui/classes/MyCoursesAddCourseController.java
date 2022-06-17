@@ -13,14 +13,17 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.StageStyle;
 
 public class MyCoursesAddCourseController {
 	
@@ -92,9 +95,13 @@ public class MyCoursesAddCourseController {
 				@Override
 				public void handle(ActionEvent arg0) {
 					try {
-						//TODO
-						System.out.println("This is: " + array.get(temp_i).getName());
-						System.out.println(GuiController.getInstance().courseEnrollment(array.get(temp_i).getId()));
+						if(!GuiController.getInstance().getEnrolledCourses().contains(array.get(temp_i))) {
+							GuiController.getInstance().courseEnrollment(array.get(temp_i).getId());
+							new MyCoursesController().switchToMyCoursesAddCourse(arg0);
+						}
+						else {
+							alertError();
+						}
 					} catch (IOException | ParseException e) {
 						System.out.println("Error occured when the couseEnrollment method was invoked");
 						e.printStackTrace();
@@ -119,5 +126,14 @@ public class MyCoursesAddCourseController {
 	
 	public void switchToMyCourses(ActionEvent event) {
 		Navigator.loadCenter(Navigator.MyCourses);
+	}
+	
+	public void alertError() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle(null);
+		alert.setHeaderText("Αποτυχία Εγγραφής");
+		alert.initStyle(StageStyle.UTILITY);
+		alert.setContentText("Είστε ήδη εγγεγραμμένος στο μάθημα");
+		alert.showAndWait();
 	}
 }

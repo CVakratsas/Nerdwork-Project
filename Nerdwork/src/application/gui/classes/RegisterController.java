@@ -1,6 +1,8 @@
 package application.gui.classes;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.json.simple.parser.ParseException;
 
@@ -15,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -27,41 +30,113 @@ public class RegisterController {
 	private Stage stage;
 	private Scene scene;
 	private Parent root;
+	private ArrayList<String> orientationArray = new ArrayList<>(Arrays.asList("ΕΤΥ", "ΠΣ"));
+	private int orientationInt;
+	String error;
 	
 	@FXML
 	private TextField username, nickname, email;
 	@FXML
 	private PasswordField password, repeatPassword;
 	@FXML
+	private ComboBox<String> orientation;
+	@FXML
 	private ImageView close;
+	
+	@FXML
+	private void initialize() {
+		if(orientation != null) {
+			orientation.getItems().addAll(orientationArray);
+		}
+		else {
+			System.out.println("Hello prof");
+			orientationInt = 2;
+		}
+	}
 	
 	public void register(ActionEvent event) throws IOException, ParseException {
 		
-		boolean answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText());
-		
-		if(answer) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle(null);
-			alert.setHeaderText("Account Created");
-			alert.setContentText("Account was created sucessfully and is now ready for use");
-			alert.initStyle(StageStyle.UTILITY);
-			alert.showAndWait();			
-			switchToLogin(event);
-		}
-		else {
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle(null);
-			alert.setHeaderText("Account was not created");
-			alert.initStyle(StageStyle.UTILITY);
-			if(username.getText().equals("") || password.getText().equals("") || repeatPassword.getText().equals("")
-					|| nickname.getText().equals("") || email.getText().equals("")) {
-				alert.setContentText("Some of the fields are empty");
+//		if(orientationInt != 2) { // A student is trying to register
+//			String orientationString = orientation.getValue();
+//			if(orientationString == "ΕΤΥ") {
+//				orientationInt = 0;
+//			}
+//			else if(orientationString == "ΠΣ") {
+//				orientationInt = 1;
+//			}
+//			else {
+//				alertError1();
+//			}
+//		}
+//		else { // A professor is trying to register
+			boolean answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText());
+			
+			if(answer) {
+				alertSucess();
+				switchToLogin(event);
 			}
 			else {
-				alert.setContentText("Password does not meet the safety requirements or the email provided is not academic");
+				error = GuiController.getInstance().checkPassword(password.getText());
+				if(username.getText().equals("") || password.getText().equals("") || repeatPassword.getText().equals("")
+						|| nickname.getText().equals("") || email.getText().equals("")) { // There are empty fields
+					alertError1();
+				}
+				else if(!password.getText().equals(repeatPassword.getText())) { // Passwords are not the same
+					alertError2();
+				}
+				else if(!(GuiController.getInstance().checkPassword(password.getText()).equals("correct"))) {
+					alertError3(error);
+				}
+				else {
+					alertError4();
+				}
 			}
-			alert.showAndWait();
-		}
+//		}
+	}
+	
+	public void alertError1() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle(null);
+		alert.setHeaderText("Αποτυχία Δημιουργίας Λογαριασμού");
+		alert.initStyle(StageStyle.UTILITY);
+		alert.setContentText("Κάποια ή όλα τα πεδία είναι άδεια");
+		alert.showAndWait();
+	}
+	
+	public void alertError2() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle(null);
+		alert.setHeaderText("Αποτυχία Δημιουργίας Λογαριασμού");
+		alert.initStyle(StageStyle.UTILITY);
+		alert.setContentText("Οι κωδικοί που καταχωρήθηκαν δεν είναι οι ίδιοι");
+		alert.showAndWait();
+	}
+	
+	public void alertError3(String error) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle(null);
+		alert.setHeaderText("Αποτυχία Δημιουργίας Λογαριασμού");
+		alert.initStyle(StageStyle.UTILITY);
+		alert.setContentText(error);
+		alert.showAndWait();
+	}
+	
+	public void alertError4() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle(null);
+		alert.setHeaderText("Αποτυχία Δημιουργίας Λογαριασμού");
+		alert.initStyle(StageStyle.UTILITY);
+		alert.setContentText("Το email που δώθηκε δεν είναι ακαδημαϊκό ή ο λογαριασμός ήδη υπάρχει");
+		alert.showAndWait();
+	}
+	
+	public void alertSucess() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle(null);
+		alert.setHeaderText("Επιτυχής Δημιουργία Λογαριασμού");
+		alert.setContentText("Ο λογαριασμός δημιουργήθηκε και είναι έτοιμος προς χρήση");
+		alert.initStyle(StageStyle.UTILITY);
+		alert.showAndWait();			
 	}
 	
 	public void switchToLogin(ActionEvent event) throws IOException {
@@ -85,5 +160,4 @@ public class RegisterController {
 	        }
 	   });
 	}
-	
 }

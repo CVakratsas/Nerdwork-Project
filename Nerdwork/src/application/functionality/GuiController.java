@@ -635,7 +635,7 @@ public class GuiController {
 	 * to check if there is at least one upper and one lower letter
 	 * Pattern documentation: https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
 	 */
- 	private String checkPassword(String newPassword) {
+ 	public String checkPassword(String newPassword) {
  		// Password verification begins here:
  		if(newPassword.length()>=8) {
  			Pattern upperLetter = Pattern.compile("[A-Z]");
