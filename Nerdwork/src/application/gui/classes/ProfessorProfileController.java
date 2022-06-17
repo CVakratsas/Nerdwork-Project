@@ -1,6 +1,7 @@
 package application.gui.classes;
 
 import java.io.IOException;
+
 import org.controlsfx.control.Rating;
 import org.json.simple.parser.ParseException;
 
@@ -10,9 +11,6 @@ import application.functionality.Professor;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,13 +20,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 
 public class ProfessorProfileController {
-
-	private Stage stage;
-	private Scene scene;
-	private Parent root;
 	
 	private Professor professor;
 	private GuiController controller;
@@ -54,6 +47,7 @@ public class ProfessorProfileController {
 	
 	
 	private void setProfileDescription() throws IOException, ParseException {
+		
 		//Professor profile picture
 		Image img = new Image(dbURL + professor.getProfilePhoto());
 		profilePicture.setImage(img);
@@ -88,6 +82,7 @@ public class ProfessorProfileController {
 			box.getChildren().add(name);
 			box.setId(c.getId());
 			box.setStyle("-fx-cursor: hand");
+			
 			
 			//Loads selected Course profile 
 			box.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {

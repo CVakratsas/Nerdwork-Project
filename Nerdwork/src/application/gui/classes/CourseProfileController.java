@@ -11,9 +11,6 @@ import application.functionality.Professor;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,13 +19,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 
 public class CourseProfileController {
-	
-	private Stage stage;
-	private Scene scene;
-	private Parent root;
 	
 	private Course course;
 	private GuiController controller;
@@ -63,10 +55,12 @@ public class CourseProfileController {
 		ects.setText(Integer.toString(course.getECTS()) + " ECTS");
 		description.getChildren().add(new Label(""));
 		
+		
 		//Disables the Rating component if the User has already rated the Course
 		rating.setRating(course.getRating());
 		if(controller.getMyCourseRating(course) != -1)
 			rating.setDisable(true);	
+		
 		
 		//Loads all Professors teaching the Course
 		professorList.getChildren().clear();
@@ -86,7 +80,8 @@ public class CourseProfileController {
 			box.setId(p.getUserId());
 			box.setStyle("-fx-cursor: hand");
 
-			//Loads selected Professor profile
+			
+			//Loads selected Professor's profile
 			box.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
 				try {
 					new ProfessorProfileController().switchToProfessorProfile(event, controller.getProfessorById(Integer.parseInt(box.getId())));

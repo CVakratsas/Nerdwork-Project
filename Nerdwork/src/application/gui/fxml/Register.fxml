@@ -19,7 +19,7 @@
                <children>
                   <ImageView fitWidth="500.0" layoutX="70.0" layoutY="211.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icons/full_logo.png" />
+                        <Image url="@/application/gui/icons/full_logo.png" />
                      </image>
                   </ImageView>
                   <ImageView id="closeImageView" fx:id="close" fitWidth="30.0" layoutX="596.0" layoutY="14.0" onMousePressed="#closeWindow" pickOnBounds="true" preserveRatio="true">
