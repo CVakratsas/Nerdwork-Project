@@ -1,6 +1,7 @@
 package application.api;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class FAvailabilityResponse {
 	public boolean isSuccess;

@@ -2,7 +2,7 @@ package application.api;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,9 +17,9 @@ public class URestController {
     	 requestComponent = new URequestComponent();
      }
      /*
-      Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ο„Ξ·Ξ½ ΟƒΟ�Ξ½Ξ΄ΞµΟƒΞ· Ο„ΞΏΟ… Ο‡Ο�Ξ®ΟƒΟ„Ξ· ΞΌΞµ Ο„ΞΏ API, ΞµΟ€ΞΉΟƒΟ„Ο�Ξ­Ο†ΞµΞΉ Ξ²Ξ±ΟƒΞΉΞΊΞµΟ‚ Ο€Ξ»Ξ·Ο�ΞΏΟ†ΞΏΟ�Ξ―ΞµΟ‚ ΟƒΟ‡ΞµΟ„ΞΉΞΊΞ¬ ΞΌΞµ Ο„ΞΏΞ½ Ο‡Ο�Ξ®ΟƒΟ„Ξ·
-      FLoginResponse Ξ³ΞΉΞ± Ο€ΞµΟ�ΞΉΟƒΟƒΟ�Ο„ΞµΟ�ΞµΟ‚ Ο€Ξ»Ξ·Ο�ΞΏΟ†ΞΏΟ�Ξ―ΞµΟ‚.
-      Ξ‘Ο€Ξ±ΞΉΟ„ΞµΞ―Ο„Ξ±ΞΉ Login Ξ³ΞΉΞ± Ο„Ξ·Ξ½ ΞΊΞ»Ξ®ΟƒΞ· Ο„Ο‰Ξ½ Ο…Ο€Ο�Ξ»ΞΏΞΉΟ€Ο‰Ξ½ ΟƒΟ…Ξ½Ξ±Ο�Ο„Ξ®ΟƒΞµΟ‰Ξ½
+      Συνάρτηση για την σύνδεση του χρήστη με το API, επιστρέφει βασικες πληροφορίες σχετικά με τον χρήστη
+      FLoginResponse για περισσότερες πληροφορίες.
+      Απαιτείται Login για την κλήση των υπόλοιπων συναρτήσεων
       */
      public FLoginResponse doLogin(String username, String password) throws IOException, ParseException {
     	 JSONObject obj = new JSONObject();
@@ -32,7 +32,7 @@ public class URestController {
     		 data = (JSONObject)data.get("triggerResults");
     		 userId = (String) data.get("id");
     		 this.username = username;
-    		 return new FLoginResponse(true, userId, (String)data.get("displayName"), username, ((Number)data.get("accountType")).intValue(), ((Number)data.get("associatedProfessor")).intValue());
+    		 return new FLoginResponse(true, userId, (String)data.get("displayName"), username, ((Number)data.get("accountType")).intValue(), ((Number)data.get("associatedProfessor")).intValue(), ((Number)data.get("orientation")).intValue());
     	 }
     	 return new FLoginResponse(false);
      }
@@ -46,7 +46,7 @@ public class URestController {
     		 ArrayList<FProfessorsResponse> outResponse = new ArrayList<FProfessorsResponse>();
     		 for(int i = 0; i<arrayData.size(); i++) {
     			 JSONObject tempData = (JSONObject)arrayData.get(i);
-    			 outResponse.add(new FProfessorsResponse(((Number)tempData.get("id")).intValue(), (String) tempData.get("name"), (String) tempData.get("phone"), (String) tempData.get("email"), (String) tempData.get("profilePhoto"), (String) tempData.get("office"), ((Number)tempData.get("rating")).floatValue()));
+    			 outResponse.add(new FProfessorsResponse(((Number)tempData.get("id")).intValue(), (String) tempData.get("name"), (String) tempData.get("phone"), (String) tempData.get("email"), (String) tempData.get("profilePhoto"), (String) tempData.get("office"), ((Number)tempData.get("rating")).floatValue(), (String) tempData.get("bio")));
     		 }
     		 return outResponse;
     	 }
@@ -84,7 +84,7 @@ public class URestController {
      }
      
      /*
-       Ξ•Ο€ΞΉΟƒΟ„Ο�Ξ­Ο†ΞµΞΉ ΞΌΞΉΞ± Ξ»Ξ―ΟƒΟ„Ξ± ΞΌΞµ Ο�Ξ»Ξ± Ο„Ξ± ΞΌΞ±ΞΈΞ®ΞΌΞ±Ο„Ξ± Ο€ΞΏΟ… ΞµΞ―Ξ½Ξ±ΞΉ ΞΊΞ±Ο„Ξ±Ο‡Ο‰Ο�Ξ·ΞΌΞ­Ξ½Ξ± ΟƒΟ„Ξ·Ξ½ Ξ²Ξ¬ΟƒΞ· Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½.
+       Επιστρέφει μια λίστα με όλα τα μαθήματα που είναι καταχωρημένα στην βάση δεδομένων.
       */
      
      public ArrayList<FSubjectsResponse> getAllSubjects() throws IOException, ParseException{
@@ -104,7 +104,7 @@ public class URestController {
     			     listdata.add((String) jArray.get(j));
     			    } 
     			 }
-    			 outResponse.add(new FSubjectsResponse(((String)tempData.get("id")), (String) tempData.get("name"), listdata, ((Number)tempData.get("rating")).floatValue(), ((Number)tempData.get("semester")).intValue()));
+    			 outResponse.add(new FSubjectsResponse(((String)tempData.get("id")), (String) tempData.get("name"), listdata, ((Number)tempData.get("rating")).floatValue(), ((Number)tempData.get("semester")).intValue(), ((Number)tempData.get("orientation")).intValue()));
     		 }
     		 return outResponse; 
     	 }
@@ -112,8 +112,8 @@ public class URestController {
      }
      
      /*
-        Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ξ±ΞΎΞΉΞΏΞ»Ο�Ξ³Ξ·ΟƒΞ· ΞΌΞ±ΞΈΞ®ΞΌΞ±Ο„ΞΏΟ‚, ΞΌΟ€ΞΏΟ�ΞµΞΉ Ξ½Ξ± ΞΊΞ»Ξ·ΞΈΞµΞ― ΞΌΟ�Ξ½ΞΏ ΞΌΞΉΞ± Ο†ΞΏΟ�Ξ¬ Ξ±Ξ½Ξ± ΞΌΞ¬ΞΈΞ·ΞΌΞ±.
-        Ξ’Ξ±ΞΈΞΌΞΏΞ»ΞΏΞ³ΞΉΞ± Ο€Ο�ΞµΟ€ΞµΞΉ Ξ½Ξ± ΞµΞΉΞ½Ξ±ΞΉ Ξ±Ο€ΞΏ 1-5
+        Συνάρτηση για αξιολόγηση μαθήματος, μπορει να κληθεί μόνο μια φορά ανα μάθημα.
+        Βαθμολογια πρεπει να ειναι απο 1-5
       */
      
      public boolean setSubjectRating(int rating, String subjectId) throws IOException {
@@ -125,7 +125,7 @@ public class URestController {
      }
      
      /*
-     Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ξ»Ξ·Ο�Ξ· Ξ²Ξ±ΞΈΞΌΞΏΞ»ΞΏΞ³Ξ―Ξ±Ο‚ ΞµΞ½Ο�Ο‚ ΞΌΞ±ΞΈΞ®ΞΌΞ±Ο„ΞΏΟ‚
+     Συνάρτηση για ληψη βαθμολογίας ενός μαθήματος
    */
      
      public float getSubjectRating(String subjectId) throws IOException, ParseException{
@@ -140,8 +140,8 @@ public class URestController {
      }
      
      /*
-     Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ξ»Ξ·Ο�Ξ· Ξ²Ξ±ΞΈΞΌΞΏΞ»ΞΏΞ³Ξ―Ξ±Ο‚ Ο€ΞΏΟ… ΞµΟ‡ΞµΞΉ ΞΈΞµΟƒΞµΞΉ ΞΏ Ο‡Ο�Ξ·ΟƒΟ„Ξ·Ο‚ Ξ³ΞΉΞ± ΞµΞ½Ξ± ΞΌΞ±ΞΈΞ·ΞΌΞ±
-     -1 ΟƒΞµ Ο€ΞµΟ�ΞΉΟ€Ο„Ο‰ΟƒΞ· Ο€ΞΏΟ… Ξ΄ΞµΞ½ ΞµΟ‡ΞµΞΉ Ξ²Ξ±ΞΈΞΌΞΏΞ»ΞΏΞ³Ξ·ΟƒΞµΞΉ Ο„ΞΏ ΞΌΞ±ΞΈΞ·ΞΌΞ±.
+     Συνάρτηση για ληψη βαθμολογίας που εχει θεσει ο χρηστης για ενα μαθημα
+     -1 σε περιπτωση που δεν εχει βαθμολογησει το μαθημα.
    */
      
      public int getMySubjectRating(String subjectId) throws IOException, ParseException{
@@ -156,7 +156,7 @@ public class URestController {
      }
      
      /*
-     Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ξ»Ξ·Ο�Ξ· ΞµΞ³Ξ³ΞµΞ³Ο�Ξ±ΞΌΞµΞ½Ο‰Ξ½ ΞΌΞ±ΞΈΞ·ΞΌΞ±Ο„Ο‰Ξ½, ΞµΟ€ΞΉΟƒΟ„Ο�ΞµΟ†ΞµΞΉ ΞΌΞΉΞ± Ξ»ΞΉΟƒΟ„Ξ± ΞΌΞµ Ο„Ξ± id Ο„Ο‰Ξ½ ΞΌΞ±ΞΈΞ·ΞΌΞ±Ο„Ο‰Ξ½.
+     Συνάρτηση για ληψη εγγεγραμενων μαθηματων, επιστρεφει μια λιστα με τα id των μαθηματων.
    */
      
      public ArrayList<String> getEnrolledSubjects() throws IOException, ParseException{
@@ -181,7 +181,7 @@ public class URestController {
      }
      
      /*
-     Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± ΞµΞ³Ξ³Ο�Ξ±Ο†Ξ® ΟƒΞµ ΞΌΞ±ΞΈΞ·ΞΌΞ±, ΞΌΞµΞ³ΞΉΟƒΟ„ΞΏ 10 ΞΌΞ±ΞΈΞ®ΞΌΞ±Ο„Ξ±
+     Συνάρτηση για εγγραφή σε μαθημα, μεγιστο 10 μαθήματα
    */
      
      public boolean enrollSubject(String subjectId) throws IOException{
@@ -192,7 +192,7 @@ public class URestController {
      }
      
      /*
-     Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ξ±Ο€ΞµΞ³Ξ³Ο�Ξ±Ο†Ξ® ΟƒΞµ ΞΌΞ±ΞΈΞ·ΞΌΞ±, ΞΌΞµΞ³ΞΉΟƒΟ„ΞΏ 10 ΞΌΞ±ΞΈΞ®ΞΌΞ±Ο„Ξ±
+     Συνάρτηση για απεγγραφή σε μαθημα, μεγιστο 10 μαθήματα
    */
      
      public boolean disenrollSubject(String subjectId) throws IOException{
@@ -203,8 +203,8 @@ public class URestController {
      }
      
      /*
-     Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ξ»Ξ·Ο�Ξ· Ξ΄ΞΉΞ±ΞΈΞµΟƒΞΉΞΌΟ‰Ξ½ Ξ·ΞΌΞµΟ�ΞΏΞΌΞ·Ξ½ΞΉΟ‰Ξ½ Ξ³ΞΉΞ± Ο�Ξ±Ξ½Ο„ΞµΞ²ΞΏΟ… ΞµΞ½ΞΏΟ‚ ΞΊΞ±ΞΈΞ·Ξ³Ξ·Ο„Ξ·.
-     Ξ”ΞµΞΉΟ„Ξµ FAvailabilityResponse
+     Συνάρτηση για ληψη διαθεσιμων ημερομηνιων για ραντεβου ενος καθηγητη.
+     Δειτε FAvailabilityResponse
    */
      
      public FAvailabilityResponse getAvailabilityDates(int professorId) throws IOException, ParseException {
@@ -229,8 +229,8 @@ public class URestController {
      }
      
      /*
-      * Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ξ»Ξ·Ο�Ξ· Ξ·Ξ΄Ξ· ΞΊΞ»ΞµΞΉΟƒΞΌΞµΞ½Ο‰Ξ½ Ο�Ξ±Ξ½Ο„ΞµΞ²ΞΏΟ… ΞµΞ½ΞΏΟ‚ ΞΊΞ±ΞΈΞ·Ξ³Ξ·Ο„Ξ·
-      * Ξ— ΞΌΞΏΟ�Ο†Ξ· ΞµΞΉΞ½Ξ±ΞΉ timestamp.
+      * Συνάρτηση για ληψη ηδη κλεισμενων ραντεβου ενος καθηγητη
+      * Η μορφη ειναι timestamp.
       */
      
      public ArrayList<Integer> getBookedTimestamps(int professorId) throws IOException, ParseException{
@@ -250,8 +250,8 @@ public class URestController {
      }
      
      /*
-     Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± ΞµΞ½Ξ·ΞΌΞµΟ�Ο‰ΟƒΞ· Ο„Ο‰Ξ½ Ξ΄ΞΉΞ±ΞΈΞµΟƒΞΉΞΌΟ‰Ξ½ Ξ·ΞΌΞµΟ�ΞΏΞΌΞ·Ξ½ΞΉΟ‰Ξ½ Ο„ΞΏΟ… ΞΊΞ±ΞΈΞ·Ξ³Ξ·Ο„Ξ·.
-     Ξ�Ο€ΞΏΟ�ΞµΞΉ Ξ½Ξ± ΞΊΞ»Ξ·ΞΈΞµΞΉ ΞΌΞΏΞ½ΞΏ Ξ±Ξ½ accountType = 1, Ξ΄ΞµΞΉΟ„Ξµ FLoginResponse.
+     Συνάρτηση για ενημερωση των διαθεσιμων ημερομηνιων του καθηγητη.
+     Μπορει να κληθει μονο αν accountType = 1, δειτε FLoginResponse.
    */
      
      public boolean setAvailabilityDates(int day, int startHour, int endHour) throws IOException{
@@ -284,8 +284,8 @@ public class URestController {
      }
      
      /*
-      * Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ξ±Ο€ΞΏΞ΄ΞΏΟ‡Ξ® Ο�Ξ±Ξ½Ο„ΞµΞ²ΞΏΟ�, ΞΌΟ€ΞΏΟ�ΞµΞ― Ξ½Ξ± ΞΊΞ»Ξ·ΞΈΞµΞ― ΞΌΟ�Ξ½ΞΏ Ξ±Ο€ΞΏ ΞΊΞ±ΞΈΞ·Ξ³Ξ·Ο„Ξ®.
-      * Ξ΄ΞµΞ½ ΞΌΟ€ΞΏΟ�ΞµΞ― Ξ½Ξ± ΞΊΞ»Ξ·ΞΈΞµΞ― Ξ±Ξ½ Ο„ΞΏ Ο�Ξ±Ξ½Ο„ΞµΞ²ΞΏΟ� ΞµΞ―Ξ½Ξ±ΞΉ Ξ±ΞΊΟ…Ο�Ο‰ΞΌΞ­Ξ½ΞΏ Ξ® Ξ·Ξ΄Ξ· ΞµΟ€ΞΉΞ²ΞµΞ²Ξ±ΞΉΟ‰ΞΌΞ­Ξ½ΞΏ
+      * Συνάρτηση για αποδοχή ραντεβού, μπορεί να κληθεί μόνο απο καθηγητή.
+      * δεν μπορεί να κληθεί αν το ραντεβού είναι ακυρωμένο ή ηδη επιβεβαιωμένο
       */
      
      public boolean acceptAppointment(int appointmentId) throws IOException {
@@ -296,8 +296,8 @@ public class URestController {
      }
 
      /*
-      * Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ξ±ΞΊΟ�Ο�Ο‰ΟƒΞ· Ο�Ξ±Ξ½Ο„ΞµΞ²ΞΏΟ�, ΞΌΟ€ΞΏΟ�ΞµΞ― Ξ½Ξ± ΞΊΞ»Ξ·ΞΈΞµΞ― Ξ±Ξ½ ΞΏ Ο‡Ο�Ξ®ΟƒΟ„Ξ·Ο‚ Ξ±Ξ½Ξ®ΞΊΞµΞΉ ΟƒΞµ Ξ±Ο…Ο„Ο� Ο„ΞΏ Ο�Ξ±Ξ½Ο„ΞµΞ²ΞΏΟ�.
-      * Ξ΄ΞµΞ½ ΞΌΟ€ΞΏΟ�ΞµΞ― Ξ½Ξ± ΞΊΞ»Ξ·ΞΈΞµΞ― Ξ±Ξ½ Ο„ΞΏ Ο�Ξ±Ξ½Ο„ΞµΞ²ΞΏΟ� ΞµΞ―Ξ½Ξ±ΞΉ Ξ±ΞΊΟ…Ο�Ο‰ΞΌΞ­Ξ½ΞΏ.
+      * Συνάρτηση για ακύρωση ραντεβού, μπορεί να κληθεί αν ο χρήστης ανήκει σε αυτό το ραντεβού.
+      * δεν μπορεί να κληθεί αν το ραντεβού είναι ακυρωμένο.
       */
      
      public boolean cancelAppointment(int appointmentId) throws IOException {
@@ -308,7 +308,7 @@ public class URestController {
      }
      
      /*
-      * Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± ΞΊΞ»ΞµΞ―ΟƒΞΉΞΌΞΏ Ο�Ξ±Ξ½Ο„ΞµΞ²ΞΏΟ�, ΞΌΟ€ΞΏΟ�ΞµΞ― Ξ½Ξ± ΞΊΞ»Ξ·ΞΈΞµΞ― Ξ±Ξ½ ΞΏ Ο‡Ο�Ξ®ΟƒΟ„Ξ·Ο‚ ΞµΞ―Ξ½Ξ±ΞΉ Ο†ΞΏΞΉΟ„Ξ·Ο„Ξ®Ο‚
+      * Συνάρτηση για κλείσιμο ραντεβού, μπορεί να κληθεί αν ο χρήστης είναι φοιτητής
       */
      
      public boolean bookAppointment(int professorId, int dateTimestamp) throws IOException {
@@ -320,8 +320,8 @@ public class URestController {
      }
      
      /*
-      * Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ξ»Ξ·Ο�Ξ· Ξ²Ξ±ΟƒΞΉΞΊΟ�Ξ½ Ο€Ξ»Ξ·Ο�ΞΏΟ†ΞΏΟ�ΞΉΟ�Ξ½ ΞµΞ½Ο�Ο‚ Ο‡Ο�Ξ®ΟƒΟ„Ξ·
-      * Ξ ΞΏΞ»Ο… Ο‡Ο�Ξ®ΟƒΞΉΞΌΞ· Ξ³ΞΉΞ± Ο„Ξ± Ο�Ξ±Ξ½Ο„ΞµΞ²ΞΏΟ….
+      * Συνάρτηση για ληψη βασικών πληροφοριών ενός χρήστη
+      * Πολυ χρήσιμη για τα ραντεβου.
       */
      
      public FUserInformationResponse getUserProfile(String userId) throws IOException, ParseException{
@@ -336,14 +336,13 @@ public class URestController {
      }
      
      /*
-      * Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ξ½Ξ± ΞΈΞµΟƒΞΏΟ…ΞΌΞµ Ξ½ΞµΞΏ display name
+      * Συνάρτηση για να θεσουμε νεο display name
       */
      
      public boolean setDisplayName(String newDisplayName) throws IOException {
     	 JSONObject obj = new JSONObject();
     	 obj.put("displayName", newDisplayName);
     	 FRestResponse r = requestComponent.Put("/api/profile/displayName/", obj);
-    	 System.out.println(r.responseContent);
     	 return r.statusCode==200;
      }
      
@@ -351,7 +350,13 @@ public class URestController {
     	 JSONObject obj = new JSONObject();
     	 obj.put("bio", bio);
     	 FRestResponse r = requestComponent.Put("/api/profile/bio/", obj);
-    	 System.out.println(r.responseContent);
+    	 return r.statusCode==200;
+     }
+     
+     public boolean setOrientation(int orientation) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("orientation", orientation);
+    	 FRestResponse r = requestComponent.Put("/api/profile/orientation/", obj);
     	 return r.statusCode==200;
      }
      
@@ -362,9 +367,9 @@ public class URestController {
     	 FRestResponse r = requestComponent.Post("/api/auth/password/", obj);
     	 return r.statusCode==200;
      }
-	
+     
      /*
-     Ξ£Ο…Ξ½Ξ¬Ο�Ο„Ξ·ΟƒΞ· Ξ³ΞΉΞ± ΞµΞ³Ξ³Ο�Ξ±Ο†Ξ· Ξ½ΞµΞΏΟ… Ο‡Ο�Ξ·ΟƒΟ„Ξ·
+     Συνάρτηση για εγγραφη νεου χρηστη
    */
      
      public boolean doRegister(String username, String password, String displayName, String email) throws IOException{
