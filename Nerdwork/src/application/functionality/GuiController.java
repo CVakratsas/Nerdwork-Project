@@ -106,7 +106,7 @@ public class GuiController {
  		ArrayList<FSubjectsResponse> fsr = controller.getAllSubjects();
 		
 		// The first if statement is used to check if the user has already accessed the page 
- 		// for all courses. In that way we do not spend time gathering data from the database.
+ 		// for all courses. In that way we do not spend time refilling the array.
  		if (allCourses.size() != fsr.size()) {
 			allCourses.clear();
 			
@@ -119,24 +119,32 @@ public class GuiController {
 	 			allProfessors.clear();
 	 			
 		 		for (FProfessorsResponse i : fpr)
-		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating, 2));	 		}
+		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating, 2));
+	 		}
 	 		// allProfessors, now contains all the professors contained in the database
 			
 			for (FSubjectsResponse i : fsr) 
-				allCourses.add(new Course(i.id, i.name, i.associatedProfessors, i.rating, i.semester, allProfessors));
+				allCourses.add(new Course(i.id, i.name, i.associatedProfessors, i.rating, i.semester, allProfessors, i.orientation));
  		}
  		
- 		if (user.getOrientation() == 2) 
- 			return allCourses;
- 		
+ 		if (user != null) {
+ 			if (user.getOrientation() == 2) {
+ 	 			return allCourses;
+ 	 		}
+ 	 		else {
+ 	 			ArrayList<Course> coursesByOrientation = new ArrayList<>();
+ 	 			
+ 	 			for (Course c : allCourses) {
+ 	 				if (c.getOrientation() == user.getOrientation() || c.getOrientation() == 2) {
+ 	 					coursesByOrientation.add(c);
+ 	 				}
+ 	 			}
+ 	 			
+ 	 			return coursesByOrientation;
+ 	 		}
+ 		}
  		else {
- 			ArrayList<Course> coursesByOrientation = new ArrayList<>();
-
- 			for (Course c : allCourses)
- 				if (c.getOrientation() == user.getOrientation() || c.getOrientation() == 2) 
- 					coursesByOrientation.add(c);
-
- 			return coursesByOrientation;
+ 			return allCourses;
  		}
  	}
  	

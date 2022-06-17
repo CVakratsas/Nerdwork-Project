@@ -21,11 +21,12 @@ public class Course {
 	private float rating;
 	private ArrayList<Professor> associatedProfessors; // Professors teaching each lesson
 	
-	public Course(String id, String name, ArrayList<String> associatedProfessorsId, float rating, int semester, ArrayList<Professor> allProfessors) {
+	public Course(String id, String name, ArrayList<String> associatedProfessorsId, float rating, int semester, ArrayList<Professor> allProfessors, int orientation) {
 		this.id = id;
 		this.name = name;
 		this.rating = rating;
 		this.semester = semester;
+		this.orientation = orientation;
 		this.associatedProfessors = new ArrayList<Professor>();
 		
 		for (Professor p : allProfessors)
