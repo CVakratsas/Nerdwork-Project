@@ -164,6 +164,7 @@ public class URestController {
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 data = (JSONObject) data.get("triggerResults");
     		 JSONArray jArray = (JSONArray)data.get("enrollments");
     		 if(jArray==null) {
     			 return new ArrayList<String>();
@@ -342,6 +343,14 @@ public class URestController {
     	 JSONObject obj = new JSONObject();
     	 obj.put("displayName", newDisplayName);
     	 FRestResponse r = requestComponent.Put("/api/profile/displayName/", obj);
+    	 System.out.println(r.responseContent);
+    	 return r.statusCode==200;
+     }
+     
+     public boolean setBio(String bio) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("bio", bio);
+    	 FRestResponse r = requestComponent.Put("/api/profile/bio/", obj);
     	 System.out.println(r.responseContent);
     	 return r.statusCode==200;
      }

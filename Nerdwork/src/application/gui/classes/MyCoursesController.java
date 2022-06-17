@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
@@ -40,8 +41,13 @@ public class MyCoursesController {
 	}
 	
 	public void load(ArrayList<Course> array) {
+		
 		int counter = array.size();
+		
+		// For every course
 		for (int i = 0; i < counter; i++) {
+			// Setting i as a final variable for the event handler
+			final int temp_i = i;
 			
 			// Labels creation
 			Label labelCourse = new Label(myCourses.get(i).getName());
@@ -62,6 +68,21 @@ public class MyCoursesController {
 			courseBox.setAlignment(Pos.CENTER_LEFT);
 			courseBox.setPrefHeight(200.0);
 			courseBox.prefWidth(100.0);
+			courseBox.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle(MouseEvent arg0) {
+					try {
+						new CourseProfileController().switchToCourseProfile(arg0, array.get(temp_i));
+					} catch (IOException | ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				
+			});
+			
+			// Setting style of the courseBox
+			courseBox.setStyle("-fx-cursor: hand");
 			
 			// Button creation
 			Button deleteButton = new Button("-");
@@ -94,8 +115,8 @@ public class MyCoursesController {
 			RowConstraints row = new RowConstraints(80);
 			coursesPane.getRowConstraints().add(row);
 			
-			coursesPane.add(courseBox, 0, i + 2);
-			coursesPane.add(buttonBox, 1, i + 2);
+			coursesPane.add(courseBox, 0, i + 1);
+			coursesPane.add(buttonBox, 1, i + 1);
 			coursesPane.setMargin(courseBox, new Insets(0, 0, 0, 10));
 		}
 	}

@@ -26,7 +26,11 @@ public class MenuBarsController {
     
 	public void switchToHomePage(ActionEvent event) {
 		Navigator.loadCenter(Navigator.HomePage);
-    }
+    } 
+	
+	public void switchToProfessorListForAppointments(ActionEvent event) {
+		Navigator.loadCenter(Navigator.ProfessorListForAppointments);
+    } 
     
     public void closeWindow() {
 		

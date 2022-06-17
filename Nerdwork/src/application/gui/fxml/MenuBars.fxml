@@ -38,7 +38,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false">
+            <Button mnemonicParsing="false" onAction="#switchToProfessorListForAppointments">
                <HBox.margin>
                   <Insets left="30.0" right="60.0" />
                </HBox.margin>

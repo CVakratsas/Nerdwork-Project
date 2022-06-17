@@ -75,7 +75,7 @@ public class MyCoursesAddCourseController {
 				
 			});
 			
-			// Settings style of the courseBox
+			// Setting style of the courseBox
 			courseBox.setStyle("-fx-cursor: hand");
 			
 			// Button creation

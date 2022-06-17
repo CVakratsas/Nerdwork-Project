@@ -22,10 +22,5 @@ public class HomePageController {
         Node calendar = datePickerSkin.getPopupContent();
         calendar.setStyle("-fx-background-color: #3889c4");
         calendarPane.getChildren().add(calendar);
-    }
-	
-	public void load() {
-		
-	}
-	
+    }	
 }

@@ -33,7 +33,7 @@
                   <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="97.0" text="Απεγγραφή" GridPane.columnIndex="1">
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="97.0" text="Εγγραφή" GridPane.columnIndex="1">
                      <font>
                         <Font name="Segoe UI Bold" size="14.0" />
                      </font>
