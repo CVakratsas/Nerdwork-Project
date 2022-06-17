@@ -1,3 +1,4 @@
+package application.api;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class URestController {
     		 data = (JSONObject)data.get("triggerResults");
     		 userId = (String) data.get("id");
     		 this.username = username;
-    		 return new FLoginResponse(true, userId, (String)data.get("displayName"), username, ((Number)data.get("accountType")).intValue(), ((Number)data.get("associatedProfessor")).intValue());
+    		 return new FLoginResponse(true, userId, (String)data.get("displayName"), username, ((Number)data.get("accountType")).intValue(), ((Number)data.get("associatedProfessor")).intValue(), ((Number)data.get("orientation")).intValue());
     	 }
     	 return new FLoginResponse(false);
      }
@@ -45,7 +46,7 @@ public class URestController {
     		 ArrayList<FProfessorsResponse> outResponse = new ArrayList<FProfessorsResponse>();
     		 for(int i = 0; i<arrayData.size(); i++) {
     			 JSONObject tempData = (JSONObject)arrayData.get(i);
-    			 outResponse.add(new FProfessorsResponse(((Number)tempData.get("id")).intValue(), (String) tempData.get("name"), (String) tempData.get("phone"), (String) tempData.get("email"), (String) tempData.get("profilePhoto"), (String) tempData.get("office"), ((Number)tempData.get("rating")).floatValue()));
+    			 outResponse.add(new FProfessorsResponse(((Number)tempData.get("id")).intValue(), (String) tempData.get("name"), (String) tempData.get("phone"), (String) tempData.get("email"), (String) tempData.get("profilePhoto"), (String) tempData.get("office"), ((Number)tempData.get("rating")).floatValue(), (String) tempData.get("bio")));
     		 }
     		 return outResponse;
     	 }
@@ -103,7 +104,7 @@ public class URestController {
     			     listdata.add((String) jArray.get(j));
     			    } 
     			 }
-    			 outResponse.add(new FSubjectsResponse(((String)tempData.get("id")), (String) tempData.get("name"), listdata, ((Number)tempData.get("rating")).floatValue(), ((Number)tempData.get("semester")).intValue()));
+    			 outResponse.add(new FSubjectsResponse(((String)tempData.get("id")), (String) tempData.get("name"), listdata, ((Number)tempData.get("rating")).floatValue(), ((Number)tempData.get("semester")).intValue(), ((Number)data.get("orientation")).intValue()));
     		 }
     		 return outResponse; 
     	 }
@@ -163,6 +164,7 @@ public class URestController {
     	 if(r.statusCode==200) {
     		 JSONParser parser = new JSONParser();
     		 JSONObject data = (JSONObject) parser.parse(r.responseContent);
+    		 data = (JSONObject) data.get("triggerResults");
     		 JSONArray jArray = (JSONArray)data.get("enrollments");
     		 if(jArray==null) {
     			 return new ArrayList<String>();
@@ -217,8 +219,8 @@ public class URestController {
     			 JSONObject tempData = (JSONObject)arrayData.get(i);
     			 HashMap<String, Integer> dateElement = new HashMap<String, Integer>();
     			 dateElement.put("day", ((Number)tempData.get("day")).intValue());
-    			 dateElement.put("startHour", ((Number)tempData.get("day")).intValue());
-    			 dateElement.put("endHour", ((Number)tempData.get("day")).intValue());
+    			 dateElement.put("startHour", ((Number)tempData.get("startHour")).intValue());
+    			 dateElement.put("endHour", ((Number)tempData.get("endHour")).intValue());
     			 dates.add(dateElement);
     		 }
     		 return new FAvailabilityResponse(true, dates);
@@ -341,10 +343,23 @@ public class URestController {
     	 JSONObject obj = new JSONObject();
     	 obj.put("displayName", newDisplayName);
     	 FRestResponse r = requestComponent.Put("/api/profile/displayName/", obj);
-    	 System.out.println(r.responseContent);
     	 return r.statusCode==200;
      }
-	
+     
+     public boolean setBio(String bio) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("bio", bio);
+    	 FRestResponse r = requestComponent.Put("/api/profile/bio/", obj);
+    	 return r.statusCode==200;
+     }
+     
+     public boolean setOrientation(int orientation) throws IOException {
+    	 JSONObject obj = new JSONObject();
+    	 obj.put("orientation", orientation);
+    	 FRestResponse r = requestComponent.Put("/api/profile/orientation/", obj);
+    	 return r.statusCode==200;
+     }
+     
      public boolean setPassword(String oldPassword, String newPassword) throws IOException {
     	 JSONObject obj = new JSONObject();
     	 obj.put("oldPassword", oldPassword);
