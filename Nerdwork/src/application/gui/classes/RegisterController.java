@@ -49,49 +49,55 @@ public class RegisterController {
 			orientation.getItems().addAll(orientationArray);
 		}
 		else {
-			System.out.println("Hello prof");
 			orientationInt = 2;
 		}
 	}
 	
 	public void register(ActionEvent event) throws IOException, ParseException {
 		
-//		if(orientationInt != 2) { // A student is trying to register
-//			String orientationString = orientation.getValue();
-//			if(orientationString == "ету") {
-//				orientationInt = 0;
-//			}
-//			else if(orientationString == "пс") {
-//				orientationInt = 1;
-//			}
-//			else {
-//				alertError1();
-//			}
-//		}
-//		else { // A professor is trying to register
-			boolean answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText());
-			
-			if(answer) {
-				alertSucess();
-				switchToLogin(event);
+		boolean answer;
+		if(orientationInt != 2) { // A student is trying to register
+			String orientationString = orientation.getValue();
+			if(orientationString == "ету") {
+				orientationInt = 0;
+				answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText(), orientationInt);
+			}
+			else if(orientationString == "пс") {
+				orientationInt = 1;
+				answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText(), orientationInt);
 			}
 			else {
-				error = GuiController.getInstance().checkPassword(password.getText());
-				if(username.getText().equals("") || password.getText().equals("") || repeatPassword.getText().equals("")
-						|| nickname.getText().equals("") || email.getText().equals("")) { // There are empty fields
-					alertError1();
-				}
-				else if(!password.getText().equals(repeatPassword.getText())) { // Passwords are not the same
-					alertError2();
-				}
-				else if(!(GuiController.getInstance().checkPassword(password.getText()).equals("correct"))) {
-					alertError3(error);
-				}
-				else {
-					alertError4();
-				}
+				answer = false;
+				alertError1();
+				System.out.println("student");
 			}
-//		}
+			
+		}
+		else { // A professor is trying to register
+			answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText(), orientationInt);
+			System.out.println("prof");
+		}
+		
+		if(answer) {
+			alertSucess();
+			switchToLogin(event);
+		}
+		else {
+			error = GuiController.getInstance().checkPassword(password.getText());
+			if(username.getText().equals("") || password.getText().equals("") || repeatPassword.getText().equals("")
+					|| nickname.getText().equals("") || email.getText().equals("")) { // There are empty fields
+				alertError1();
+			}
+			else if(!password.getText().equals(repeatPassword.getText())) { // Passwords are not the same
+				alertError2();
+			}
+			else if(!(GuiController.getInstance().checkPassword(password.getText()).equals("correct"))) {
+				alertError3(error);
+			}
+			else {
+				alertError4();
+			}
+		}
 	}
 	
 	public void alertError1() {

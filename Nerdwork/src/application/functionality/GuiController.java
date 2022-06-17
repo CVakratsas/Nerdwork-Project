@@ -612,10 +612,10 @@ public class GuiController {
  		
  		if (message.equals(isCorrect)) {
  			if (controller.setPassword(oldPassword, newPassword))
- 				return "Ξ ΞΊΟ‰Ξ΄ΞΉΞΊΟΟ‚ ΞµΞ½Ξ·ΞΌΞµΟΟΞΈΞ·ΞΊΞµ ΞµΟ€ΞΉΟ„Ο…Ο‡ΟΟ‚!";
+ 				return "Ο κωδικός ενημερώθηκε επιτυχώς!";
  			
  			else
- 				return "Ξ Ο€Ξ±Ξ»ΞΉΟΟ‚ ΞΊΟ‰Ξ΄ΞΉΞΊΟΟ‚ Ξ΄ΞµΞ½ ΞµΞ―Ξ½Ξ±ΞΉ Ξ­Ξ³ΞΊΟ…ΟΞΏΟ‚!";
+ 				return "Ο παλιός κωδικός δεν είναι έγκυρος!";
  		}
  		
  		return message;
@@ -649,23 +649,23 @@ public class GuiController {
  			Matcher hasDigit = digit.matcher(newPassword);
  			Matcher hasSpecial = special.matcher(newPassword);
  			    
- 			String passwordErrors = "Ξ Ξ½Ξ­ΞΏΟ‚ ΞΊΟ‰Ξ΄ΞΉΞΊΟΟ‚ ΞΈΞ± Ο€ΟΞ­Ο€ΞµΞΉ Ξ½Ξ± Ο€ΞµΟΞΉΞ­Ο‡ΞµΞΉ:";
+ 			String passwordErrors = "Ο νέος κωδικός θα πρέπει να περιέχει:";
  			boolean validPassword = true;
  			    
  			if (!hasUpperLetter.find()) {
- 			  	passwordErrors += "\n- Ο„ΞΏΟ…Ξ»Ξ¬Ο‡ΞΉΟƒΟ„ΞΏΞ½ Ξ­Ξ½Ξ± ΞΊΞµΟ†Ξ±Ξ»Ξ±Ξ―ΞΏ Ο‡Ξ±ΟΞ±ΞΊΟ„Ξ®ΟΞ±";
+ 			  	passwordErrors += "\n- τουλάχιστον έναν κεφαλαίο χαρακτήρα";
  			  	validPassword = false;
  			}
  			if (!hasLowerLetter.find()) {
- 			   	passwordErrors += "\n- Ο„ΞΏΟ…Ξ»Ξ¬Ο‡ΞΉΟƒΟ„ΞΏΞ½ Ξ­Ξ½Ξ± Ο€ΞµΞ¶Ο Ο‡Ξ±ΟΞ±ΞΊΟ„Ξ®ΟΞ±";
+ 			   	passwordErrors += "\n- τουλάχιστον ένα πεζό χαρακτήρα";
  			   	validPassword = false;
  			}
  			if (!hasDigit.find()) {
- 			   	passwordErrors += "\n- Ο„ΞΏΟ…Ξ»Ξ¬Ο‡ΞΉΟƒΟ„ΞΏΞ½ Ξ­Ξ½Ξ± ΟΞ·Ο†Ξ―ΞΏ";
+ 			   	passwordErrors += "\n- τουλάχιστον ένα ψηφίο";
  			   	validPassword = false;
  			}
  		    if (!hasSpecial.find()) {
- 		    	passwordErrors += "\n- Ο„ΞΏΟ…Ξ»Ξ¬Ο‡ΞΉΟƒΟ„ΞΏΞ½ Ξ­Ξ½Ξ±Ξ½ ΞµΞΉΞ΄ΞΉΞΊΟ Ο‡Ξ±ΟΞ±ΞΊΟ„Ξ®ΟΞ±";
+ 		    	passwordErrors += "\n- τουλάχιστον έναν ειδικό χαρακτήρα";
  		    	validPassword = false;
  		    }
  		    if (validPassword)
@@ -674,7 +674,7 @@ public class GuiController {
  		    	return passwordErrors;
  		}
  		else {
- 			return "Ξ Ξ½Ξ­ΞΏΟ‚ ΞΊΟ‰Ξ΄ΞΉΞΊΟΟ‚ Ο€ΟΞ­Ο€ΞµΞΉ Ξ½Ξ± Ξ­Ο‡ΞµΞΉ ΞΌΞ­Ξ³ΞµΞΈΞΏΟ‚ Ο„ΞΏΟ…Ξ»Ξ¬Ο‡ΞΉΟƒΟ„ΞΏΞ½ 8 Ο‡Ξ±ΟΞ±ΞΊΟ„Ξ®ΟΟ‰Ξ½!";
+ 			return "Ο νέος κωδικός πρέπει να έχει μέγεθος τουλάχιστον 8 χαρακτήρων!";
  		}
  	}
 }
