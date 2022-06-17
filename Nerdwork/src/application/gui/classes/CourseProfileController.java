@@ -51,7 +51,7 @@ public class CourseProfileController {
 		name.setText(course.getName());
 		rating.setRating(course.getRating());
 		semester.setText(Integer.toString(course.getSemester()) + "ο Εξάμηνο");;
-		orientation.setText(course.getOrientation());
+		orientation.setText(Integer.toString(course.getOrientation()));
 		ects.setText(Integer.toString(course.getECTS()) + " ECTS");
 		description.getChildren().add(new Label(""));
 		

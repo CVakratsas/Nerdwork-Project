@@ -16,7 +16,7 @@ public class Course {
 	
 	private String id;
 	private String name;
-	private String orientation; // There are three types of the orientation attribute
+	private int orientation;
 	private static final int ECTS = 5;
 	private int semester;
 	private float rating;
@@ -64,11 +64,11 @@ public class Course {
 		return name;
 	}
 	
-	public void setOrientation(String orientation) {
+	public void setOrientation(int orientation) {
 		this.orientation = orientation;
 	}
 
-	public String getOrientation() {
+	public int getOrientation() {
 		return orientation;
 	}
 	

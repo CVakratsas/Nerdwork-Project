@@ -16,6 +16,7 @@ public abstract class User {
 	protected String username;
 	protected String email;
 	protected String displayName;
+	protected int orientation;
 	private String bio;
 	protected ArrayList<Timeslot> requestedAppointments;
 	private ArrayList<Timeslot> reservedAppointments; 
@@ -29,10 +30,11 @@ public abstract class User {
 	
 	/*User Constructor is here*/
 	
-	public User(String userId, String username, String displayName) {
+	public User(String userId, String username, String displayName, int orientation) {
 		this.userId = userId;
 		this.username = username;
 		this.displayName = displayName;
+		this.orientation = orientation;
 		myCourses = new ArrayList<>();
 		myAppointments = new ArrayList<>();
 		requestedAppointments = new ArrayList<Timeslot>();
@@ -66,6 +68,10 @@ public abstract class User {
 	public void setUserame(String username) {
 		this.username = username;
 	}
+	
+	public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 	
 	public String getDisplayName() {
 		return displayName;
@@ -113,6 +119,14 @@ public abstract class User {
 		this.email = email;
 	}
 	
+	public void setOrientation(int orientation) {
+		this.orientation = orientation;
+	}
+	
+	public int getOrientation() {
+		return orientation;
+	}
+
 	public String getBio() {
 		return bio;
 	}

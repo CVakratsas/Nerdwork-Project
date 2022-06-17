@@ -23,8 +23,8 @@ public class Student extends User {
 	
 	/*Student Constructor is here*/
 	
-	public Student(String userId, String username, String displayName) {
-		super(userId, username, displayName);
+	public Student(String userId, String username, String displayName, int orientation) {
+		super(userId, username, displayName, orientation);
 		this.gpa = null;
 		courseGrades = new ArrayList<>();
 	}

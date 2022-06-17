@@ -83,14 +83,14 @@ public class GuiController {
  		
  		if (flr.isSuccess) {
 	 		if (flr.accountType == 0) {
-	 			user = new Student(flr.userId, flr.username, flr.displayName);
+	 			user = new Student(flr.userId, flr.username, flr.displayName, flr.orientation);
 	 			user.setEmail(controller.getUserProfile(user.getUserId()).email);
 	 		}
 	 		else {
-	 			user = null;
 	 			user = getProfessorById(flr.associatedProfessorId);
 	 			user.setUserame(flr.username);
 	 			user.setUserId(flr.userId);
+	 			user.setOrientation(2);
 	 			user.setBio(controller.getUserProfile(user.getUserId()).bio);
 	 		}
  		}
@@ -120,7 +120,7 @@ public class GuiController {
 	 			allProfessors.clear();
 	 			
 		 		for (FProfessorsResponse i : fpr)
-		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating));
+		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating, 2));
 	 		}
 	 		// allProfessors, now contains all the professors contained in the database
 			
@@ -128,7 +128,20 @@ public class GuiController {
 				allCourses.add(new Course(i.id, i.name, i.associatedProfessors, i.rating, i.semester, allProfessors));
  		}
  		
- 		return allCourses;
+ 		if (user.getOrientation() == 2) {
+ 			return allCourses;
+ 		}
+ 		else {
+ 			ArrayList<Course> coursesByOrientation = new ArrayList<>();
+ 			
+ 			for (Course c : allCourses) {
+ 				if (c.getOrientation() == user.getOrientation() || c.getOrientation() == 2) {
+ 					coursesByOrientation.add(c);
+ 				}
+ 			}
+ 			
+ 			return coursesByOrientation;
+ 		}
  	}
  	
  	public Course getCourseById(String courseId) throws IOException, ParseException {
@@ -281,7 +294,7 @@ public class GuiController {
  			allProfessors.clear();
  			
 	 		for (FProfessorsResponse i : fpr)
-	 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating));
+	 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating, 2));
 	 		
 	 		// This part returns the courses each professor teaches.
 	 		for (Professor professor : allProfessors)
@@ -489,9 +502,14 @@ public class GuiController {
  		return selectedProfessor.getReservedAppointments();
  	}
  	
- 	public boolean setDisplayName(User user) throws IOException {
- 		return controller.setDisplayName(user.getDisplayName());
- 	}
+ 	public boolean setDisplayName(String newDisplayName) throws IOException {
+        boolean success = controller.setDisplayName(newDisplayName);
+
+        if (success)
+            user.setDisplayName(newDisplayName);
+
+        return success;
+    }
  	
 	public String changePassword(String oldPassword, String newPassword) throws IOException {
  		String isCorrect = "correct";

@@ -25,8 +25,8 @@ public class Professor extends User {
 	/*Professor Constructor is here*/
 	
 	// Constructor for getting professor information as student.
-	public Professor(String displayName, int professorId, String email, String profilePhoto, String phone, String office, float rating) {
-		super(Integer.toString(professorId), null, displayName);
+	public Professor(String displayName, int professorId, String email, String profilePhoto, String phone, String office, float rating, int orientation) {
+		super(Integer.toString(professorId), null, displayName, orientation);
 		this.professorId = professorId;
 		this.email = email;
 		this.profilePhoto = profilePhoto;
@@ -37,8 +37,8 @@ public class Professor extends User {
 	}
 	
 	// Constructor for professor login
-	public Professor(String userId, String username, String displayName, int professorId) {
-		super(userId, username, displayName);
+	public Professor(String userId, String username, String displayName, int professorId, int orientation) {
+		super(userId, username, displayName, orientation);
 		this.professorId = professorId;
 		availableTimeslots = new ArrayList<Timeslot>();
 	}
