@@ -58,9 +58,9 @@ public class GuiController {
  	 * to other users and an email (his academic email). It returns true if the 
  	 * registration was successful and false otherwise (described below).
  	 */
- 	public boolean register(String username, String password, String displayName, String email) throws IOException {
+ 	public boolean register(String username, String password, String displayName, String email, int orientation) throws IOException {
  		if (checkPassword(password).equals("correct"))
- 			return controller.doRegister(username, password, displayName, email); // false if email incorrect or username already exists.
+ 			return controller.doRegister(username, password, displayName, email, orientation); // false if email incorrect or username already exists.
  		
  		return false; // Password incorrect.
  	}
