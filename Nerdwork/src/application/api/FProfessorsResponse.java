@@ -1,5 +1,4 @@
 package application.api;
-import java.util.ArrayList;
 
 public class FProfessorsResponse {
 	public int id;

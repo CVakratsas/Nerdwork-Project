@@ -26,9 +26,8 @@
                      <children>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/phone.png" />
-                           </image>
-                        </ImageView>
+                              <Image url="@/application/gui/icons/phone.png" />
+                           </image></ImageView>
                         <Label fx:id="phoneNumber" text="professorNumber">
                            <font>
                               <Font name="Comic Sans MS" size="18.0" />
@@ -46,7 +45,7 @@
                      <children>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/email.png" />
+                              <Image url="@/application/gui/icons/phone.png" />
                            </image>
                         </ImageView>
                         <Label fx:id="email" text="professorEmail">
@@ -66,7 +65,7 @@
                      <children>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/office.png" />
+                              <Image url="application\gui\icons\office.png" />
                            </image>
                         </ImageView>
                         <Label fx:id="office" text="professorOffice">
@@ -82,11 +81,7 @@
                </children>
             </VBox>
             <Rating fx:id="rating" layoutX="77.0" layoutY="260.0" onMouseClicked="#rateProfessor" partialRating="true" rating="5.0" />
-            <ImageView fx:id="profilePicture" fitHeight="200.0" fitWidth="200.0" layoutX="68.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons" />
-               </image>
-            </ImageView>
+            <ImageView fx:id="profilePicture" fitHeight="200.0" fitWidth="200.0" layoutX="68.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </AnchorPane>
       <ScrollPane prefHeight="200.0" prefWidth="200.0">

@@ -1,10 +1,6 @@
 package application.gui.classes;
 
 import java.io.IOException;
-
-import org.json.simple.parser.ParseException;
-
-import application.functionality.Course;
 import javafx.fxml.FXMLLoader;
 
 public class Navigator {
@@ -17,6 +13,8 @@ public class Navigator {
     public static final String HomePage = "/application/gui/fxml/HomePage.fxml";
     public static final String ProfessorProfile = "/application/gui/fxml/ProfessorProfile.fxml";
     public static final String CourseProfile = "/application/gui/fxml/CourseProfile.fxml";
+    public static final String Settings = "/application/gui/fxml/Settings.fxml";
+    public static final String Appointments = "/application/gui/fxml/Appointments.fxml";
 
     private static MenuBarsController menuBarsController;
 
