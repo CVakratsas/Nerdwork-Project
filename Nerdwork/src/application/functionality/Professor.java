@@ -1,9 +1,7 @@
 /*
  * Professor class, providing methods for the functionalities
- * that a professor might need to make in out program, such as,
- * the management of the courses they teach and their appointments 
- * with their students. It also provides some methods for rating
- * purposes of the Professor objects.
+ * that a professor might need to make in our program, such as,
+ * the management their appointments with their students. 
  */
 
 package application.functionality;
@@ -21,8 +19,6 @@ public class Professor extends User {
 	private int professorId;
 	private float rating;
 	private ArrayList<Timeslot> availableTimeslots; // A Professor's available Timeslots
-		
-	/*Professor Constructor is here*/
 	
 	// Constructor for getting professor information as student.
 	public Professor(String displayName, int professorId, String email, String profilePhoto, String phone, String office, float rating, int orientation) {
@@ -57,6 +53,7 @@ public class Professor extends User {
 		 * the current course is being taught by "this" Professor object.
 		 */
 		myCourses.clear();
+		
 		for (Course course : allCourses)
 			for (Professor associatedProfessor : course.getProfessors())
 				if (associatedProfessor.getProfessorId() == this.professorId)
@@ -75,6 +72,12 @@ public class Professor extends User {
 		return professorId;
 	}
 	
+	/*
+	 * Method used to create available Timeslots (with half hour distance of the start
+	 * and end hours of the appointment).
+	 * It returns nothing and receives two int type parameters the start and end hour
+	 * of the appointment in the form of seconds passed since 1st January 1970 00:00:00.
+	 */
 	public void addAvailableTimeslot(int startHourTimestamp, int endHourTimestamp) {
 		Date dateStartTimestamp = new Date((long)startHourTimestamp * 1000);
 		Date dateEndTimestamp = new Date((long)endHourTimestamp * 1000);

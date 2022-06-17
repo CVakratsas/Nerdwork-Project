@@ -1,7 +1,9 @@
 /*
- * Class that contains information about the hours and dates
- * a Professor is available for an appointment with a Student
- * and also for the status of the Students' requests for appointments.
+ * Class that contains information for appointments of a student
+ * with a professor and their status. Note that appointments are
+ * stored as starting date and ending date seconds since 1st January
+ * 1970 00:00:00. Timeslot also contains methods that can be used to 
+ * more easily parse these data into more usable forms.
  */
 
 package application.functionality;
@@ -13,6 +15,8 @@ import java.util.TimeZone;
 
 public class Timeslot {
 	
+	public static final String Days[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}; 
+	public static final String Months[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "December"};
 	private int id;
 	private String studentId;
 	private int professorId;
@@ -40,8 +44,12 @@ public class Timeslot {
 	}
 	
 	/*
-	 * This method is used to return the date of the available Timeslot
-	 * in a Date format.
+	 * Method used to get data contained in the Date objects, concerning 
+	 * dates, in a simpler way.
+	 * It returns a HashMap with key of the type String (month, day, hour, 
+	 * minutes) and with values of type Integer (value for each of the aforementioned
+	 * keys) and receives a Date object as parameter (the date from which to extract 
+	 * these information).
 	 */
 	public static HashMap<String, Integer> getDateInfo(Date date) {
 		Calendar calendarTimestamp = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
@@ -56,7 +64,13 @@ public class Timeslot {
 		
 		return availableDate;
 	}
-
+	
+	/*
+	 * Method used to return the start date and end date of an appointment.
+	 * It returns a HashMap with key of the type String (startHour, endHour)
+	 * and with values of the type Date (Date objects representing the end and
+	 * start hour of the appointment) and receives no parameters.
+	 */
 	public HashMap<String, Date> getAppointment(){
 		HashMap<String, Date> appointment = new HashMap<String, Date>();
 		Date dateStartTimestamp = new Date((long)startHourTimestamp * 1000);
@@ -68,14 +82,22 @@ public class Timeslot {
 		return appointment; 
 	}
 	
+	/*
+	 * Method used to check if an appointment is outdated, using the GMT
+	 * timezone.
+	 * It returns false if the appointment can still be considered active
+	 * and (available, requested, reserved) and true otherwise.
+	 */
 	public boolean checkOutdated() {
 		Calendar day = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 		Date dayTimestamp = day.getTime();
 		boolean outdated = false;
-
+		
+		// A requested or available, can be considered outdated when current time exceeds their starting hour.
 		if (((int)(dayTimestamp.getTime() / 1000)) > startHourTimestamp && status != 1)
 			outdated = true;
 		
+		// A reserved appointment, can be considered outdated when current time exceeds their ending hour.
 		else if (((int)(dayTimestamp.getTime() / 1000)) > endHourTimestamp)
 			outdated = true;
 		

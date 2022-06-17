@@ -2,8 +2,7 @@
  * The Course class, is used to create objects that represent,
  * courses for a University. Objects of the classes Professor 
  * and Student can react with objects of the Course class,
- * according to their needs, by the use of certain methods, 
- * provided by the class.
+ * according to their needs.
  */
 
 package application.functionality;
@@ -22,9 +21,6 @@ public class Course {
 	private float rating;
 	private ArrayList<Professor> associatedProfessors; // Professors teaching each lesson
 	
-	
-	/* Course class attribute initialization: */
-	
 	public Course(String id, String name, ArrayList<String> associatedProfessorsId, float rating, int semester, ArrayList<Professor> allProfessors) {
 		this.id = id;
 		this.name = name;
@@ -38,14 +34,6 @@ public class Course {
 					associatedProfessors.add(p);
 	}
 	
-	/* Methods of Course class */
-	
-	/*
-	 * Method that parses the this.name attribute to a String
-	 * (overlaps the toString Java method).
-	 * toString, has no parameters and returns a String variable 
-	 * (the name attribute, of "this" Course object).
-	 */
 	public String toString(){
 		return name;
 	}
@@ -63,11 +51,11 @@ public class Course {
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setOrientation(int orientation) {
 		this.orientation = orientation;
 	}
-
+	
 	public int getOrientation() {
 		return orientation;
 	}

@@ -42,8 +42,7 @@ public class GuiController {
 	private URestController controller; // Not to be user by GUI.
  	private ArrayList<Course> allCourses; // All courses.
  	private ArrayList<Professor> allProfessors;
- 	// The 2 types of User:
- 	private User user;
+ 	private User user; // The logged in user's information.
  	
  	// Constructor:
  	private GuiController() throws IOException, ParseException {
@@ -107,7 +106,7 @@ public class GuiController {
  		ArrayList<FSubjectsResponse> fsr = controller.getAllSubjects();
 		
 		// The first if statement is used to check if the user has already accessed the page 
- 		// for all courses. In that way we do not spend time refilling the array.
+ 		// for all courses. In that way we do not spend time gathering data from the database.
  		if (allCourses.size() != fsr.size()) {
 			allCourses.clear();
 			
@@ -120,30 +119,34 @@ public class GuiController {
 	 			allProfessors.clear();
 	 			
 		 		for (FProfessorsResponse i : fpr)
-		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating, 2));
-	 		}
+		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating, 2));	 		}
 	 		// allProfessors, now contains all the professors contained in the database
 			
 			for (FSubjectsResponse i : fsr) 
 				allCourses.add(new Course(i.id, i.name, i.associatedProfessors, i.rating, i.semester, allProfessors));
  		}
  		
- 		if (user.getOrientation() == 2) {
+ 		if (user.getOrientation() == 2) 
  			return allCourses;
- 		}
+ 		
  		else {
  			ArrayList<Course> coursesByOrientation = new ArrayList<>();
- 			
- 			for (Course c : allCourses) {
- 				if (c.getOrientation() == user.getOrientation() || c.getOrientation() == 2) {
+
+ 			for (Course c : allCourses)
+ 				if (c.getOrientation() == user.getOrientation() || c.getOrientation() == 2) 
  					coursesByOrientation.add(c);
- 				}
- 			}
- 			
+
  			return coursesByOrientation;
  		}
  	}
  	
+ 	/*
+ 	 * Method used to get a Course object from allCourses ArrayList,
+ 	 * by its id.
+ 	 * It returns the course with the id (Integer) provided (as parameter),
+ 	 * if found in the allCourses ArrayList.
+ 	 * Note: Professors can not add new Courses in the database.
+ 	 */
  	public Course getCourseById(String courseId) throws IOException, ParseException {
  		for (Course course : allCourses) {
  			if (course.getId().equals(courseId)) {
@@ -158,7 +161,8 @@ public class GuiController {
  	 * Method used by students in order to enroll to a course.
  	 * The method returns true only if the enrollment was successful.
  	 * It returns false if the enrollment failed (student already enrolled)
- 	 * or because of the http request failure.
+ 	 * or because of the http request failure. It receives a String object,
+ 	 * as parameter, representing the course's id
  	 */
  	public boolean courseEnrollment(String courseId) throws IOException, ParseException {
  		boolean success = controller.enrollSubject(courseId);
@@ -173,7 +177,8 @@ public class GuiController {
  	 * Method used by students in order to disenroll from a course.
  	 * The method returns true only if the disenrollment was successful.
  	 * It returns false if the disenrollment failed (student not enrolled)
- 	 * or because of the http request failure.
+ 	 * or because of the http request failure. It receives a String object,
+ 	 * as parameter, rrepresenting the course's id
  	 */
  	public boolean courseDisenrollment(String courseId) throws IOException, ParseException {
  		boolean success = controller.disenrollSubject(courseId);
@@ -187,13 +192,14 @@ public class GuiController {
  	/*
  	 * Method used to provide access to the user's enrolled courses.
  	 * It returns an ArrayList consisting of Course objects, which 
- 	 * represent the ones that the user is enrolled to and gets no parameters.
+ 	 * represent the ones that the user is enrolled to and receives
+ 	 *  no parameters.
  	 */
  	public ArrayList<Course> getEnrolledCourses() throws IOException, ParseException{
  		ArrayList<String> enrolledCourses = controller.getEnrolledSubjects();
  		
  		// The first if statement is used to check if the user has already accessed the page 
- 		// for his courses. In that way we do not spend time refilling the array.
+ 		// for his courses. In that way we do not spend time gathering data from the database.
  		if (user.getMyCourses().size() != enrolledCourses.size()) {
 			user.clearMyCourses();
 			
@@ -212,7 +218,8 @@ public class GuiController {
  	 * attributes with new data.
  	 * Returns true if the rating was successful and false if it was not
  	 * (student already rated this course) or an error occurred on the side
- 	 * of the server.
+ 	 * of the server. It receives an int type parameter (stars given to the course)
+ 	 * and a Course object (the course being rated), as parameters.
  	 */
  	public boolean rateCourse(int stars, Course selectedCourse) throws IOException, ParseException {
  		boolean success = false;
@@ -232,9 +239,8 @@ public class GuiController {
  		if (success) {
  			float rating = controller.getSubjectRating(selectedCourse.getId());
  			
- 			user.getMyCourses().get(indexOfRatedCourse).setRating(rating); // Update allCourses
+ 			user.getMyCourses().get(indexOfRatedCourse).setRating(rating);
  			
- 			// Update myCourses
  			for (int i = 0; i < allCourses.size(); i++) {
  				if (allCourses.get(i).getId().equals(selectedCourse.getId())) {
  					allCourses.get(i).setRating(rating);
@@ -247,20 +253,18 @@ public class GuiController {
  	}
  	
  	/*
- 	 * Method used to get the total rating of a selected course, which
- 	 * is defined by its id.
+ 	 * Method used to get the total rating of a selected course.
  	 * It returns a float object representing the total rating of the selected course
- 	 * and gets a String object as parameter which represents the selected course, by its id.
+ 	 * and gets a Course object as parameter which represents the selected course.
  	 */
  	public float getCourseRating(Course selectedCourse) throws IOException, ParseException {
  		return controller.getSubjectRating(selectedCourse.getId());
  	}
 
  	/*
- 	 * Method used to get the stars of a selected course, which
- 	 * is defined by its id, which a student gave to it.
+ 	 * Method used to get the stars of a selected course, which a student gave to it.
  	 * It returns a float object representing the stars of the selected course given by the user
- 	 * and gets a String object as parameter which represents the selected course, by its id.
+ 	 * and gets a Course object as parameter which represents the selected course.
  	 */
  	public int getMyCourseRating(Course selectedCourse) throws IOException, ParseException {
  		return controller.getMySubjectRating(selectedCourse.getId());
@@ -276,6 +280,11 @@ public class GuiController {
  		return selectedCourse.getECTS();
  	}
  	
+ 	/*
+ 	 * Method used to get the semester a course belongs to.
+ 	 * It returns an int type variable (the course's semester)
+ 	 * and receives a Course object (the selected course).
+ 	 */
  	public int getCourseSemester(Course selectedCourse) {
  		return selectedCourse.getSemester();
  	}
@@ -304,6 +313,11 @@ public class GuiController {
  		return allProfessors;
  	}
  	
+ 	/*
+ 	 * Method used to get a professor, from allProfessors list by his id.
+ 	 * It returns the professor found and receives an type parameter
+ 	 * representing the professor's id.
+ 	 */
  	public Professor getProfessorById(int professorId) throws IOException, ParseException {
  		for (Professor professor : allProfessors) {
  			if (professor.getProfessorId() == professorId) {
@@ -314,12 +328,17 @@ public class GuiController {
  		return null;
  	}
  	
- 	// Change comments:!!!!!
+ 	/*
+ 	 * Method used to rate a professor, that is selected by a student.
+ 	 * It returns true if the operation was successful and false otherwise 
+ 	 * (server failed to respond or student already rated this professor)
+ 	 * and receives an int type (starts given by the student to the professor) and 
+ 	 * Professor object (the professor being rated) as parameters.
+ 	 */
  	public boolean rateProfessor(int stars, Professor selectedProfessor) throws IOException, ParseException {
  		boolean success = false;
  		int indexOfRatedProfessor = 0;
  		
- 		// Checking if the course the Student chose to rate is attended by him
 		for (Professor professor : allProfessors) {
 			if (professor.getProfessorId() == selectedProfessor.getProfessorId()) {
 					success = controller.setProfessorRating(stars, selectedProfessor.getProfessorId());
@@ -333,20 +352,35 @@ public class GuiController {
  		if (success) {
  			float rating = controller.getProfessorRating(selectedProfessor.getProfessorId());
  			
- 			allProfessors.get(indexOfRatedProfessor).setRating(rating); // Update allCourses		
+ 			allProfessors.get(indexOfRatedProfessor).setRating(rating); 		
  		}
  		
  		return success;
  	}
  	
+ 	/*
+ 	 * Method used to get the total rating of a professor.
+ 	 * It returns a float type variable (the professor's total rating)
+ 	 * and receives a Professor object (the selected professor), as parameter.
+ 	 */
  	public float getProfessorRating(Professor selectedProfessor) throws IOException, ParseException {
  		return controller.getProfessorRating(selectedProfessor.getProfessorId());
  	}
  	
+ 	/*
+ 	 * Method used to get the rating given by the student to a professor.
+ 	 * It returns a int type variable (the stars given to the professor by the student)
+ 	 * and receives a Professor object (the selected professor), as parameter.
+ 	 */
  	public int getMyProfessorRating(Professor selectedProfessor) throws IOException, ParseException {
  		return controller.getMyProfessorRating(selectedProfessor.getProfessorId());
  	}
  	
+ 	/*
+ 	 * Method used to get a professor's available timeslot, by its id.
+ 	 * It returns the Timeslot object found and receives an int type parameter,
+ 	 * representing the available timeslot's id
+ 	 */
  	public Timeslot getAvailableTimeslotById(int timeslotId) throws IOException, ParseException {
  		for (Professor professor : allProfessors)
  			for (Timeslot availableTimeslot : professor.getAvailableTimeslots())
@@ -356,6 +390,11 @@ public class GuiController {
  		return null;
  	}
  	
+ 	/*
+ 	 * Method used to get a professor's requested appointment, by its id.
+ 	 * It returns the Timeslot object found and receives an int type parameter,
+ 	 * representing the requested appointment's id
+ 	 */
  	public Timeslot getRequestedTimeslotsById(int timeslotId) throws IOException, ParseException {
 		for (Professor professor : allProfessors)
  			for (Timeslot requestedTimeslot : professor.getRequestedAppointments())
@@ -365,6 +404,11 @@ public class GuiController {
  		return null;
  	}
  	
+ 	/*
+ 	 * Method used to get a professor's reserved appointment, by its id.
+ 	 * It returns the Timeslot object found and receives an int type parameter,
+ 	 * representing the reserved appointment's id
+ 	 */
  	public Timeslot getReservedTimeslotById(int timeslotId) throws IOException, ParseException {
 		for (Professor professor : allProfessors)
  			for (Timeslot reservedTimeslot : professor.getReservedAppointments())
@@ -394,18 +438,17 @@ public class GuiController {
  	
  	/*
  	 * Method used for getting the dates that a professor is available for an appointment
- 	 * with a student. It uses the professor's unique id in order to locate the professor
- 	 * and then checks professor.timeslots is not updated, or has not been filled at all.
- 	 * It returns the an ArrayList containing Timeslot objects (the dates that the selected
- 	 * professor is available for appointments) and receives an int type variable, representing 
- 	 * the professor's unique id.
+ 	 * with a student. It uses the professor's unique id in order to locate the professor.
+ 	 * It returns an ArrayList containing Timeslot objects (the dates that the selected
+ 	 * professor is available for appointments) and receives a Professor object, representing 
+ 	 * the selected professor.
  	 */
  	public ArrayList<Timeslot> getAvailableTimeslots(Professor selectedProfessor) throws IOException, ParseException {
  		Calendar nextAvailableDate = Calendar.getInstance(TimeZone.getTimeZone("GMT")); // Next date the professor set as available
  		Date availableDateStart; // For temporary storage and parsing of data to a Date object
  		Date availableDateEnd;
 		int i = 0;
-		boolean firstAvailableDayOfWeekFound = false;
+		boolean firstAvailableDayOfWeekFound = false; // This is set to true only when the Calendar instance matches with a day contained in far.dates.
  		
  		FAvailabilityResponse far = controller.getAvailabilityDates(selectedProfessor.getProfessorId());
  		
@@ -452,6 +495,13 @@ public class GuiController {
  		return selectedProfessor.getAvailableTimeslots();
  	}
  	
+ 	/*
+ 	 * Method used to make an appointment request from a student to a professor.
+ 	 * It returns true if the operation was successful and server responded correctly
+ 	 * and false if the operation failed or the server did not respond correctly.
+ 	 * It receives a Professor object (the selected professor) and four int type 
+ 	 * parameters (month, day, hour and minutes of the appointment). 
+ 	 */
  	public boolean requestAppointment(Professor selectedProfessor, int month, int day, int hour, int minutes) throws IOException, ParseException {
  		Calendar appointmentDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
  		
@@ -463,13 +513,17 @@ public class GuiController {
  		appointmentDate.set(Calendar.MILLISECOND, 0);
  		
  		Date appointmentTimestamp = appointmentDate.getTime();
- 		System.out.println(appointmentTimestamp);
- 		System.out.println(appointmentTimestamp.getTime() / 1000);
+
  		getProfessorById(selectedProfessor.getProfessorId()).addRequestedAppointment(new Timeslot((int)(appointmentTimestamp.getTime() / 1000), (int)(appointmentTimestamp.getTime() / 1000) +1800));
  		
  		return controller.bookAppointment(selectedProfessor.getProfessorId(), (int)(appointmentTimestamp.getTime() / 1000));
  	}
  	
+ 	/*
+ 	 * Method used to get the user's requests for appointments (professor)/requested appointments (student)
+ 	 * It returns an ArrayList consisting of Timeslot objects, representing the requested appointments
+ 	 * and receives no parameters.
+ 	 */
  	public ArrayList<Timeslot> getRequestedAppointments() throws IOException, ParseException {
  		ArrayList<FAppointmentsResponse> far = controller.getMyAppointments();
  		
@@ -482,14 +536,35 @@ public class GuiController {
  		return user.getRequestedAppointments();
  	}
  	
+ 	/*
+ 	 * Method used by professor users to accept a request for appointment.
+ 	 * It returns true if the operation was successful and the server responded 
+ 	 * correctly and false if the operation failed or the server did not 
+ 	 * respond correctly. It receives a Timeslot object (the request of appointment),
+ 	 * as parameter.
+ 	 */
  	public boolean acceptAppointmentRequest(Timeslot requestedAppointment) throws IOException {
  		return controller.acceptAppointment(requestedAppointment.getId());
  	}
  	
+ 	/*
+ 	 * Method used by professor users to reject/cancel a request for appointment.
+ 	 * It returns true if the operation was successful and the server responded 
+ 	 * correctly and false if the operation failed or the server did not 
+ 	 * respond correctly. It receives a Timeslot object (the request of appointment),
+ 	 * as parameter.
+ 	 */
  	public boolean rejectAppointmentRequested(Timeslot requestedAppointment) throws IOException {
  		return controller.cancelAppointment(requestedAppointment.getId());
  	}
  	
+ 	/*
+ 	 * Method used to get the appointments that have been reserved by students
+ 	 * with a professor.
+ 	 * It returns an ArrayList consisting of Timeslot objects representing the
+ 	 * reserved appointments and receives a Professor object (the selected professor)
+ 	 * as parameter
+ 	 */
  	public ArrayList<Timeslot> getReservedTimeslots(Professor selectedProfessor) throws IOException, ParseException{
  		ArrayList<Integer> reservedStartingTimestamps = controller.getBookedTimestamps(selectedProfessor.getProfessorId());
  		
@@ -502,21 +577,35 @@ public class GuiController {
  		return selectedProfessor.getReservedAppointments();
  	}
  	
+ 	/*
+ 	 * Method used to change a users display name.
+ 	 * It returns true if the operation was successful and the server responded correctly
+ 	 * and false if the the operation failed or the server did not respond correctly.
+ 	 * It receives a String object as parameter (the new display name).
+ 	 */
  	public boolean setDisplayName(String newDisplayName) throws IOException {
-        boolean success = controller.setDisplayName(newDisplayName);
-
-        if (success)
-            user.setDisplayName(newDisplayName);
-
-        return success;
-    }
+ 		boolean success = controller.setDisplayName(newDisplayName);
+ 		
+ 		if (success)
+ 			user.setDisplayName(newDisplayName);
+ 		
+ 		return success;
+ 	}
  	
+ 	/*
+ 	 * Methos used to change a user's password.
+ 	 * It returns a String object representing the success or not
+ 	 * and receives two String objects as parameters (the new and 
+ 	 * old passwords).
+ 	 */
 	public String changePassword(String oldPassword, String newPassword) throws IOException {
  		String isCorrect = "correct";
  		String message = checkPassword(newPassword);
+ 		
  		if (message.equals(isCorrect)) {
  			if (controller.setPassword(oldPassword, newPassword))
  				return "Password updated successfully!";
+ 			
  			else
  				return "Old password is invalid";
  		}
@@ -529,11 +618,9 @@ public class GuiController {
 	}
 	
 	/*
-	 * Method for setting a password for "this" Users object and also check
-	 * if the inputed password has been written according to our password pattern.
-	 * setPassword, receives a String object (password inputed by the user), as a 
-	 * parameter and is a boolean type method, returning true if the password provided,
-	 * meets the pattern and false otherwise.
+	 * Method for checking if the inputed password has been written according to our password pattern.
+	 * checkPassword, receives a String object (new password inputed by the user), as a 
+	 * parameter and returns a String object representing the success or not of the operation.
 	 * Some of the following code is product of others. Sources follow:
 	 * 
 	 * Code for password checking found here: https://stackoverflow.com/a/41697673 and modified

@@ -1,6 +1,5 @@
 /* Student class, containing methods and attributes for the Student
- * objects' functionalities, such as add or remove course, rating and
- * requesting/canceling an appointment with a Professor.
+ * objects' functionalities.
  */
 
 package application.functionality;
@@ -21,15 +20,11 @@ public class Student extends User {
 	 */
 	private ArrayList<Double> courseGrades;
 	
-	/*Student Constructor is here*/
-	
 	public Student(String userId, String username, String displayName, int orientation) {
 		super(userId, username, displayName, orientation);
 		this.gpa = null;
 		courseGrades = new ArrayList<>();
 	}
-	
-	/* Student methods regarding grades are here: */
 	
 	/*
 	 * Method used to add "this" Student object's grade to one of the courses
