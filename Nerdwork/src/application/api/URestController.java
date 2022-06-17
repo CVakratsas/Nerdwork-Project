@@ -372,12 +372,13 @@ public class URestController {
      Συνάρτηση για εγγραφη νεου χρηστη
    */
      
-     public boolean doRegister(String username, String password, String displayName, String email) throws IOException{
+     public boolean doRegister(String username, String password, String displayName, String email, int orientation) throws IOException{
     	 JSONObject obj = new JSONObject();
     	 obj.put("username", username);
-	     obj.put("password", password);
-	     obj.put("displayName", displayName);
-	     obj.put("email", email);
+	 obj.put("password", password);
+	 obj.put("displayName", displayName);
+	 obj.put("email", email);
+	 obj.put("orientation", orientation);    
     	 FRestResponse r = requestComponent.Post("/api/auth/register/", obj);
     	 return r.statusCode==200;
      }

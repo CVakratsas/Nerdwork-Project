@@ -58,9 +58,9 @@ public class GuiController {
  	 * to other users and an email (his academic email). It returns true if the 
  	 * registration was successful and false otherwise (described below).
  	 */
- 	public boolean register(String username, String password, String displayName, String email) throws IOException {
+ 	public boolean register(String username, String password, String displayName, String email, int orientation) throws IOException {
  		if (checkPassword(password).equals("correct"))
- 			return controller.doRegister(username, password, displayName, email); // false if email incorrect or username already exists.
+ 			return controller.doRegister(username, password, displayName, email, orientation); // false if email incorrect or username already exists.
  		
  		return false; // Password incorrect.
  	}
@@ -612,10 +612,10 @@ public class GuiController {
  		
  		if (message.equals(isCorrect)) {
  			if (controller.setPassword(oldPassword, newPassword))
- 				return "Password updated successfully!";
+ 				return "Ο κωδικός ενημερώθηκε επιτυχώς!";
  			
  			else
- 				return "Old password is invalid";
+ 				return "Ο παλιός κωδικός δεν είναι έγκυρος!";
  		}
  		
  		return message;
@@ -649,23 +649,23 @@ public class GuiController {
  			Matcher hasDigit = digit.matcher(newPassword);
  			Matcher hasSpecial = special.matcher(newPassword);
  			    
- 			String passwordErrors = "New password must also contain:";
+ 			String passwordErrors = "Ο νέος κωδικός θα πρέπει να περιέχει:";
  			boolean validPassword = true;
  			    
  			if (!hasUpperLetter.find()) {
- 			  	passwordErrors += "\n- at least one upper case letter";
+ 			  	passwordErrors += "\n- τουλάχιστον ένα κεφαλαίο χαρακτήρα";
  			  	validPassword = false;
  			}
  			if (!hasLowerLetter.find()) {
- 			   	passwordErrors += "\n- at least one lower case letter";
+ 			   	passwordErrors += "\n- τουλάχιστον ένα πεζό χαρακτήρα";
  			   	validPassword = false;
  			}
  			if (!hasDigit.find()) {
- 			   	passwordErrors += "\n- at least one digit number";
+ 			   	passwordErrors += "\n- τουλάχιστον ένα ψηφίο";
  			   	validPassword = false;
  			}
  		    if (!hasSpecial.find()) {
- 		    	passwordErrors += "\n- at least one special character";
+ 		    	passwordErrors += "\n- τουλάχιστον έναν ειδικό χαρακτήρα";
  		    	validPassword = false;
  		    }
  		    if (validPassword)
@@ -674,7 +674,7 @@ public class GuiController {
  		    	return passwordErrors;
  		}
  		else {
- 			return "New password must be at least 8 characters long!";
+ 			return "Ο νέος κωδικός πρέπει να έχει μέγεθος τουλάχιστον 8 χαρακτήρων!";
  		}
  	}
 }
