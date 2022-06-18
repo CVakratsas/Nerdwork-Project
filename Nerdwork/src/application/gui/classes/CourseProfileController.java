@@ -24,7 +24,6 @@ public class CourseProfileController {
 	
 	private Course course;
 	private GuiController controller;
-	private static final String dbURL = "https://nerdnet.geoxhonapps.com/cdn/profPhotos/";
 	
 	@FXML
 	private ImageView profilePicture;
@@ -65,7 +64,7 @@ public class CourseProfileController {
 		//Loads all Professors teaching the Course
 		professorList.getChildren().clear();
 		for(Professor p : course.getProfessors()) {
-			Image img = new Image(dbURL + p.getProfilePhoto());
+			Image img = new Image(GuiController.dbURL + p.getProfilePhoto());
 			ImageView picture = new ImageView(img);
 			
 			picture.setFitWidth(32);

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -27,8 +26,6 @@ public class AppointmentsController {
 	
 	private GuiController controller;
 	private Professor currentProfessor;
-	public static final String dbURL = "https://nerdnet.geoxhonapps.com/cdn/profPhotos/";
-	public static final String Timezone = "GMT";
 	
 	@FXML
 	private ImageView currentProfessorPicture;
@@ -45,15 +42,15 @@ public class AppointmentsController {
 	public void initialize() throws IOException, ParseException {
 		controller = GuiController.getInstance();
 		
-		setContents();
+		setContentView();
 	}
 	
 	
-	public void setContents() throws IOException, ParseException {
+	public void setContentView() throws IOException, ParseException {
 		
 		//Loads all Professors
 		for(Professor p : controller.getAllProfessors()) {
-			Image img = new Image(dbURL + p.getProfilePhoto());
+			Image img = new Image(GuiController.dbURL + p.getProfilePhoto());
 			ImageView picture = new ImageView(img);
 			
 			picture.setFitWidth(32);
@@ -72,7 +69,7 @@ public class AppointmentsController {
 			box.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
 				try {
 					currentProfessor = p;
-					currentProfessorPicture.setImage(new Image(dbURL + p.getProfilePhoto()));
+					currentProfessorPicture.setImage(new Image(GuiController.dbURL + p.getProfilePhoto()));
 					currentProfessorName.setText(currentProfessor.getDisplayName());
 					currentProfessorName.setStyle("-fx-cursor: hand");
 					currentProfessorOffice.setText(currentProfessor.getOffice());
@@ -101,34 +98,26 @@ public class AppointmentsController {
 
 		
 		ArrayList<Timeslot> timeslots = controller.getAvailableTimeslots(currentProfessor);
-		ArrayList<Timeslot> reserved = controller.getReservedTimeslots(currentProfessor);
-		
-//		for(Timeslot t1 : timeslots)
-//			for(Timeslot t2 : reserved)
-//				if(t1.getStartHourTimestamp() == t2.getStartHourTimestamp()) {
-//					t1.setStatus(t2.getStatus());
-//				}
-					
 
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-		formatter.setTimeZone(TimeZone.getTimeZone(Timezone));
+		formatter.setTimeZone(TimeZone.getTimeZone(GuiController.Timezone));
 
 		
 		//Professor has available appointments
 		if(timeslots != null) {
-			Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(Timezone));
+			Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(GuiController.Timezone));
 			
 			
 			while(!timeslots.isEmpty())
 				for(String day : Timeslot.Days) {
 	
-					//Timeslots of the day
+					//All Timeslots of the day
 					ArrayList<Timeslot> dayTimeslots = new ArrayList<>();
 	
 					
-					//Selects all timeslots of a certain day of the week
+					//Selects all Timeslots of a certain day of the week
 					for(Timeslot t : timeslots) {
-						Date startHourDate = new Date(((long) t.getStartHourTimestamp()) * 1000);
+						Date startHourDate = new Date(t.getStartHourTimestampMili());
 						calendar.setTime(startHourDate);
 						
 						
@@ -140,11 +129,10 @@ public class AppointmentsController {
 					}
 					
 					
-					//Removes selected timeslots from all timeslots
+					//Removes selected Timeslots from all Timeslots
 					for(Timeslot t : dayTimeslots) {
 						timeslots.remove(t);
 					}
-					
 					
 					
 					if(dayTimeslots.isEmpty()) //No appointment was found for a certain day
@@ -169,39 +157,68 @@ public class AppointmentsController {
 					
 					for(Timeslot t : dayTimeslots) {
 						
-						if(t.getStatus() == 0 || t.getStatus() == 1)
-							continue;
+						System.out.println(t.getStatus());
 						
 						//Calculates the appointment's starting time and formats it properly
-						Date startDate = new Date(((long) t.getStartHourTimestamp()) * 1000);
+						Date startDate = new Date(t.getStartHourTimestampMili());
 						calendar.setTime(startDate);
 						String startTime = String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 						
 						
 						//Calculates the appointment's ending time and formats it properly
-						Date endDate = new Date(((long) t.getEndHourTimestamp()) * 1000);
+						Date endDate = new Date(t.getEndHourTimestampMili());
 						calendar.setTime(endDate);
 						String endTime = String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 						
 						
 						String timeRange = startTime + " - " + endTime;
 						Button appointmentButton = new Button(timeRange);
+						
+						switch(t.getStatus()) { //Button Color based on Timeslot Availability
+						
+							case 3:
+								appointmentButton.setStyle("-fx-background-color: lime");
+								break;
+							case 0:
+								appointmentButton.setStyle("-fx-background-color: yellow");
+								break;
+							case 1:
+								appointmentButton.setStyle("-fx-background-color: orange");
+								break;
+							case 2:
+								appointmentButton.setStyle("-fx-background-color: red");
+								break;
+						}
+						
+						
 						appointmentButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
 							Timeslot selectedTimeslot = t;
 							try {
 								boolean response = controller.requestAppointment(currentProfessor, selectedTimeslot);
+								System.out.println(response);
+								
+								
+								if(response)
+									GuiController.getInstance().
+									alertFactory("Επιτυχής Καταχώρηση Ραντεβού",
+													"Το ραντεβού σας με τον καθηγητή "
+													+ currentProfessor.getDisplayName()
+													+ " καταχωρήθηκε με επιτυχία.");
+								else
+									GuiController.getInstance().
+									alertFactory("Αποτυχημένη Καταχώρηση Ραντεβού",
+													"Η καταχώρηση του ραντεβού σας με τον καθηγητή "
+													+ currentProfessor.getDisplayName()
+													+ " απέτυχε.");
 							} catch (IOException | ParseException e) {
 								e.printStackTrace();
 							}
 						});
-						
-						
-						
 						appointment.getChildren().add(appointmentButton);
 					}
 					
 					
-					//Adds all appointments for the day
+					//Lists all appointments for the day
 					appointmentList.getChildren().add(appointment);
 				}
 		}	

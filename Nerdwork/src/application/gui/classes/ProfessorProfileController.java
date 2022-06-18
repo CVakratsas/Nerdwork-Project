@@ -25,7 +25,6 @@ public class ProfessorProfileController {
 	
 	private Professor professor;
 	private GuiController controller;
-	private static final String dbURL = "https://nerdnet.geoxhonapps.com/cdn/profPhotos/";
 	
 	@FXML
 	private ImageView profilePicture;
@@ -49,7 +48,7 @@ public class ProfessorProfileController {
 	private void setProfileDescription() throws IOException, ParseException {
 		
 		//Professor profile picture
-		Image img = new Image(dbURL + professor.getProfilePhoto());
+		Image img = new Image(GuiController.dbURL + professor.getProfilePhoto());
 		profilePicture.setImage(img);
 		
 		

@@ -49,5 +49,6 @@
          </font>
       </Label>
       <TextFlow fx:id="bio" layoutX="461.0" layoutY="364.0" prefHeight="183.0" prefWidth="726.0" />
+      <VBox fx:id="availableAppointments" layoutX="1062.0" layoutY="90.0" prefHeight="200.0" prefWidth="218.0" />
    </children>
 </AnchorPane>

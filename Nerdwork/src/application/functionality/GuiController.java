@@ -496,7 +496,7 @@ public class GuiController {
 	 			selectedProfessor.addRequestedAppointment(timeslot);
 	 	}
 
- 		return false;
+ 		return success;
  	}
  	
  	/*

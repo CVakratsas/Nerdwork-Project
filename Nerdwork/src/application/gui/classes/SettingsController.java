@@ -24,7 +24,6 @@ public class SettingsController {
 	private User user;
 	private GuiController controller;
 	private FadeTransition fadeIn = new FadeTransition(Duration.millis(4000));
-	private static final String dbURL = "https://nerdnet.geoxhonapps.com/cdn/profPhotos/";
 	
 	@FXML
 	private ImageView profilePicture;
@@ -62,7 +61,6 @@ public class SettingsController {
 		fadeIn.setNode(nameChangedResponse);
 		passwordChangedResponse.opacityProperty().bind(nameChangedResponse.opacityProperty());
 		bioChangedResponse.opacityProperty().bind(nameChangedResponse.opacityProperty());
-		
 	    fadeIn.setFromValue(1.0);
 	    fadeIn.setToValue(0.0);
 	    fadeIn.setCycleCount(1);
@@ -71,15 +69,14 @@ public class SettingsController {
 		
 		setContentView();
 	}
-	
+	//TODO set dates for professors
 	
 	private void setContentView() throws IOException, ParseException {
 		
 		//Loads User's information
-		
 		profilePicture.setImage(new Image("application/gui/icons/profile.png"));
 		if(user instanceof Professor)
-			profilePicture.setImage(new Image(dbURL + ((Professor) user).getProfilePhoto()));
+			profilePicture.setImage(new Image(GuiController.dbURL + ((Professor) user).getProfilePhoto()));
 			
 		
 		name.setText(user.getDisplayName());
@@ -127,7 +124,8 @@ public class SettingsController {
 			passwordChangedResponse.setText(""); //Clears Response Label
 			return ;
 		}
-			
+		
+		
 		//Both new passwords are the same
 		if(newPassPF.getText().equals(newPassRepeatPF.getText())){
 			
@@ -161,14 +159,15 @@ public class SettingsController {
 			return ;
 		}
 		
+		
 		//Bio change response
 		boolean response = controller.setBio(bioTA.getText());
 		
-		if(response) { //Bio change was succesfully
+		if(response) { //Bio change was successfully
 			bioChangedResponse.setText("Η περιγραφή ενημερώθηκε επιτυχώς!");
 			bioChangedResponse.setTextFill(Color.GREEN);
 		}
-		else { //Bio change was unsuccesfully
+		else { //Bio change was unsuccessfully
 			bioChangedResponse.setText("Η καινούργια περιγραφή είναι λανθασμένη");
 			bioChangedResponse.setTextFill(Color.RED);
 		}

@@ -22,14 +22,14 @@
       </ScrollPane>
       <ScrollPane prefHeight="200.0" prefWidth="200.0">
          <content>
-            <AnchorPane prefHeight="578.0" prefWidth="937.0">
+            <AnchorPane>
                <children>
                   <Label layoutX="24.0" layoutY="49.0" text="Αναζήτηση Ραντεβού">
                      <font>
                         <Font name="Segoe UI Bold" size="30.0" />
                      </font>
                   </Label>
-                  <HBox fx:id="appointmentList" layoutX="30.0" layoutY="206.0" prefHeight="0.0" prefWidth="877.0" />
+                  <HBox fx:id="appointmentList" layoutX="30.0" layoutY="206.0" />
                   <ImageView fx:id="currentProfessorPicture" fitHeight="100.0" fitWidth="100.0" layoutX="24.0" layoutY="99.0" pickOnBounds="true" />
                   <Label fx:id="currentProfessorName" layoutX="132.0" layoutY="99.0">
                      <font>
