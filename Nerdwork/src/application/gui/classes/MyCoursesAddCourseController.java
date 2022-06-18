@@ -100,7 +100,7 @@ public class MyCoursesAddCourseController {
 							new MyCoursesController().switchToMyCoursesAddCourse(arg0);
 						}
 						else {
-							alertError();
+							GuiController.getInstance().alertFactory("Ξ‘Ξ΄Ο…Ξ½Ξ±ΞΌΞ―Ξ± Ξ•Ξ³Ξ³ΟΞ±Ο†Ξ®Ο‚", "Ξ•Ξ―ΟƒΟ„Ξµ Ξ®Ξ΄Ξ· ΞµΞ³Ξ³ΞµΞ³ΟΞ±ΞΌΞΌΞ­Ξ½ΞΏΟ‚ ΟƒΟ„ΞΏ ΞΌΞ¬ΞΈΞ·ΞΌΞ±");
 						}
 					} catch (IOException | ParseException e) {
 						System.out.println("Error occured when the couseEnrollment method was invoked");
@@ -126,14 +126,5 @@ public class MyCoursesAddCourseController {
 	
 	public void switchToMyCourses(ActionEvent event) {
 		Navigator.loadCenter(Navigator.MyCourses);
-	}
-	
-	public void alertError() {
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle(null);
-		alert.setHeaderText("Αποτυχία Εγγραφής");
-		alert.initStyle(StageStyle.UTILITY);
-		alert.setContentText("Είστε ήδη εγγεγραμμένος στο μάθημα");
-		alert.showAndWait();
 	}
 }

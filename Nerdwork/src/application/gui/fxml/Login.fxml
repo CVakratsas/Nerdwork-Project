@@ -26,36 +26,24 @@
          <children>
             <Pane prefHeight="720.0" prefWidth="640.0" style="-fx-background-color: #fff;">
                <children>
-                  <TextField fx:id="username" layoutX="160.0" layoutY="150.0" prefHeight="50.0" prefWidth="300.0" promptText="Email">
+                  <TextField fx:id="username" layoutX="160.0" layoutY="200.0" prefHeight="50.0" prefWidth="300.0" promptText="Email">
                      <font>
                         <Font name="Segoe UI" size="14.0" />
                      </font>
                   </TextField>
-                  <PasswordField fx:id="password" layoutX="160.0" layoutY="235.0" prefHeight="50.0" prefWidth="300.0" promptText="Password">
+                  <PasswordField fx:id="password" layoutX="160.0" layoutY="285.0" prefHeight="50.0" prefWidth="300.0" promptText="Συνθηματικό">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </PasswordField>
-                  <Label id="forgotPasswordLabel" alignment="CENTER" layoutX="170.0" layoutY="312.0" prefHeight="30.0" prefWidth="120.0" text="Forgot Password" />
-                  <Button id="whiteButton" fx:id="signInButton" alignment="CENTER" contentDisplay="CENTER" layoutX="330.0" layoutY="312.0" mnemonicParsing="false" onAction="#login" prefHeight="30.0" prefWidth="120.0" text="Sign In" />
-                  <Separator layoutX="160.0" layoutY="364.0" prefHeight="13.0" prefWidth="300.0" />
-                  <Label alignment="CENTER" layoutX="258.0" layoutY="359.0" prefHeight="23.0" prefWidth="90.0" style="-fx-background-color: #fff;" text="Or register as a" textFill="#5b5a5a">
+                  <Button id="whiteButton" fx:id="signInButton" alignment="CENTER" contentDisplay="CENTER" layoutX="160.0" layoutY="365.0" mnemonicParsing="false" onAction="#login" prefHeight="50.0" prefWidth="300.0" text="Σύνδεση" />
+                  <Separator layoutX="160.0" layoutY="437.0" prefHeight="13.0" prefWidth="300.0" />
+                  <Label alignment="CENTER" layoutX="256.0" layoutY="430.0" prefHeight="23.0" style="-fx-background-color: #fff;" text="Ή κάνε εγγραφή ως" textFill="#5b5a5a">
                      <font>
                         <Font name="Segoe UI" size="12.0" />
                      </font>
                   </Label>
-                  <Button id="blueButton" layoutX="160.0" layoutY="405.0" mnemonicParsing="false" onAction="#switchToRegisterAsStudent" prefHeight="50.0" prefWidth="300.0" text="Student" textFill="WHITE">
-                     <font>
-                        <Font name="Segoe UI" size="14.0" />
-                     </font>
-                  </Button>
-                  <Separator layoutX="160.0" layoutY="485.0" prefHeight="6.0" prefWidth="300.0" />
-                  <Label alignment="CENTER" layoutX="287.0" layoutY="477.0" prefHeight="23.0" prefWidth="31.0" style="-fx-background-color: #fff;" text="Or a" textFill="#5b5a5a">
-                     <font>
-                        <Font name="Segoe UI" size="12.0" />
-                     </font>
-                  </Label>
-                  <Button id="whiteButton" layoutX="160.0" layoutY="520.0" mnemonicParsing="false" onAction="#switchToRegisterAsProfessor" prefHeight="50.0" prefWidth="300.0" text="Professor">
+                  <Button id="blueButton" layoutX="160.0" layoutY="465.0" mnemonicParsing="false" onAction="#switchToRegisterAsStudent" prefHeight="50.0" prefWidth="300.0" text="Φοιτητής" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI" size="14.0" />
                      </font>

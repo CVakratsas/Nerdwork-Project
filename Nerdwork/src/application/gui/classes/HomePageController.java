@@ -12,6 +12,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.skin.DatePickerSkin;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -32,7 +33,9 @@ public class HomePageController {
         Node calendar = datePickerSkin.getPopupContent();
         calendar.setStyle("-fx-background-color: #3889c4");
         calendarPane.getChildren().add(calendar);
-        bio.getChildren().add(new Text(GuiController.getInstance().getUser().getBio()));
+        Text bioText = new Text(GuiController.getInstance().getUser().getBio());
+        bioText.setFont(Font.font("Segoe UI", 16.0));
+        bio.getChildren().add(bioText);
         
         // Initialize user's information
         displayName.setText(GuiController.getInstance().getUser().getDisplayName());

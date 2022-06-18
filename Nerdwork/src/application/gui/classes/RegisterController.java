@@ -45,38 +45,27 @@ public class RegisterController {
 	
 	@FXML
 	private void initialize() {
-		if(orientation != null) {
 			orientation.getItems().addAll(orientationArray);
-		}
-		else {
-			orientationInt = 2;
-		}
 	}
 	
 	public void register(ActionEvent event) throws IOException, ParseException {
 		
 		boolean answer;
-		if(orientationInt != 2) { // A student is trying to register
-			String orientationString = orientation.getValue();
-			if(orientationString == "ΕΤΥ") {
-				orientationInt = 0;
-				answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText(), orientationInt);
-			}
-			else if(orientationString == "ΠΣ") {
-				orientationInt = 1;
-				answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText(), orientationInt);
-			}
-			else {
-				answer = false;
-				GuiController.getInstance().alertFactory("Ανεπιτυχής Δημιουργία Λογαριασμού", "Κάποια ή όλα τα πεδία δεν είναι συμπληρωμένα"); // Orientation field is empty
-				return;
-			}
-			
-		}
-		else { // A professor is trying to register
+		String orientationString = orientation.getValue();
+		if(orientationString == "ΕΤΥ") {
+			orientationInt = 0;
 			answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText(), orientationInt);
 		}
-		
+		else if(orientationString == "ΠΣ") {
+			orientationInt = 1;
+			answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText(), orientationInt);
+		}
+		else {
+			answer = false;
+			GuiController.getInstance().alertFactory("Ανεπιτυχής Δημιουργία Λογαριασμού", "Κάποια ή όλα τα πεδία δεν είναι συμπληρωμένα"); // Orientation field is empty
+			return;
+		}
+			
 		if(answer) {
 			GuiController.getInstance().alertFactory("Επιτυχής Δημιουργία Λογαριασμού", "Ο λογαριασμός δημιουργήθηκε και είναι έτοιμος προς χρήση");
 			switchToLogin(event);
