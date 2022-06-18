@@ -78,15 +78,13 @@ public class Professor extends User {
 	 * It returns nothing and receives two int type parameters the start and end hour
 	 * of the appointment in the form of seconds passed since 1st January 1970 00:00:00.
 	 */
-	public void addTimeslot(int startHourTimestamp, int endHourTimestamp, ArrayList<Timeslot> requestedTimeslots, ArrayList<Timeslot> reservedTimeslots) {
-		Date dateStartTimestamp = new Date((long)startHourTimestamp * 1000);
-		Date dateEndTimestamp = new Date((long)endHourTimestamp * 1000);
+	public void addTimeslot(long startHourTimestamp, long endHourTimestamp, ArrayList<Timeslot> requestedTimeslots, ArrayList<Timeslot> reservedTimeslots) {
+		Date dateStartTimestamp = new Date(startHourTimestamp);
+		Date dateEndTimestamp = new Date(endHourTimestamp);
 		// The two above objects, are used only for the if condition.
 		
-		int appointmentStartHourTimestamp = startHourTimestamp; // The start hour of the available hours of a professor for a student.
-		int appointmentEndHourTimestamp = startHourTimestamp + 1800; // The end hour of the available hours of a professor for a student.
-		
-		boolean isAvailable = true;
+		long appointmentStartHourTimestamp = startHourTimestamp; // The start hour of the available hours of a professor for a student.
+		long appointmentEndHourTimestamp = startHourTimestamp + (1800 * 1000); // The end hour of the available hours of a professor for a student.
 		
 		// The condition means: The appointments that can be made from starting hour
 		// to end hour. Appointments last for 30 minutes each.
@@ -99,11 +97,11 @@ public class Professor extends User {
 			if (!timeslot.checkOutdated()) {
 				
 				for (Timeslot requested : requestedTimeslots)
-					if (((long)requested.getStartHourTimestamp()) * 1000 == appointmentDateStartHourTimestamp.getTime() && professorId == requested.getProfessorId())
+					if (requested.getStartHourTimestampMili() == appointmentDateStartHourTimestamp.getTime() && professorId == requested.getProfessorId())
 						timeslot.setStatus(0);
 		
 				for (Timeslot reserved : reservedTimeslots)
-					if (((long)reserved.getStartHourTimestamp()) * 1000 == appointmentDateStartHourTimestamp.getTime())
+					if (reserved.getStartHourTimestampMili() == appointmentDateStartHourTimestamp.getTime())
 						timeslot.setStatus(1);
 						
 				timeslots.add(timeslot);
@@ -111,9 +109,6 @@ public class Professor extends User {
 			
 			appointmentStartHourTimestamp = appointmentEndHourTimestamp;
 			appointmentEndHourTimestamp += 1800; 
-			
-			isAvailable = true;
-		
 		}
 	}
 	

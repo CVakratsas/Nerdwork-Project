@@ -20,16 +20,16 @@ public class Timeslot {
 	private int id;
 	private String studentId;
 	private int professorId;
-	private int startHourTimestamp; // Seconds since 1st January 1970 00:00:00 for startHour
-	private int endHourTimestamp; // // Seconds since 1st January 1970 00:00:00 for endHour
+	private long startHourTimestamp; // Milieconds since 1st January 1970 00:00:00 for startHour
+	private long endHourTimestamp; // // Miliseconds since 1st January 1970 00:00:00 for endHour
 	private int status; // 0 = Not Confirmed, 1 = Confirmed, 2 = Cancelled, 3 = Available 
 	// Change to availability
 	private String created_at;
 	
 	// Constructor used for available Timeslots
 	public Timeslot(int startHourTimestamp, int endHourTimestamp, int status) {
-		this.startHourTimestamp = startHourTimestamp;
-		this.endHourTimestamp = endHourTimestamp;
+		this.startHourTimestamp = ((long)startHourTimestamp) * 1000;
+		this.endHourTimestamp = ((long)endHourTimestamp) * 1000;
 		this.status = status;
 	}
 	
@@ -38,8 +38,8 @@ public class Timeslot {
 		this.id = id;
 		this.studentId = studentId;
 		this.professorId = professorId;
-		this.startHourTimestamp = startHourTimestamp;
-		this.endHourTimestamp = endHourTimestamp;
+		this.startHourTimestamp = ((long)startHourTimestamp) * 1000;
+		this.endHourTimestamp = ((long)endHourTimestamp) * 1000;
 		this.status = status;
 		this.created_at = created_at;
 	}
@@ -118,10 +118,18 @@ public class Timeslot {
 	}
 	
 	public int getStartHourTimestamp() {
-		return startHourTimestamp;
+		return (int)(startHourTimestamp / 1000);
 	}
 	
 	public int getEndHourTimestamp() {
+		return (int)(endHourTimestamp / 1000);
+	}
+	
+	public long getStartHourTimestampMili() {
+		return startHourTimestamp;
+	}
+	
+	public long getEndHourTimestampMili() {
 		return endHourTimestamp;
 	}
 

@@ -457,7 +457,7 @@ public class GuiController {
 
 					availableDateEnd = nextAvailableDate.getTime();
 					
-					selectedProfessor.addTimeslot((int)(availableDateStart.getTime() / 1000), (int)(availableDateEnd.getTime() / 1000), requested, reserved);
+					selectedProfessor.addTimeslot(availableDateStart.getTime(), availableDateEnd.getTime(), requested, reserved);
 				}
 			}
 			
