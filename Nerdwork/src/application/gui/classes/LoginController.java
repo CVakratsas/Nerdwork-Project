@@ -49,12 +49,7 @@ public class LoginController {
 			stage.setScene(createScene(loadHomePage()));
 		}
 		else {
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle(null);
-			alert.setHeaderText("Λανθασμένα στοιχεία");
-			alert.setContentText("Δεν υπάρχει λογαριασμός που να αντιστοιχεί στα παραπάνω διαπιστευτήρια");
-			alert.initStyle(StageStyle.UTILITY);
-			alert.showAndWait();
+			GuiController.getInstance().alertFactory("Ξ•ΟƒΟ†Ξ±Ξ»ΞΌΞ­Ξ½Ξ± Ξ£Ο„ΞΏΞΉΟ‡ΞµΞ―Ξ±", "Ξ¤Ξ± ΟƒΟ„ΞΏΞΉΟ‡ΞµΞ―Ξ± Ο€ΞΏΟ… Ξ΄ΟΞΈΞ·ΞΊΞ±Ξ½ Ξ΄ΞµΞ½ Ξ±Ξ½Ο„ΞΉΟƒΟ„ΞΏΞΉΟ‡ΞΏΟΞ½ ΟƒΞµ Ξ»ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΟ");
 		}
 	}
 	

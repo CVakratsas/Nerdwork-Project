@@ -28,6 +28,9 @@ import application.api.FProfessorsResponse;
 import application.api.FSubjectsResponse;
 import application.api.FUserInformationResponse;
 import application.api.URestController;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.StageStyle;
 
 public class GuiController {
 	
@@ -696,5 +699,14 @@ public class GuiController {
  		else {
  			return "Ο νέος κωδικός πρέπει να έχει μέγεθος τουλάχιστον 8 χαρακτήρων!";
  		}
+ 	}
+ 	
+ 	public void alertFactory(String header, String content) {
+ 		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle(null);
+		alert.setHeaderText(header);
+		alert.setContentText(content);
+		alert.initStyle(StageStyle.UTILITY);
+		alert.showAndWait();
  	}
 }

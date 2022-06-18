@@ -30,7 +30,7 @@ public class RegisterController {
 	private Stage stage;
 	private Scene scene;
 	private Parent root;
-	private ArrayList<String> orientationArray = new ArrayList<>(Arrays.asList("ΕΤΥ", "ΠΣ"));
+	private ArrayList<String> orientationArray = new ArrayList<>(Arrays.asList("Ξ•Ξ¤Ξ¥", "Ξ Ξ£"));
 	private int orientationInt;
 	String error;
 	
@@ -58,91 +58,44 @@ public class RegisterController {
 		boolean answer;
 		if(orientationInt != 2) { // A student is trying to register
 			String orientationString = orientation.getValue();
-			if(orientationString == "ΕΤΥ") {
+			if(orientationString == "Ξ•Ξ¤Ξ¥") {
 				orientationInt = 0;
 				answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText(), orientationInt);
 			}
-			else if(orientationString == "ΠΣ") {
+			else if(orientationString == "Ξ Ξ£") {
 				orientationInt = 1;
 				answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText(), orientationInt);
 			}
 			else {
 				answer = false;
-				alertError1();
-				System.out.println("student");
+				GuiController.getInstance().alertFactory("Ξ‘Ξ½ΞµΟ€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ›ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΞΏΟ", "ΞΞ¬Ο€ΞΏΞΉΞ± Ξ® ΟΞ»Ξ± Ο„Ξ± Ο€ΞµΞ΄Ξ―Ξ± Ξ΄ΞµΞ½ ΞµΞ―Ξ½Ξ±ΞΉ ΟƒΟ…ΞΌΟ€Ξ»Ξ·ΟΟ‰ΞΌΞ­Ξ½Ξ±");
 			}
 			
 		}
 		else { // A professor is trying to register
 			answer = GuiController.getInstance().register(username.getText(), password.getText(), nickname.getText(), email.getText(), orientationInt);
-			System.out.println("prof");
 		}
 		
 		if(answer) {
-			alertSucess();
+			GuiController.getInstance().alertFactory("Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ›ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΞΏΟ", "Ξ Ξ»ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΟΟ‚ Ξ΄Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ®ΞΈΞ·ΞΊΞµ ΞΊΞ±ΞΉ ΞµΞ―Ξ½Ξ±ΞΉ Ξ­Ο„ΞΏΞΉΞΌΞΏΟ‚ Ο€ΟΞΏΟ‚ Ο‡ΟΞ®ΟƒΞ·");
 			switchToLogin(event);
 		}
 		else {
 			error = GuiController.getInstance().checkPassword(password.getText());
 			if(username.getText().equals("") || password.getText().equals("") || repeatPassword.getText().equals("")
 					|| nickname.getText().equals("") || email.getText().equals("")) { // There are empty fields
-				alertError1();
+				GuiController.getInstance().alertFactory("Ξ‘Ξ½ΞµΟ€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ›ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΞΏΟ", "ΞΞ¬Ο€ΞΏΞΉΞ± Ξ® ΟΞ»Ξ± Ο„Ξ± Ο€ΞµΞ΄Ξ―Ξ± Ξ΄ΞµΞ½ ΞµΞ―Ξ½Ξ±ΞΉ ΟƒΟ…ΞΌΟ€Ξ»Ξ·ΟΟ‰ΞΌΞ­Ξ½Ξ±");
 			}
 			else if(!password.getText().equals(repeatPassword.getText())) { // Passwords are not the same
-				alertError2();
+				GuiController.getInstance().alertFactory("Ξ‘Ξ½ΞµΟ€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ›ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΞΏΟ", "ΞΞΉ ΞΊΟ‰Ξ΄ΞΉΞΊΞΏΞ― Ο€ΞΏΟ… ΞΊΞ±Ο„Ξ±Ο‡Ο‰ΟΞ®ΞΈΞ·ΞΊΞ±Ξ½ Ξ΄ΞµΞ½ ΞµΞ―Ξ½Ξ±ΞΉ ΞΏΞΉ Ξ―Ξ΄ΞΉΞΏΞΉ");
 			}
 			else if(!(GuiController.getInstance().checkPassword(password.getText()).equals("correct"))) {
-				alertError3(error);
+				GuiController.getInstance().alertFactory("Ξ‘Ξ½ΞµΟ€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ›ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΞΏΟ", error);
 			}
 			else {
-				alertError4();
+				GuiController.getInstance().alertFactory("Ξ‘Ξ½ΞµΟ€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ›ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΞΏΟ", "Ξ¤ΞΏ ΞΊΞ±Ο„Ξ±Ο‡Ο‰ΟΞ·ΞΌΞ­Ξ½ΞΏ email Ξ΄ΞµΞ½ ΞµΞ―Ξ½Ξ±ΞΉ Ξ±ΞΊΞ±Ξ΄Ξ·ΞΌΞ±ΟΞΊΟ Ξ® ΞΏ Ξ»ΞΏΞ³ΞΉΞ±ΟƒΞΌΟΟ‚ Ξ®Ξ΄Ξ· Ο…Ο€Ξ¬ΟΟ‡ΞµΞΉ");
 			}
 		}
-	}
-	
-	public void alertError1() {
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle(null);
-		alert.setHeaderText("Αποτυχία Δημιουργίας Λογαριασμού");
-		alert.initStyle(StageStyle.UTILITY);
-		alert.setContentText("Κάποια ή όλα τα πεδία είναι άδεια");
-		alert.showAndWait();
-	}
-	
-	public void alertError2() {
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle(null);
-		alert.setHeaderText("Αποτυχία Δημιουργίας Λογαριασμού");
-		alert.initStyle(StageStyle.UTILITY);
-		alert.setContentText("Οι κωδικοί που καταχωρήθηκαν δεν είναι οι ίδιοι");
-		alert.showAndWait();
-	}
-	
-	public void alertError3(String error) {
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle(null);
-		alert.setHeaderText("Αποτυχία Δημιουργίας Λογαριασμού");
-		alert.initStyle(StageStyle.UTILITY);
-		alert.setContentText(error);
-		alert.showAndWait();
-	}
-	
-	public void alertError4() {
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle(null);
-		alert.setHeaderText("Αποτυχία Δημιουργίας Λογαριασμού");
-		alert.initStyle(StageStyle.UTILITY);
-		alert.setContentText("Το email που δώθηκε δεν είναι ακαδημαϊκό ή ο λογαριασμός ήδη υπάρχει");
-		alert.showAndWait();
-	}
-	
-	public void alertSucess() {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle(null);
-		alert.setHeaderText("Επιτυχής Δημιουργία Λογαριασμού");
-		alert.setContentText("Ο λογαριασμός δημιουργήθηκε και είναι έτοιμος προς χρήση");
-		alert.initStyle(StageStyle.UTILITY);
-		alert.showAndWait();			
 	}
 	
 	public void switchToLogin(ActionEvent event) throws IOException {

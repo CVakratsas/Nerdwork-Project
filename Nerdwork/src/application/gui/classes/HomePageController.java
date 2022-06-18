@@ -36,10 +36,10 @@ public class HomePageController {
         email.setText(GuiController.getInstance().getUser().getEmail());
         int orientationInt = GuiController.getInstance().getUser().getOrientation();
         if(orientationInt == 0) {
-        	orientation.setText("Επιστήμη και\nΤεχνολογία\nΥπολογιστών");
+        	orientation.setText("Ξ•Ο€ΞΉΟƒΟ„Ξ®ΞΌΞ· ΞΊΞ±ΞΉ\nΞ¤ΞµΟ‡Ξ½ΞΏΞ»ΞΏΞ³Ξ―Ξ±\nΞ¥Ο€ΞΏΞ»ΞΏΞ³ΞΉΟƒΟ„ΟΞ½");
         }
         else if(orientationInt == 1) {
-        	orientation.setText("Πληροφοριακά\nΣυστήματα");
+        	orientation.setText("Ξ Ξ»Ξ·ΟΞΏΟ†ΞΏΟΞΉΞ±ΞΊΞ¬\nΞ£Ο…ΟƒΟ„Ξ®ΞΌΞ±Ο„Ξ±");
         }
         else {
         	orientation.setText(""); // When the professor is logged in nothing is displayed
