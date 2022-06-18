@@ -26,6 +26,7 @@ import application.api.FAvailabilityResponse;
 import application.api.FLoginResponse;
 import application.api.FProfessorsResponse;
 import application.api.FSubjectsResponse;
+import application.api.FUserInformationResponse;
 import application.api.URestController;
 
 public class GuiController {
@@ -84,6 +85,9 @@ public class GuiController {
 	 		if (flr.accountType == 0) {
 	 			user = new Student(flr.userId, flr.username, flr.displayName, flr.orientation);
 	 			user.setEmail(controller.getUserProfile(user.getUserId()).email);
+	 			FUserInformationResponse userProfile = controller.getUserProfile(flr.userId);
+	 			String userBio = userProfile.bio;
+	 			user.setBio(userBio);
 	 		}
 	 		else {
 	 			user = getProfessorById(flr.associatedProfessorId);
@@ -601,7 +605,23 @@ public class GuiController {
  	}
  	
  	/*
- 	 * Methos used to change a user's password.
+ 	 *Method used to set a Bio for the user 
+ 	 * It returns true if the operation was successful and the server responded correctly
+ 	 * and false if the the operation failed or the server did not respond correctly.
+ 	 * It receives a String object as parameter (the new bio).
+ 	 * */
+ 	
+ 	public boolean setBio(String bio) throws IOException {
+ 		boolean success = controller.setBio(bio);
+ 		
+ 		if (success)
+ 			user.setBio(bio);
+ 		
+ 		return success;
+ 	}
+ 	
+ 	/*
+ 	 * Method used to change a user's password.
  	 * It returns a String object representing the success or not
  	 * and receives two String objects as parameters (the new and 
  	 * old passwords).
