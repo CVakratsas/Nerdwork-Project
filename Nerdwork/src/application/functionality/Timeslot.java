@@ -44,45 +44,6 @@ public class Timeslot {
 	}
 	
 	/*
-	 * Method used to get data contained in the Date objects, concerning 
-	 * dates, in a simpler way.
-	 * It returns a HashMap with key of the type String (month, day, hour, 
-	 * minutes) and with values of type Integer (value for each of the aforementioned
-	 * keys) and receives a Date object as parameter (the date from which to extract 
-	 * these information).
-	 */
-	public static HashMap<String, Integer> getDateInfo(Date date) {
-		Calendar calendarTimestamp = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-		HashMap<String, Integer> availableDate = new HashMap<>();
-		
-		calendarTimestamp.setTime(date);
-		
-		availableDate.put("month", calendarTimestamp.get(Calendar.MONTH) + 1);
-		availableDate.put("day", calendarTimestamp.get(Calendar.DAY_OF_MONTH));
-		availableDate.put("hour", calendarTimestamp.get(Calendar.HOUR_OF_DAY));
-		availableDate.put("minutes", calendarTimestamp.get(Calendar.MINUTE));
-		
-		return availableDate;
-	}
-	
-	/*
-	 * Method used to return the start date and end date of an appointment.
-	 * It returns a HashMap with key of the type String (startHour, endHour)
-	 * and with values of the type Date (Date objects representing the end and
-	 * start hour of the appointment) and receives no parameters.
-	 */
-	public HashMap<String, Date> getAppointment(){
-		HashMap<String, Date> appointment = new HashMap<String, Date>();
-		Date dateStartTimestamp = new Date((long)startHourTimestamp * 1000);
-		Date dateEndTimestamp = new Date((long)endHourTimestamp * 1000);
-		
-		appointment.put("startHour", dateStartTimestamp);
-		appointment.put("endHour", dateEndTimestamp);
-		
-		return appointment; 
-	}
-	
-	/*
 	 * Method used to check if an appointment is outdated, using the GMT
 	 * timezone.
 	 * It returns false if the appointment can still be considered active
