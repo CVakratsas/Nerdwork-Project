@@ -113,8 +113,6 @@ public class AppointmentsController {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		formatter.setTimeZone(TimeZone.getTimeZone(Timezone));
 
-		Collections.sort(timeslots);
-		
 		
 		//Professor has available appointments
 		if(timeslots != null) {
