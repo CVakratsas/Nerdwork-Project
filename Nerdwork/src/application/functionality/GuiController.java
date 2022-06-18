@@ -76,6 +76,7 @@ public class GuiController {
  	 * user who wants to login uses and second is the password linked to this
  	 * username.
  	 */
+ 	
  	public boolean login(String username, String password) throws IOException, ParseException {
  		FLoginResponse flr;
  		
