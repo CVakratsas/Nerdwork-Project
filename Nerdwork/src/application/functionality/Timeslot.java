@@ -21,7 +21,7 @@ public class Timeslot {
 	private String studentId;
 	private int professorId;
 	private long startHourTimestamp; // Milieconds since 1st January 1970 00:00:00 for startHour
-	private long endHourTimestamp; // // Miliseconds since 1st January 1970 00:00:00 for endHour
+	private long endHourTimestamp; // Miliseconds since 1st January 1970 00:00:00 for endHour
 	private int status; // 0 = Not Confirmed, 1 = Confirmed, 2 = Cancelled, 3 = Available 
 	// Change to availability
 	private String created_at;
@@ -95,11 +95,11 @@ public class Timeslot {
 		boolean outdated = false;
 		
 		// A requested or available, can be considered outdated when current time exceeds their starting hour.
-		if (((int)(dayTimestamp.getTime() / 1000)) > startHourTimestamp && status != 1)
+		if (dayTimestamp.getTime() > startHourTimestamp && status != 1)
 			outdated = true;
 		
 		// A reserved appointment, can be considered outdated when current time exceeds their ending hour.
-		else if (((int)(dayTimestamp.getTime() / 1000)) > endHourTimestamp)
+		else if (dayTimestamp.getTime() > endHourTimestamp)
 			outdated = true;
 		
 		return outdated;
@@ -144,5 +144,4 @@ public class Timeslot {
 	public String getCreated_at() {
 		return created_at;
 	}
-	
 }

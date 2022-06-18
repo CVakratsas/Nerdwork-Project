@@ -403,15 +403,19 @@ public class GuiController {
  	 * the professor will be available for appointments).
  	 */
  	public boolean setAvailableTimeslot(int day, int startHour, int endHour) throws IOException, ParseException {
- 		boolean success = controller.setAvailabilityDates(day, startHour, endHour);
- 		Professor p = (Professor) user;
+        boolean success = false;
  		
- 		if (success)
- 			getAvailableTimeslots(getProfessorById(p.getProfessorId()));
- 		
- 		return success; 
- 	}
+ 		if(user instanceof Professor) 
+ 			success = controller.setAvailabilityDates(day, startHour, endHour);
+ 				if (success) {
+ 					Professor professor = (Professor) user;
  	
+ 					getAvailableTimeslots(getProfessorById(professor.getProfessorId()));
+ 				
+ 				}
+ 					
+        return success;
+    }
  	/*
  	 * Method used for getting the dates that a professor is available for an appointment
  	 * with a student. It uses the professor's unique id in order to locate the professor.
@@ -448,15 +452,17 @@ public class GuiController {
 					nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("startHour"));
 					nextAvailableDate.set(Calendar.MINUTE, 0);
 					nextAvailableDate.set(Calendar.SECOND, 0);
-
+					nextAvailableDate.set(Calendar.MILLISECOND, 0);
+					
 					availableDateStart = nextAvailableDate.getTime();
 
 					nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("endHour"));
 					nextAvailableDate.set(Calendar.MINUTE, 0);
 					nextAvailableDate.set(Calendar.SECOND, 0);
+					nextAvailableDate.set(Calendar.MILLISECOND, 0);
 
 					availableDateEnd = nextAvailableDate.getTime();
-					
+
 					selectedProfessor.addTimeslot(availableDateStart.getTime(), availableDateEnd.getTime(), requested, reserved);
 				}
 			}
@@ -473,14 +479,21 @@ public class GuiController {
  	}
  	
  	public boolean requestAppointment(Professor selectedProfessor, Timeslot timeslot) throws IOException, ParseException {
-	 	
+	 	ArrayList<Timeslot> requestedAppointments = getRequestedAppointments();
+	 	boolean success = false;
+ 		
  		if (user instanceof Student && timeslot.getStatus() == 3) {
-	 		boolean success = controller.bookAppointment(selectedProfessor.getProfessorId(), timeslot.getStartHourTimestamp());
+	 		success = controller.bookAppointment(selectedProfessor.getProfessorId(), timeslot.getStartHourTimestamp());
 	 		
+	 		// Check if server responded correctly
 	 		if (success) 
- 				selectedProfessor.addRequestedAppointment(timeslot);
+	 			for (Timeslot requested : requestedAppointments)
+	 				if (requested.getProfessorId() == selectedProfessor.getProfessorId()) 
+	 					success = false; // Student already requested.
 	 		
-	 		return success;
+	 		// Check if already requested appointment with this professor.
+	 		if (success)
+	 			selectedProfessor.addRequestedAppointment(timeslot);
 	 	}
 
  		return false;

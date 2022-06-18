@@ -89,26 +89,27 @@ public class Professor extends User {
 		// The condition means: The appointments that can be made from starting hour
 		// to end hour. Appointments last for 30 minutes each.
 		for (int i = 0; i < ((dateEndTimestamp.getTime() - dateStartTimestamp.getTime()) / 1000) / 1800; i++) {
-			Date appointmentDateStartHourTimestamp = new Date((long)appointmentStartHourTimestamp * 1000);
-			Date appointmentDateEndHourTimestamp = new Date((long)appointmentEndHourTimestamp * 1000);
+			Date appointmentDateStartHourTimestamp = new Date(appointmentStartHourTimestamp);
+			Date appointmentDateEndHourTimestamp = new Date(appointmentEndHourTimestamp);
 			
+			//System.out.println("starting: " + appointmentDateStartHourTimestamp + " ending " + appointmentDateEndHourTimestamp);
 			Timeslot timeslot = new Timeslot((int)(appointmentDateStartHourTimestamp.getTime() / 1000), (int)(appointmentDateEndHourTimestamp.getTime() / 1000), 3);
 			
 			if (!timeslot.checkOutdated()) {
 				
 				for (Timeslot requested : requestedTimeslots)
-					if (requested.getStartHourTimestampMili() == appointmentDateStartHourTimestamp.getTime() && professorId == requested.getProfessorId())
+					if (requested.getStartHourTimestamp() == appointmentDateStartHourTimestamp.getTime() / 1000 && professorId == requested.getProfessorId())
 						timeslot.setStatus(0);
 		
 				for (Timeslot reserved : reservedTimeslots)
-					if (reserved.getStartHourTimestampMili() == appointmentDateStartHourTimestamp.getTime())
+					if (reserved.getStartHourTimestamp() == appointmentDateStartHourTimestamp.getTime() / 1000)
 						timeslot.setStatus(1);
 						
 				timeslots.add(timeslot);
 			}
 			
 			appointmentStartHourTimestamp = appointmentEndHourTimestamp;
-			appointmentEndHourTimestamp += 1800; 
+			appointmentEndHourTimestamp += (1800 * 1000); 
 		}
 	}
 	
