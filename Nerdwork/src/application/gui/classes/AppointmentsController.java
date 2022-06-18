@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -26,8 +27,8 @@ public class AppointmentsController {
 	
 	private GuiController controller;
 	private Professor currentProfessor;
-	private static final String dbURL = "https://nerdnet.geoxhonapps.com/cdn/profPhotos/";
-	private static final String Timezone = "GMT";
+	public static final String dbURL = "https://nerdnet.geoxhonapps.com/cdn/profPhotos/";
+	public static final String Timezone = "GMT";
 	
 	@FXML
 	private ImageView currentProfessorPicture;
@@ -66,6 +67,7 @@ public class AppointmentsController {
 			box.getChildren().add(name);
 			box.setStyle("-fx-cursor: hand");
 			
+			
 			//Loads selected Professor's available appointments
 			box.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
 				try {
@@ -96,12 +98,23 @@ public class AppointmentsController {
 	private void loadAppointments() throws IOException, ParseException {
 		appointmentList.getChildren().clear();
 		appointmentList.setSpacing(15);
-		
+
 		
 		ArrayList<Timeslot> timeslots = controller.getAvailableTimeslots(currentProfessor);
+		ArrayList<Timeslot> reserved = controller.getReservedTimeslots(currentProfessor);
+		
+//		for(Timeslot t1 : timeslots)
+//			for(Timeslot t2 : reserved)
+//				if(t1.getStartHourTimestamp() == t2.getStartHourTimestamp()) {
+//					t1.setStatus(t2.getStatus());
+//				}
+					
+
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		formatter.setTimeZone(TimeZone.getTimeZone(Timezone));
 
+		Collections.sort(timeslots);
+		
 		
 		//Professor has available appointments
 		if(timeslots != null) {
@@ -158,6 +171,9 @@ public class AppointmentsController {
 					
 					for(Timeslot t : dayTimeslots) {
 						
+						if(t.getStatus() == 0 || t.getStatus() == 1)
+							continue;
+						
 						//Calculates the appointment's starting time and formats it properly
 						Date startDate = new Date(((long) t.getStartHourTimestamp()) * 1000);
 						calendar.setTime(startDate);
@@ -172,6 +188,17 @@ public class AppointmentsController {
 						
 						String timeRange = startTime + " - " + endTime;
 						Button appointmentButton = new Button(timeRange);
+						appointmentButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
+							Timeslot selectedTimeslot = t;
+							try {
+								boolean response = controller.requestAppointment(currentProfessor, selectedTimeslot);
+							} catch (IOException | ParseException e) {
+								e.printStackTrace();
+							}
+						});
+						
+						
+						
 						appointment.getChildren().add(appointmentButton);
 					}
 					
