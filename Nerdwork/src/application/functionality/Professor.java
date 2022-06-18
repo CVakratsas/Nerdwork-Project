@@ -99,7 +99,7 @@ public class Professor extends User {
 			if (!timeslot.checkOutdated()) {
 				
 				for (Timeslot requested : requestedTimeslots)
-					if (((long)requested.getStartHourTimestamp()) * 1000 == appointmentDateStartHourTimestamp.getTime())
+					if (((long)requested.getStartHourTimestamp()) * 1000 == appointmentDateStartHourTimestamp.getTime() && professorId == requested.getProfessorId())
 						timeslot.setStatus(0);
 		
 				for (Timeslot reserved : reservedTimeslots)

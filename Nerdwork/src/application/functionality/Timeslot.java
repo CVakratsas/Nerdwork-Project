@@ -22,7 +22,8 @@ public class Timeslot {
 	private int professorId;
 	private int startHourTimestamp; // Seconds since 1st January 1970 00:00:00 for startHour
 	private int endHourTimestamp; // // Seconds since 1st January 1970 00:00:00 for endHour
-	private int status; // 0 = Not Confirmed, 1 = Confirmed, 2 = Cancelled, 3 = Available
+	private int status; // 0 = Not Confirmed, 1 = Confirmed, 2 = Cancelled, 3 = Available 
+	// Change to availability
 	private String created_at;
 	
 	// Constructor used for available Timeslots

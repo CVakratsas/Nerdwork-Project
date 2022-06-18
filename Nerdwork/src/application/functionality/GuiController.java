@@ -472,25 +472,17 @@ public class GuiController {
  		return selectedProfessor.getTimeslots();
  	}
  	
- 	
- 	/*
- 	 * Method used to make an appointment request from a student to a professor.
- 	 * It returns true if the operation was successful and server responded correctly
- 	 * and false if the operation failed or the server did not respond correctly.
- 	 * It receives a Professor object (the selected professor) and four int type 
- 	 * parameters (month, day, hour and minutes of the appointment). 
- 	 */
  	public boolean requestAppointment(Professor selectedProfessor, Timeslot timeslot) throws IOException, ParseException {
 	 	
- 		if (user instanceof Student) {
+ 		if (user instanceof Student && timeslot.getStatus() == 3) {
 	 		boolean success = controller.bookAppointment(selectedProfessor.getProfessorId(), timeslot.getStartHourTimestamp());
 	 		
-	 		if (success) 	
+	 		if (success) 
  				selectedProfessor.addRequestedAppointment(timeslot);
 	 		
 	 		return success;
 	 	}
- 		
+
  		return false;
  	}
  	
@@ -519,11 +511,14 @@ public class GuiController {
  	 * as parameter.
  	 */
  	public boolean acceptAppointmentRequest(Timeslot requestedAppointment) throws IOException {
- 		return controller.acceptAppointment(requestedAppointment.getId());
+ 		if (user instanceof Professor)
+ 			return controller.acceptAppointment(requestedAppointment.getId());
+ 		
+ 		return false;
  	}
  	
  	/*
- 	 * Method used by professor users to reject/cancel a request for appointment.
+ 	 * Method used by users to reject/cancel a request for appointment.
  	 * It returns true if the operation was successful and the server responded 
  	 * correctly and false if the operation failed or the server did not 
  	 * respond correctly. It receives a Timeslot object (the request of appointment),
@@ -575,12 +570,14 @@ public class GuiController {
  	 * */
  	
  	public boolean setBio(String bio) throws IOException {
- 		boolean success = controller.setBio(bio);
+ 		if (bio.length() <= 300)
+ 			if (controller.setBio(bio)) {
+ 				user.setBio(bio);
+ 				
+ 				return true;
+ 			}
  		
- 		if (success)
- 			user.setBio(bio);
- 		
- 		return success;
+ 		return false;
  	}
  	
  	/*
