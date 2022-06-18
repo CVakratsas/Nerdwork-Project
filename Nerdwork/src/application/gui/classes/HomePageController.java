@@ -10,9 +10,10 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.skin.DatePickerSkin;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 public class HomePageController {
 	
@@ -21,15 +22,17 @@ public class HomePageController {
 	@FXML
 	private VBox calendarPane;
 	@FXML
-	private TextArea bio;
+	private TextFlow bio;
 	
 	@FXML
 	private void initialize() throws IOException, ParseException {
+		
 		// Initialize calendar
     	DatePickerSkin datePickerSkin = new DatePickerSkin(new DatePicker(LocalDate.now()));
         Node calendar = datePickerSkin.getPopupContent();
         calendar.setStyle("-fx-background-color: #3889c4");
         calendarPane.getChildren().add(calendar);
+        bio.getChildren().add(new Text(GuiController.getInstance().getUser().getBio()));
         
         // Initialize user's information
         displayName.setText(GuiController.getInstance().getUser().getDisplayName());
@@ -44,6 +47,5 @@ public class HomePageController {
         else {
         	orientation.setText(""); // When the professor is logged in nothing is displayed
         }
-        bio.setText(GuiController.getInstance().getUser().getBio());
     }	
 }

@@ -68,7 +68,8 @@ public class RegisterController {
 			}
 			else {
 				answer = false;
-				GuiController.getInstance().alertFactory("Ανεπιτυχής Δημιουργία Λογαριασμού", "Κάποια ή όλα τα πεδία δεν είναι συμπληρωμένα");
+				GuiController.getInstance().alertFactory("Ανεπιτυχής Δημιουργία Λογαριασμού", "Κάποια ή όλα τα πεδία δεν είναι συμπληρωμένα"); // Orientation field is empty
+				return;
 			}
 			
 		}

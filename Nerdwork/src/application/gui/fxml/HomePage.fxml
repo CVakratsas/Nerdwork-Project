@@ -2,20 +2,15 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane maxHeight="580.0" maxWidth="1280.0" minHeight="580.0" minWidth="1280.0" prefHeight="580.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gui.classes.HomePageController">
    <children>
-      <TextArea fx:id="bio" editable="false" layoutX="461.0" layoutY="364.0" prefHeight="183.0" prefWidth="726.0" text="Bio Example&#10;* I have experience with JavaFX since I have created this app&#10;* I need to get familiar with the Spring framework in the future&#10;* TODO: Make an appointment with Mr. Hatzigeorgiou in order to ask about the app" wrapText="true">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </TextArea>
       <Label layoutX="37.0" layoutY="31.0" text="Το προφίλ μου">
          <font>
             <Font name="Segoe UI Bold" size="24.0" />
@@ -29,7 +24,7 @@
       <VBox fx:id="calendarPane" layoutX="586.0" layoutY="90.0" prefHeight="200.0" prefWidth="476.0" />
       <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="123.0" layoutY="90.0">
          <image>
-            <Image url="@../icons/profile.png" />
+            <Image url="@/application/gui/icons/profile.png" />
          </image>
       </ImageView>
       <Label fx:id="orientation" layoutX="136.0" layoutY="455.0" text="Orientation">
@@ -53,5 +48,6 @@
             <Font size="18.0" />
          </font>
       </Label>
+      <TextFlow fx:id="bio" layoutX="461.0" layoutY="364.0" prefHeight="183.0" prefWidth="726.0" />
    </children>
 </AnchorPane>
