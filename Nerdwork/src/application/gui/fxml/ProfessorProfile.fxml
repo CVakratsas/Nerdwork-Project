@@ -17,7 +17,7 @@
    <items>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="335.0">
          <children>
-            <VBox layoutX="65.0" layoutY="309.0" prefHeight="111.0" prefWidth="200.0">
+            <VBox layoutX="65.0" layoutY="309.0">
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="200.0">
                      <VBox.margin>
@@ -45,7 +45,7 @@
                      <children>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@/application/gui/icons/phone.png" />
+                              <Image url="@/application/gui/icons/email.png" />
                            </image>
                         </ImageView>
                         <Label fx:id="email" text="professorEmail">
@@ -65,7 +65,7 @@
                      <children>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="application\gui\icons\office.png" />
+                              <Image url="@/application/gui/icons/office.png" />
                            </image>
                         </ImageView>
                         <Label fx:id="office" text="professorOffice">

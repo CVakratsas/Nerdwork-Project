@@ -612,10 +612,10 @@ public class GuiController {
  		
  		if (message.equals(isCorrect)) {
  			if (controller.setPassword(oldPassword, newPassword))
- 				return "Ο κωδικός ενημερώθηκε επιτυχώς!";
+ 				return "Ξ ΞΊΟ‰Ξ΄ΞΉΞΊΟΟ‚ ΞµΞ½Ξ·ΞΌΞµΟΟΞΈΞ·ΞΊΞµ ΞµΟ€ΞΉΟ„Ο…Ο‡ΟΟ‚!";
  			
  			else
- 				return "Ο παλιός κωδικός δεν είναι έγκυρος!";
+ 				return "Ξ Ο€Ξ±Ξ»ΞΉΟΟ‚ ΞΊΟ‰Ξ΄ΞΉΞΊΟΟ‚ Ξ΄ΞµΞ½ ΞµΞ―Ξ½Ξ±ΞΉ Ξ­Ξ³ΞΊΟ…ΟΞΏΟ‚!";
  		}
  		
  		return message;
@@ -649,23 +649,23 @@ public class GuiController {
  			Matcher hasDigit = digit.matcher(newPassword);
  			Matcher hasSpecial = special.matcher(newPassword);
  			    
- 			String passwordErrors = "Ο νέος κωδικός θα πρέπει να περιέχει:";
+ 			String passwordErrors = "Ξ Ξ½Ξ­ΞΏΟ‚ ΞΊΟ‰Ξ΄ΞΉΞΊΟΟ‚ ΞΈΞ± Ο€ΟΞ­Ο€ΞµΞΉ Ξ½Ξ± Ο€ΞµΟΞΉΞ­Ο‡ΞµΞΉ:";
  			boolean validPassword = true;
  			    
  			if (!hasUpperLetter.find()) {
- 			  	passwordErrors += "\n- τουλάχιστον έναν κεφαλαίο χαρακτήρα";
+ 				passwordErrors += "\n- Ο„ΞΏΟ…Ξ»Ξ¬Ο‡ΞΉΟƒΟ„ΞΏΞ½ Ξ­Ξ½Ξ± ΞΊΞµΟ†Ξ±Ξ»Ξ±Ξ―ΞΏ Ο‡Ξ±ΟΞ±ΞΊΟ„Ξ®ΟΞ±";
  			  	validPassword = false;
  			}
  			if (!hasLowerLetter.find()) {
- 			   	passwordErrors += "\n- τουλάχιστον ένα πεζό χαρακτήρα";
+ 				passwordErrors += "\n- Ο„ΞΏΟ…Ξ»Ξ¬Ο‡ΞΉΟƒΟ„ΞΏΞ½ Ξ­Ξ½Ξ± Ο€ΞµΞ¶Ο Ο‡Ξ±ΟΞ±ΞΊΟ„Ξ®ΟΞ±";
  			   	validPassword = false;
  			}
  			if (!hasDigit.find()) {
- 			   	passwordErrors += "\n- τουλάχιστον ένα ψηφίο";
+ 				passwordErrors += "\n- Ο„ΞΏΟ…Ξ»Ξ¬Ο‡ΞΉΟƒΟ„ΞΏΞ½ Ξ­Ξ½Ξ± ΟΞ·Ο†Ξ―ΞΏ";
  			   	validPassword = false;
  			}
  		    if (!hasSpecial.find()) {
- 		    	passwordErrors += "\n- τουλάχιστον έναν ειδικό χαρακτήρα";
+ 		    	passwordErrors += "\n- Ο„ΞΏΟ…Ξ»Ξ¬Ο‡ΞΉΟƒΟ„ΞΏΞ½ Ξ­Ξ½Ξ±Ξ½ ΞµΞΉΞ΄ΞΉΞΊΟ Ο‡Ξ±ΟΞ±ΞΊΟ„Ξ®ΟΞ±";
  		    	validPassword = false;
  		    }
  		    if (validPassword)
@@ -674,7 +674,7 @@ public class GuiController {
  		    	return passwordErrors;
  		}
  		else {
- 			return "Ο νέος κωδικός πρέπει να έχει μέγεθος τουλάχιστον 8 χαρακτήρων!";
+ 			return "Ξ Ξ½Ξ­ΞΏΟ‚ ΞΊΟ‰Ξ΄ΞΉΞΊΟΟ‚ Ο€ΟΞ­Ο€ΞµΞΉ Ξ½Ξ± Ξ­Ο‡ΞµΞΉ ΞΌΞ­Ξ³ΞµΞΈΞΏΟ‚ Ο„ΞΏΟ…Ξ»Ξ¬Ο‡ΞΉΟƒΟ„ΞΏΞ½ 8 Ο‡Ξ±ΟΞ±ΞΊΟ„Ξ®ΟΟ‰Ξ½!";
  		}
  	}
 }

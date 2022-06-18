@@ -87,7 +87,8 @@ public class ProfessorProfileController {
 			//Loads selected Course profile 
 			box.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
 				try {
-					new CourseProfileController().switchToCourseProfile(event, controller.getCourseById(box.getId()));
+					Course selectedCourse = c;
+					new CourseProfileController().switchToCourseProfile(event, selectedCourse);
 				} catch (IOException | ParseException e) {
 					e.printStackTrace();
 				}

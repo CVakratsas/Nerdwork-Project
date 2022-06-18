@@ -27,7 +27,7 @@ public class AppointmentsController {
 	private GuiController controller;
 	private Professor currentProfessor;
 	private static final String dbURL = "https://nerdnet.geoxhonapps.com/cdn/profPhotos/";
-
+	private static final String Timezone = "GMT";
 	
 	@FXML
 	private ImageView currentProfessorPicture;
@@ -64,20 +64,28 @@ public class AppointmentsController {
 			HBox box = new HBox();
 			box.getChildren().add(picture);
 			box.getChildren().add(name);
-			box.setId(p.getUserId());
-			
+			box.setStyle("-fx-cursor: hand");
 			
 			//Loads selected Professor's available appointments
 			box.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
 				try {
-					currentProfessor = controller.getProfessorById(Integer.parseInt(box.getId()));
-					currentProfessorPicture.setImage(new Image(dbURL + currentProfessor.getProfilePhoto()));
+					currentProfessor = p;
+					currentProfessorPicture.setImage(new Image(dbURL + p.getProfilePhoto()));
 					currentProfessorName.setText(currentProfessor.getDisplayName());
+					currentProfessorName.setStyle("-fx-cursor: hand");
 					currentProfessorOffice.setText(currentProfessor.getOffice());
 					
-					loadAppointments();
 					
-				} catch (NumberFormatException | IOException | ParseException | java.text.ParseException e) {e.printStackTrace();}
+					//Loads selected Professor profile
+					currentProfessorName.addEventHandler(MouseEvent.MOUSE_CLICKED, (event2) -> {
+						try {
+							new ProfessorProfileController().switchToProfessorProfile(event2, currentProfessor);
+						} catch (NumberFormatException | IOException | ParseException e) {e.printStackTrace();}
+					});
+					
+					
+					loadAppointments();
+				} catch (NumberFormatException | IOException | ParseException e) {e.printStackTrace();}
 			});
 			
 			professorList.getChildren().add(box);
@@ -85,20 +93,19 @@ public class AppointmentsController {
 	}	
 	
 
-	private void loadAppointments() throws IOException, ParseException, java.text.ParseException {
+	private void loadAppointments() throws IOException, ParseException {
 		appointmentList.getChildren().clear();
-		
-		ArrayList<Timeslot> timeslots = controller.getAvailableTimeslots(currentProfessor);
 		appointmentList.setSpacing(15);
 		
 		
+		ArrayList<Timeslot> timeslots = controller.getAvailableTimeslots(currentProfessor);
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-		formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+		formatter.setTimeZone(TimeZone.getTimeZone(Timezone));
 
 		
+		//Professor has available appointments
 		if(timeslots != null) {
-			Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-			
+			Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(Timezone));
 			
 			
 			while(!timeslots.isEmpty())
@@ -142,36 +149,34 @@ public class AppointmentsController {
 					appointment.setSpacing(15);
 					
 					
-					String dateStr = formatter.format(calendar.getTime());
-					String weekDayStr = Timeslot.Days[calendar.get(Calendar.DAY_OF_WEEK) - 1];
-					
-					
-					Label date = new Label(dateStr);
-					Label weekDay = new Label(weekDayStr);
-					
+					//Loads Date and Day
+					Label date = new Label(formatter.format(calendar.getTime()));
+					Label weekDay = new Label(Timeslot.Days[calendar.get(Calendar.DAY_OF_WEEK) - 1]);
 					appointment.getChildren().add(date);
 					appointment.getChildren().add(weekDay);
 					
 					
 					for(Timeslot t : dayTimeslots) {
 						
+						//Calculates the appointment's starting time and formats it properly
 						Date startDate = new Date(((long) t.getStartHourTimestamp()) * 1000);
 						calendar.setTime(startDate);
 						String startTime = String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 						
 						
+						//Calculates the appointment's ending time and formats it properly
 						Date endDate = new Date(((long) t.getEndHourTimestamp()) * 1000);
 						calendar.setTime(endDate);
 						String endTime = String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 						
 						
 						String timeRange = startTime + " - " + endTime;
-						
-						
 						Button appointmentButton = new Button(timeRange);
 						appointment.getChildren().add(appointmentButton);
 					}
 					
+					
+					//Adds all appointments for the day
 					appointmentList.getChildren().add(appointment);
 				}
 		}	

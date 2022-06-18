@@ -77,14 +77,14 @@ public class CourseProfileController {
 			HBox box = new HBox();
 			box.getChildren().add(picture);
 			box.getChildren().add(name);
-			box.setId(p.getUserId());
 			box.setStyle("-fx-cursor: hand");
 
 			
-			//Loads selected Professor's profile
+			//Loads selected Professor profile
 			box.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
 				try {
-					new ProfessorProfileController().switchToProfessorProfile(event, controller.getProfessorById(Integer.parseInt(box.getId())));
+					Professor selectedProfessor = p;
+					new ProfessorProfileController().switchToProfessorProfile(event, selectedProfessor);
 				} catch (NumberFormatException | IOException | ParseException e) {
 					e.printStackTrace();
 				}

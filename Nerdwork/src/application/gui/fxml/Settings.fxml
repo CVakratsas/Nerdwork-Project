@@ -43,12 +43,14 @@
          <content>
             <AnchorPane prefHeight="579.0" prefWidth="937.0">
                <children>
-                  <TextField fx:id="nameTF" layoutX="136.0" layoutY="67.0" prefHeight="25.0" prefWidth="165.0" promptText="Όνομα Χρήστη" />
                   <Label layoutX="136.0" layoutY="50.0" text="Αλλαγή Ονόματος" textFill="#000000a6" />
+                  <TextField fx:id="nameTF" layoutX="136.0" layoutY="67.0" prefHeight="25.0" prefWidth="165.0" promptText="Όνομα Χρήστη" />
+                  <Label fx:id="nameChangedResponse" layoutX="301.0" layoutY="71.0" />
                   <Label layoutX="136.0" layoutY="114.0" text="Αλλαγή Κωδικού Πρόσβασης" textFill="#000000a6" />
                   <PasswordField fx:id="oldPassPF" layoutX="136.0" layoutY="131.0" prefHeight="25.0" prefWidth="165.0" promptText="Παλιός κωδικός" />
                   <PasswordField fx:id="newPassPF" layoutX="136.0" layoutY="163.0" prefHeight="25.0" prefWidth="165.0" promptText="Νέος κωδικός" />
-                  <PasswordField fx:id="newPassRepeatTF" layoutX="136.0" layoutY="196.0" prefHeight="25.0" prefWidth="165.0" promptText="Επιβεβαίωση νέου κωδικού" />
+                  <PasswordField fx:id="newPassRepeatPF" layoutX="136.0" layoutY="196.0" prefHeight="25.0" prefWidth="165.0" promptText="Επιβεβαίωση νέου κωδικού" />
+                  <Label fx:id="passwordChangedResponse" layoutX="301.0" layoutY="135.0" />
                   <Label layoutX="137.0" layoutY="231.0" text="Επιλογή Κατεύθυνσης" textFill="#000000a6" />
                   <ComboBox fx:id="orientationCB" layoutX="137.0" layoutY="248.0" prefWidth="150.0" />
                   <Label layoutX="137.0" layoutY="297.0" text="Επεξεργασία Bio" textFill="#000000a6" />
