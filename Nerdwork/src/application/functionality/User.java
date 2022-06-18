@@ -18,6 +18,7 @@ public abstract class User {
 	protected String displayName;
 	private String bio;
 	protected int orientation;
+	public static final String Orientation[] = {"ету", "пс", "ету-пс"};
 
 	/*
 	 * The above five attributes keep track of personal Student/Professor,
@@ -54,7 +55,7 @@ public abstract class User {
 		return username;
 	}
 
-	public void setUserame(String username) {
+	public void setUserName(String username) {
 		this.username = username;
 	}
 	

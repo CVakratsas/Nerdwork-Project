@@ -18,7 +18,7 @@ public class Professor extends User {
 	private String office;
 	private int professorId;
 	private float rating;
-	private ArrayList<Timeslot> availableTimeslots; // A Professor's available Timeslots
+	private ArrayList<Timeslot> timeslots; // A Professor's available Timeslots
 	
 	// Constructor for getting professor information as student.
 	public Professor(String displayName, int professorId, String email, String profilePhoto, String phone, String office, float rating, int orientation) {
@@ -29,14 +29,14 @@ public class Professor extends User {
 		this.phone = phone;
 		this.office = office;
 		this.rating = rating;
-		availableTimeslots = new ArrayList<Timeslot>();
+		timeslots = new ArrayList<Timeslot>();
 	}
 	
 	// Constructor for professor login
 	public Professor(String userId, String username, String displayName, int professorId, int orientation) {
 		super(userId, username, displayName, orientation);
 		this.professorId = professorId;
-		availableTimeslots = new ArrayList<Timeslot>();
+		timeslots = new ArrayList<Timeslot>();
 	}
 	
 	/*
@@ -62,8 +62,8 @@ public class Professor extends User {
 		return myCourses;
 	}
 	
-	public void clearAvailableTimeslots() {
-		availableTimeslots.clear();
+	public void clearTimeslots() {
+		timeslots.clear();
 	}
 	
 	/*Professor class Getters and Setters: */
@@ -78,31 +78,47 @@ public class Professor extends User {
 	 * It returns nothing and receives two int type parameters the start and end hour
 	 * of the appointment in the form of seconds passed since 1st January 1970 00:00:00.
 	 */
-	public void addAvailableTimeslot(int startHourTimestamp, int endHourTimestamp) {
+	public void addTimeslot(int startHourTimestamp, int endHourTimestamp, ArrayList<Timeslot> requestedTimeslots, ArrayList<Timeslot> reservedTimeslots) {
 		Date dateStartTimestamp = new Date((long)startHourTimestamp * 1000);
 		Date dateEndTimestamp = new Date((long)endHourTimestamp * 1000);
 		// The two above objects, are used only for the if condition.
+		
 		int appointmentStartHourTimestamp = startHourTimestamp; // The start hour of the available hours of a professor for a student.
 		int appointmentEndHourTimestamp = startHourTimestamp + 1800; // The end hour of the available hours of a professor for a student.
+		
+		boolean isAvailable = true;
 		
 		// The condition means: The appointments that can be made from starting hour
 		// to end hour. Appointments last for 30 minutes each.
 		for (int i = 0; i < ((dateEndTimestamp.getTime() - dateStartTimestamp.getTime()) / 1000) / 1800; i++) {
 			Date appointmentDateStartHourTimestamp = new Date((long)appointmentStartHourTimestamp * 1000);
 			Date appointmentDateEndHourTimestamp = new Date((long)appointmentEndHourTimestamp * 1000);
-			Timeslot timeslot = new Timeslot((int)(appointmentDateStartHourTimestamp.getTime() / 1000), (int)(appointmentDateEndHourTimestamp.getTime() / 1000));
 			
-			if (!timeslot.checkOutdated())
-				availableTimeslots.add(timeslot);
+			Timeslot timeslot = new Timeslot((int)(appointmentDateStartHourTimestamp.getTime() / 1000), (int)(appointmentDateEndHourTimestamp.getTime() / 1000), 3);
+			
+			if (!timeslot.checkOutdated()) {
+				
+				for (Timeslot requested : requestedTimeslots)
+					if (((long)requested.getStartHourTimestamp()) * 1000 == appointmentDateStartHourTimestamp.getTime())
+						timeslot.setStatus(0);
+		
+				for (Timeslot reserved : reservedTimeslots)
+					if (((long)reserved.getStartHourTimestamp()) * 1000 == appointmentDateStartHourTimestamp.getTime())
+						timeslot.setStatus(1);
+						
+				timeslots.add(timeslot);
+			}
 			
 			appointmentStartHourTimestamp = appointmentEndHourTimestamp;
 			appointmentEndHourTimestamp += 1800; 
+			
+			isAvailable = true;
 		
 		}
 	}
 	
-	public ArrayList<Timeslot> getAvailableTimeslots() {
-		return availableTimeslots;
+	public ArrayList<Timeslot> getTimeslots() {
+		return timeslots;
 	}
 	
 	public String getPhone() {
