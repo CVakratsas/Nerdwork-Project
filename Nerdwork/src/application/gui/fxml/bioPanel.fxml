@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.bioPanelController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="194.79999389648438" minHeight="10.0" prefHeight="74.39997787475586" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="348.59999618530276" minHeight="10.0" prefHeight="254.20000000000002" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="348.59999618530276" minHeight="10.0" prefHeight="93.39999999999998" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <TextArea fx:id="Enterbio" prefHeight="225.0" prefWidth="541.0" promptText="Γράγε λίγα πράγματα για εσένα (max 300 χαρακτήρες) " style="-fx-border-color: black;" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets bottom="10.0" left="30.0" right="30.0" />
+         </GridPane.margin>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextArea>
+      <Label fx:id="title" prefHeight="46.0" prefWidth="68.0" text="Bio">
+         <GridPane.margin>
+            <Insets left="30.0" right="20.0" top="10.0" />
+         </GridPane.margin>
+         <font>
+            <Font name="Arial" size="35.0" />
+         </font>
+      </Label>
+      <Button fx:id="Apply" mnemonicParsing="false" onAction="#getBioinfo" prefHeight="42.0" prefWidth="147.0" style="-fx-background-color: rgb(225, 252, 223); -fx-border-color: green;" text="Εφαρμογή" GridPane.rowIndex="2">
+         <font>
+            <Font name="Arial Bold" size="22.0" />
+         </font>
+         <GridPane.margin>
+            <Insets bottom="10.0" left="800.0" right="10.0" top="10.0" />
+         </GridPane.margin>
+      </Button>
+      <Label fx:id="Success" prefHeight="30.0" prefWidth="190.0" style="visibility: hidden;" text="Το Bio ενημερώθηκε" textFill="#68d771" GridPane.rowIndex="2">
+         <font>
+            <Font name="System Italic" size="20.0" />
+         </font>
+         <GridPane.margin>
+            <Insets bottom="100.0" left="10.0" right="10.0" top="10.0" />
+         </GridPane.margin>
+      </Label>
+      <Label fx:id="Failure" layoutX="20.0" layoutY="458.0" prefHeight="30.0" prefWidth="515.0" style="visibility: hidden;" text="Το Bio απορρίφθηκε, υπερβήκατε τους 300 χαρακτήρες" textFill="#e55050" GridPane.rowIndex="2">
+         <font>
+            <Font name="System Italic" size="20.0" />
+         </font>
+         <GridPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </GridPane.margin>
+      </Label>
+   </children>
+</GridPane>
