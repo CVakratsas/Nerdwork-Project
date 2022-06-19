@@ -12,18 +12,18 @@ public abstract class User {
 	
 	/*User attributes are here*/
 
-	protected String userId;
+	protected String userId; // Unique database key of the object.
 	protected String username;
 	protected String email;
 	protected String displayName;
 	private String bio;
-	protected int orientation;
-	public static final String Orientation[] = {"ÅÔÕ", "ÐÓ", "ÅÔÕ-ÐÓ"};
 
 	/*
 	 * The above five attributes keep track of personal Student/Professor,
 	 * concerning the profile they have built.
 	 */
+	protected int orientation;
+	public static final String Orientation[] = {"Î•Î¤Î¥", "Î Î£", "Î•Î¤Î¥-Î Î£"};
 	
 	protected ArrayList<Course> myCourses; // Courses attended by Students or taught by Professors	
 	protected ArrayList<Timeslot> requestedAppointments;

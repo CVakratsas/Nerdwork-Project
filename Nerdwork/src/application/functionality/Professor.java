@@ -16,7 +16,7 @@ public class Professor extends User {
 	private String phone;
 	private String profilePhoto;
 	private String office;
-	private int professorId;
+	private int professorId; // Is a unique professor identifier
 	private float rating;
 	private ArrayList<Timeslot> timeslots; // A Professor's available Timeslots
 	
@@ -76,7 +76,10 @@ public class Professor extends User {
 	 * Method used to create available Timeslots (with half hour distance of the start
 	 * and end hours of the appointment).
 	 * It returns nothing and receives two int type parameters the start and end hour
-	 * of the appointment in the form of seconds passed since 1st January 1970 00:00:00.
+	 * of the appointment in the form of seconds passed since 1st January 1970 00:00:00 
+	 * and two ArrayList consisting of Timeslot objects one representing MyAppointments
+	 * and the other the Reserved. The last two parameters, are used to return all of the 
+	 * appointments the professor has with the correct status each.
 	 */
 	public void addTimeslot(long startHourTimestamp, long endHourTimestamp, ArrayList<Timeslot> requestedTimeslots, ArrayList<Timeslot> reservedTimeslots) {
 		Date dateStartTimestamp = new Date(startHourTimestamp);
@@ -85,6 +88,8 @@ public class Professor extends User {
 		
 		long appointmentStartHourTimestamp = startHourTimestamp; // The start hour of the available hours of a professor for a student.
 		long appointmentEndHourTimestamp = startHourTimestamp + (1800 * 1000); // The end hour of the available hours of a professor for a student.
+		
+		boolean isRequested = false;
 		
 		// The condition means: The appointments that can be made from starting hour
 		// to end hour. Appointments last for 30 minutes each.
@@ -97,20 +102,30 @@ public class Professor extends User {
 			
 			if (!timeslot.checkOutdated()) {
 				
+				// Checks if the timeslot we created is a requested one (see getMyppointments method in GuiController).
 				for (Timeslot requested : requestedTimeslots)
-					if (requested.getStartHourTimestamp() == appointmentDateStartHourTimestamp.getTime() / 1000 && professorId == requested.getProfessorId())
-						timeslot.setStatus(0);
-		
+					if (requested.getStartHourTimestamp() == appointmentDateStartHourTimestamp.getTime() / 1000 && professorId == requested.getProfessorId()) {
+						timeslot.setStatus(requested.getStatus());
+						isRequested = true;
+					}
+				
+				// Checks if the timeslot we created is a reserved one (see getReservedTimeslots method in GuiController)
 				for (Timeslot reserved : reservedTimeslots)
-					if (reserved.getStartHourTimestamp() == appointmentDateStartHourTimestamp.getTime() / 1000)
+					if (reserved.getStartHourTimestamp() == appointmentDateStartHourTimestamp.getTime() / 1000 && !isRequested)
 						timeslot.setStatus(1);
 						
 				timeslots.add(timeslot);
+				
+				isRequested = false;
 			}
 			
 			appointmentStartHourTimestamp = appointmentEndHourTimestamp;
 			appointmentEndHourTimestamp += (1800 * 1000); 
 		}
+	}
+	
+	public void removeTimeslot(Timeslot timeslot) {
+		timeslots.remove(timeslot);
 	}
 	
 	public ArrayList<Timeslot> getTimeslots() {

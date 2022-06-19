@@ -46,8 +46,6 @@ public class Student extends User {
 		
 		gpa /= courseGrades.size();
 	}
-	
-	/*User Getters and Setters methods are here*/
 
 	public Double getGpa() {
 		return gpa;

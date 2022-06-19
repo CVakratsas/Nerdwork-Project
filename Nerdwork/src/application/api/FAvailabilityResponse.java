@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class FAvailabilityResponse {
 	public boolean isSuccess;
+	
 	/*
 	  The following ArrayList of hashmaps has the following design
 	  [index]->{"day": int, "startHour":int, "endHour":int}
@@ -15,9 +16,11 @@ public class FAvailabilityResponse {
 	  [2]->{"day": 5, "startHour":12, "endHour":16}
 	 */
 	public ArrayList<HashMap<String, Integer>> dates;
+	
 	public FAvailabilityResponse(boolean isSuccess) {
 		this.isSuccess = isSuccess;
 	}
+	
 	public FAvailabilityResponse(boolean isSuccess, ArrayList<HashMap<String, Integer>> dates) {
 		this.isSuccess = isSuccess;
 		this.dates = dates;
