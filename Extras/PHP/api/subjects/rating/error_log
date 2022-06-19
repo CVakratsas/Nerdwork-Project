@@ -1,0 +1,18 @@
+[22-May-2022 12:26:51 UTC] PHP Warning:  Creating default object from empty value in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/api/subjects/rating/index.php on line 188
+[22-May-2022 12:26:51 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function getMySubjectRating() in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/api/subjects/rating/index.php:189
+Stack trace:
+#0 {main}
+  thrown in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/api/subjects/rating/index.php on line 189
+[22-May-2022 12:28:21 UTC] PHP Warning:  Creating default object from empty value in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/api/subjects/rating/index.php on line 189
+[22-May-2022 12:28:21 UTC] PHP Notice:  Undefined variable: link in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/functions.php on line 4
+[22-May-2022 12:28:21 UTC] PHP Warning:  mysqli_prepare() expects parameter 1 to be mysqli, null given in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/functions.php on line 4
+[22-May-2022 12:29:26 UTC] PHP Warning:  Creating default object from empty value in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/api/subjects/rating/index.php on line 189
+[22-May-2022 12:29:26 UTC] PHP Notice:  Constant DB_SERVER already defined in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/config.php on line 4
+[22-May-2022 12:29:26 UTC] PHP Notice:  Constant DB_USERNAME already defined in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/config.php on line 5
+[22-May-2022 12:29:26 UTC] PHP Notice:  Constant DB_PASSWORD already defined in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/config.php on line 6
+[22-May-2022 12:29:26 UTC] PHP Notice:  Constant DB_NAME already defined in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/config.php on line 7
+[22-May-2022 12:29:38 UTC] PHP Warning:  Creating default object from empty value in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/api/subjects/rating/index.php on line 189
+[22-May-2022 12:29:38 UTC] PHP Notice:  Constant DB_SERVER already defined in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/config.php on line 4
+[22-May-2022 12:29:38 UTC] PHP Notice:  Constant DB_USERNAME already defined in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/config.php on line 5
+[22-May-2022 12:29:38 UTC] PHP Notice:  Constant DB_PASSWORD already defined in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/config.php on line 6
+[22-May-2022 12:29:38 UTC] PHP Notice:  Constant DB_NAME already defined in /home/u936088023/domains/geoxhonapps.com/public_html/nerdnet/config.php on line 7
