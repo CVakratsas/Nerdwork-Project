@@ -5,19 +5,21 @@ public class FLoginResponse{
 	public String userId;
 	public String displayName;
 	public String username;
-	public int accountType;//Για φοιτητες accountType=0, για καθηγητες accountType = 1
+	public int accountType;
 	public int associatedProfessorId; 
+	public int orientation; 
 	
 	public FLoginResponse(boolean success) {
 		isSuccess = success;
 	}
 	
-	public FLoginResponse(boolean success, String id, String Name, String username, int accountType, int associatedProfessorId) {
+	public FLoginResponse(boolean success, String id, String Name, String username, int accountType, int associatedProfessorId, int orientation) {
 		isSuccess = success;
 		userId = id;
 		displayName = Name;
 		this.username = username;
 		this.accountType = accountType;
 		this.associatedProfessorId = associatedProfessorId;
+		this.orientation = orientation;
 	}
 }

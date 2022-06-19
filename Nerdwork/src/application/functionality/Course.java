@@ -15,17 +15,18 @@ public class Course {
 	
 	private String id;
 	private String name;
-	private String orientation; // There are three types of the orientation attribute
+	private int orientation;
 	private static final int ECTS = 5;
 	private int semester;
 	private float rating;
 	private ArrayList<Professor> associatedProfessors; // Professors teaching each lesson
 	
-	public Course(String id, String name, ArrayList<String> associatedProfessorsId, float rating, int semester, ArrayList<Professor> allProfessors) {
+	public Course(String id, String name, ArrayList<String> associatedProfessorsId, float rating, int semester, ArrayList<Professor> allProfessors, int orientation) {
 		this.id = id;
 		this.name = name;
 		this.rating = rating;
 		this.semester = semester;
+		this.orientation = orientation;
 		this.associatedProfessors = new ArrayList<Professor>();
 		
 		for (Professor p : allProfessors)
@@ -38,8 +39,6 @@ public class Course {
 		return name;
 	}
 	
-	/* Getter and Setter methods of the Course class: */
-	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -51,12 +50,12 @@ public class Course {
 	public String getName() {
 		return name;
 	}
-	
-	public void setOrientation(String orientation) {
+
+	public void setOrientation(int orientation) {
 		this.orientation = orientation;
 	}
-
-	public String getOrientation() {
+	
+	public int getOrientation() {
 		return orientation;
 	}
 	

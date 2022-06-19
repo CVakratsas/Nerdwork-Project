@@ -12,24 +12,28 @@ public abstract class User {
 	
 	/*User attributes are here*/
 
-	protected String userId;
+	protected String userId; // Unique database key of the object.
 	protected String username;
 	protected String email;
 	protected String displayName;
 	private String bio;
+
 	/*
 	 * The above five attributes keep track of personal Student/Professor,
 	 * concerning the profile they have built.
 	 */
+	protected int orientation;
+	public static final String Orientation[] = {"ΕΤΥ", "ΠΣ", "ΕΤΥ-ΠΣ"};
 	
 	protected ArrayList<Course> myCourses; // Courses attended by Students or taught by Professors	
 	protected ArrayList<Timeslot> requestedAppointments;
 	private ArrayList<Timeslot> reservedAppointments; 
 	
-	public User(String userId, String username, String displayName) {
+	public User(String userId, String username, String displayName, int orientation) {
 		this.userId = userId;
 		this.username = username;
 		this.displayName = displayName;
+		this.orientation = orientation;
 		myCourses = new ArrayList<>();
 		requestedAppointments = new ArrayList<Timeslot>();
 		reservedAppointments = new ArrayList<Timeslot>();
@@ -51,7 +55,7 @@ public abstract class User {
 		return username;
 	}
 
-	public void setUserame(String username) {
+	public void setUserName(String username) {
 		this.username = username;
 	}
 	
@@ -103,6 +107,14 @@ public abstract class User {
 	
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public void setOrientation(int orientation) {
+		this.orientation = orientation;
+	}
+
+	public int getOrientation() {
+		return orientation;
 	}
 	
 	public String getBio() {

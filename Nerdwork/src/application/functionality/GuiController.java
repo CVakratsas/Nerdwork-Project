@@ -26,23 +26,30 @@ import application.api.FAvailabilityResponse;
 import application.api.FLoginResponse;
 import application.api.FProfessorsResponse;
 import application.api.FSubjectsResponse;
+import application.api.FUserInformationResponse;
 import application.api.URestController;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.StageStyle;
 
 public class GuiController {
 	
-	private static GuiController c = null;
+	private static GuiController gController = null;
 	
 	public static GuiController getInstance() throws IOException, ParseException {
-		if (c== null)
-            c = new GuiController();
-		return c;
+		if (gController== null)
+            gController = new GuiController();
+		return gController;
 	}
 	
 	// Class attributes
-	private URestController controller; // Not to be user by GUI.
- 	private ArrayList<Course> allCourses; // All courses.
+	private URestController controller; // Not to be used by GUI.
+ 	private ArrayList<Course> allCourses; 
  	private ArrayList<Professor> allProfessors;
  	private User user; // The logged in user's information.
+	
+ 	public static final String dbURL = "https://nerdnet.geoxhonapps.com/cdn/profPhotos/";
+ 	public static final String Timezone = "GMT";
  	
  	// Constructor:
  	private GuiController() throws IOException, ParseException {
@@ -58,9 +65,9 @@ public class GuiController {
  	 * to other users and an email (his academic email). It returns true if the 
  	 * registration was successful and false otherwise (described below).
  	 */
- 	public boolean register(String username, String password, String displayName, String email) throws IOException {
+ 	public boolean register(String username, String password, String displayName, String email, int orientation) throws IOException {
  		if (checkPassword(password).equals("correct"))
- 			return controller.doRegister(username, password, displayName, email); // false if email incorrect or username already exists.
+ 			return controller.doRegister(username, password, displayName, email, orientation); // false if email incorrect or username already exists.
  		
  		return false; // Password incorrect.
  	}
@@ -82,14 +89,17 @@ public class GuiController {
  		
  		if (flr.isSuccess) {
 	 		if (flr.accountType == 0) {
-	 			user = new Student(flr.userId, flr.username, flr.displayName);
+	 			user = new Student(flr.userId, flr.username, flr.displayName, flr.orientation);
 	 			user.setEmail(controller.getUserProfile(user.getUserId()).email);
+	 			FUserInformationResponse userProfile = controller.getUserProfile(flr.userId);
+	 			String userBio = userProfile.bio;
+	 			user.setBio(userBio);
 	 		}
 	 		else {
-	 			user = null;
 	 			user = getProfessorById(flr.associatedProfessorId);
-	 			user.setUserame(flr.username);
+	 			user.setUserName(flr.username);
 	 			user.setUserId(flr.userId);
+	 			user.setOrientation(2);
 	 			user.setBio(controller.getUserProfile(user.getUserId()).bio);
 	 		}
  		}
@@ -106,7 +116,7 @@ public class GuiController {
  		ArrayList<FSubjectsResponse> fsr = controller.getAllSubjects();
 		
 		// The first if statement is used to check if the user has already accessed the page 
- 		// for all courses. In that way we do not spend time gathering data from the database.
+ 		// for all courses. In that way we do not spend time refilling the array.
  		if (allCourses.size() != fsr.size()) {
 			allCourses.clear();
 			
@@ -119,15 +129,34 @@ public class GuiController {
 	 			allProfessors.clear();
 	 			
 		 		for (FProfessorsResponse i : fpr)
-		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating));
+		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating, 2));
 	 		}
 	 		// allProfessors, now contains all the professors contained in the database
 			
 			for (FSubjectsResponse i : fsr) 
-				allCourses.add(new Course(i.id, i.name, i.associatedProfessors, i.rating, i.semester, allProfessors));
+				allCourses.add(new Course(i.id, i.name, i.associatedProfessors, i.rating, i.semester, allProfessors, i.orientation));
  		}
  		
- 		return allCourses;
+ 		// Filters courses by the orientation of the user.
+ 		if (user != null) {
+ 			if (user.getOrientation() == 2) {
+ 	 			return allCourses;
+ 	 		}
+ 	 		else {
+ 	 			ArrayList<Course> coursesByOrientation = new ArrayList<>();
+ 	 			
+ 	 			for (Course c : allCourses) {
+ 	 				if (c.getOrientation() == user.getOrientation() || c.getOrientation() == 2) {
+ 	 					coursesByOrientation.add(c);
+ 	 				}
+ 	 			}
+ 	 			
+ 	 			return coursesByOrientation;
+ 	 		}
+ 		}
+ 		else {
+ 			return allCourses;
+ 		}
  	}
  	
  	/*
@@ -293,7 +322,7 @@ public class GuiController {
  			allProfessors.clear();
  			
 	 		for (FProfessorsResponse i : fpr)
-	 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating));
+	 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating, 2));
 	 		
 	 		// This part returns the courses each professor teaches.
 	 		for (Professor professor : allProfessors)
@@ -367,48 +396,6 @@ public class GuiController {
  	}
  	
  	/*
- 	 * Method used to get a professor's available timeslot, by its id.
- 	 * It returns the Timeslot object found and receives an int type parameter,
- 	 * representing the available timeslot's id
- 	 */
- 	public Timeslot getAvailableTimeslotById(int timeslotId) throws IOException, ParseException {
- 		for (Professor professor : allProfessors)
- 			for (Timeslot availableTimeslot : professor.getAvailableTimeslots())
- 				if (availableTimeslot.getId() == timeslotId)
- 					return availableTimeslot;
- 		
- 		return null;
- 	}
- 	
- 	/*
- 	 * Method used to get a professor's requested appointment, by its id.
- 	 * It returns the Timeslot object found and receives an int type parameter,
- 	 * representing the requested appointment's id
- 	 */
- 	public Timeslot getRequestedTimeslotsById(int timeslotId) throws IOException, ParseException {
-		for (Professor professor : allProfessors)
- 			for (Timeslot requestedTimeslot : professor.getRequestedAppointments())
- 				if (requestedTimeslot.getId() == timeslotId)
- 					return requestedTimeslot;
- 		
- 		return null;
- 	}
- 	
- 	/*
- 	 * Method used to get a professor's reserved appointment, by its id.
- 	 * It returns the Timeslot object found and receives an int type parameter,
- 	 * representing the reserved appointment's id
- 	 */
- 	public Timeslot getReservedTimeslotById(int timeslotId) throws IOException, ParseException {
-		for (Professor professor : allProfessors)
- 			for (Timeslot reservedTimeslot : professor.getReservedAppointments())
- 				if (reservedTimeslot.getId() == timeslotId)
- 					return reservedTimeslot;
- 		
- 		return null;
- 	}
- 	
- 	/*
  	 * Method used by professors, in order to set an available date for appointments with
  	 * students.
  	 * It returns true, only if the operation and the connection were successful and false
@@ -417,14 +404,19 @@ public class GuiController {
  	 * the professor will be available for appointments).
  	 */
  	public boolean setAvailableTimeslot(int day, int startHour, int endHour) throws IOException, ParseException {
- 		boolean success = controller.setAvailabilityDates(day, startHour, endHour);
- 		Professor p = (Professor) user;
+        boolean success = false;
  		
- 		if (success)
- 			getAvailableTimeslots(getProfessorById(p.getProfessorId()));
- 		
- 		return success; 
- 	}
+ 		if(user instanceof Professor) 
+ 			success = controller.setAvailabilityDates(day, startHour, endHour);
+ 				if (success) {
+ 					Professor professor = (Professor) user;
+ 	
+ 					getAvailableTimeslots(getProfessorById(professor.getProfessorId()));
+ 				
+ 				}
+ 					
+        return success;
+    }
  	
  	/*
  	 * Method used for getting the dates that a professor is available for an appointment
@@ -434,18 +426,20 @@ public class GuiController {
  	 * the selected professor.
  	 */
  	public ArrayList<Timeslot> getAvailableTimeslots(Professor selectedProfessor) throws IOException, ParseException {
- 		Calendar nextAvailableDate = Calendar.getInstance(TimeZone.getTimeZone("GMT")); // Next date the professor set as available
+ 		ArrayList<Timeslot> requested = getMyAppointments();
+ 		ArrayList<Timeslot> reserved = getReservedTimeslots(selectedProfessor);
+ 		Calendar nextAvailableDate = Calendar.getInstance(TimeZone.getTimeZone(Timezone)); // Next date the professor set as available
  		Date availableDateStart; // For temporary storage and parsing of data to a Date object
  		Date availableDateEnd;
 		int i = 0;
 		boolean firstAvailableDayOfWeekFound = false; // This is set to true only when the Calendar instance matches with a day contained in far.dates.
- 		
+		
  		FAvailabilityResponse far = controller.getAvailabilityDates(selectedProfessor.getProfessorId());
  		
  		if (far.dates.isEmpty())
  			return null;
 	
-		allProfessors.get(selectedProfessor.getProfessorId() - 1).clearAvailableTimeslots();
+		allProfessors.get(selectedProfessor.getProfessorId() - 1).clearTimeslots();
 		
 		// Here the Integer data, will be converted into a date timestamp, with the
 		// help of the the Calendar and Date Java classes and will be used to create
@@ -460,17 +454,18 @@ public class GuiController {
 					nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("startHour"));
 					nextAvailableDate.set(Calendar.MINUTE, 0);
 					nextAvailableDate.set(Calendar.SECOND, 0);
-
+					nextAvailableDate.set(Calendar.MILLISECOND, 0);
+					
 					availableDateStart = nextAvailableDate.getTime();
 
 					nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("endHour"));
 					nextAvailableDate.set(Calendar.MINUTE, 0);
 					nextAvailableDate.set(Calendar.SECOND, 0);
+					nextAvailableDate.set(Calendar.MILLISECOND, 0);
 
 					availableDateEnd = nextAvailableDate.getTime();
-					
-					selectedProfessor.addAvailableTimeslot((int)(availableDateStart.getTime() / 1000), (int)(availableDateEnd.getTime() / 1000));
-					
+
+					selectedProfessor.addTimeslot(availableDateStart.getTime(), availableDateEnd.getTime(), requested, reserved);
 				}
 			}
 			
@@ -482,45 +477,50 @@ public class GuiController {
  	
 		allProfessors.set((selectedProfessor.getProfessorId() - 1), selectedProfessor);
 		
- 		return selectedProfessor.getAvailableTimeslots();
+ 		return selectedProfessor.getTimeslots();
  	}
  	
  	/*
- 	 * Method used to make an appointment request from a student to a professor.
- 	 * It returns true if the operation was successful and server responded correctly
- 	 * and false if the operation failed or the server did not respond correctly.
- 	 * It receives a Professor object (the selected professor) and four int type 
- 	 * parameters (month, day, hour and minutes of the appointment). 
+ 	 * Method used by students to request an appointment with a selected professor
+ 	 * at a selected timeslot.
+ 	 * It returns true if the operation was successful and the server responded correctly 
+ 	 * or false if the operation failed or the server did not respond correctly.
+ 	 * It receives a Professor object and a Timeslot object (selected Timeslot)
+ 	 * as parameters.
  	 */
- 	public boolean requestAppointment(Professor selectedProfessor, int month, int day, int hour, int minutes) throws IOException, ParseException {
- 		Calendar appointmentDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+ 	public boolean requestAppointment(Professor selectedProfessor, Timeslot timeslot) throws IOException, ParseException {
+	 	ArrayList<Timeslot> requestedAppointments = getMyAppointments();
+	 	boolean success = false;
  		
- 		appointmentDate.set(Calendar.MONTH, month - 1);
- 		appointmentDate.set(Calendar.DAY_OF_MONTH, day);
- 		appointmentDate.set(Calendar.HOUR_OF_DAY, hour);
- 		appointmentDate.set(Calendar.MINUTE, minutes);
- 		appointmentDate.set(Calendar.SECOND, 0);
- 		appointmentDate.set(Calendar.MILLISECOND, 0);
- 		
- 		Date appointmentTimestamp = appointmentDate.getTime();
+ 		if (user instanceof Student && timeslot.getStatus() == 3) {
+	 		success = controller.bookAppointment(selectedProfessor.getProfessorId(), timeslot.getStartHourTimestamp());
+	 		
+	 		// Check if server responded correctly
+	 		if (success) 
+	 			for (Timeslot requested : requestedAppointments)
+	 				if (requested.getProfessorId() == selectedProfessor.getProfessorId()) 
+	 					success = false; // Student already requested.
+	 		
+	 		// Check if already requested appointment with this professor.
+	 		if (success)
+	 			selectedProfessor.addRequestedAppointment(timeslot);
+	 	}
 
- 		getProfessorById(selectedProfessor.getProfessorId()).addRequestedAppointment(new Timeslot((int)(appointmentTimestamp.getTime() / 1000), (int)(appointmentTimestamp.getTime() / 1000) +1800));
- 		
- 		return controller.bookAppointment(selectedProfessor.getProfessorId(), (int)(appointmentTimestamp.getTime() / 1000));
+ 		return success;
  	}
  	
  	/*
- 	 * Method used to get the user's requests for appointments (professor)/requested appointments (student)
- 	 * It returns an ArrayList consisting of Timeslot objects, representing the requested appointments
- 	 * and receives no parameters.
+ 	 * Method used to get a user's requested and cancelled appointments.
+ 	 * It returns an ArrayList of Timeslot objects, represenitng the user 
+ 	 * requested and cancelled appointments.
+ 	 * Note, that it can be used by both students and professors.
  	 */
- 	public ArrayList<Timeslot> getRequestedAppointments() throws IOException, ParseException {
+ 	public ArrayList<Timeslot> getMyAppointments() throws IOException, ParseException {
  		ArrayList<FAppointmentsResponse> far = controller.getMyAppointments();
  		
  		user.clearRequestedAppointments();
  		
  		for (FAppointmentsResponse timeslotParser : far) 
- 			if (timeslotParser.status == 0)
  				user.addRequestedAppointment(new Timeslot(timeslotParser.id, timeslotParser.studentId, timeslotParser.professorId, timeslotParser.dateTimestamp, (timeslotParser.dateTimestamp + 1800), timeslotParser.status, timeslotParser.created_at));
  		
  		return user.getRequestedAppointments();
@@ -534,11 +534,14 @@ public class GuiController {
  	 * as parameter.
  	 */
  	public boolean acceptAppointmentRequest(Timeslot requestedAppointment) throws IOException {
- 		return controller.acceptAppointment(requestedAppointment.getId());
+ 		if (user instanceof Professor)
+ 			return controller.acceptAppointment(requestedAppointment.getId());
+ 		
+ 		return false;
  	}
  	
  	/*
- 	 * Method used by professor users to reject/cancel a request for appointment.
+ 	 * Method used by users to reject/cancel a request for appointment.
  	 * It returns true if the operation was successful and the server responded 
  	 * correctly and false if the operation failed or the server did not 
  	 * respond correctly. It receives a Timeslot object (the request of appointment),
@@ -549,11 +552,8 @@ public class GuiController {
  	}
  	
  	/*
- 	 * Method used to get the appointments that have been reserved by students
- 	 * with a professor.
- 	 * It returns an ArrayList consisting of Timeslot objects representing the
- 	 * reserved appointments and receives a Professor object (the selected professor)
- 	 * as parameter
+ 	 * Method used to get the reserved and requested appointments of a professor
+ 	 * It returns an ArrayList of Timeslot objects and receives a Professor parameter.
  	 */
  	public ArrayList<Timeslot> getReservedTimeslots(Professor selectedProfessor) throws IOException, ParseException{
  		ArrayList<Integer> reservedStartingTimestamps = controller.getBookedTimestamps(selectedProfessor.getProfessorId());
@@ -561,10 +561,11 @@ public class GuiController {
  		selectedProfessor.clearReservedAppointments();
  		
  		for (Integer timestamp : reservedStartingTimestamps) {
- 			selectedProfessor.addReservedAppointment(new Timeslot(timestamp, timestamp + 1800));
+ 			selectedProfessor.addReservedAppointment(new Timeslot(timestamp, timestamp + 1800, 1));
+ 			user.addReservedAppointment(new Timeslot(timestamp, timestamp + 1800, 1));
  		}
  		
- 		return selectedProfessor.getReservedAppointments();
+ 		return user.getReservedAppointments();
  	}
  	
  	/*
@@ -583,7 +584,24 @@ public class GuiController {
  	}
  	
  	/*
- 	 * Methos used to change a user's password.
+ 	 *Method used to set a Bio for the user 
+ 	 * It returns true if the operation was successful and the server responded correctly
+ 	 * and false if the the operation failed or the server did not respond correctly.
+ 	 * It receives a String object as parameter (the new bio).
+ 	 */
+ 	public boolean setBio(String bio) throws IOException {
+ 		if (bio.length() <= 300)
+ 			if (controller.setBio(bio)) {
+ 				user.setBio(bio);
+ 				
+ 				return true;
+ 			}
+ 		
+ 		return false;
+ 	}
+ 	
+ 	/*
+ 	 * Method used to change a user's password.
  	 * It returns a String object representing the success or not
  	 * and receives two String objects as parameters (the new and 
  	 * old passwords).
@@ -594,10 +612,10 @@ public class GuiController {
  		
  		if (message.equals(isCorrect)) {
  			if (controller.setPassword(oldPassword, newPassword))
- 				return "Password updated successfully!";
+ 				return "Ο κωδικός ενημερώθηκε επιτυχώς!";
  			
  			else
- 				return "Old password is invalid";
+ 				return "Ο παλιός κωδικός δεν είναι έγκυρος!";
  		}
  		
  		return message;
@@ -617,7 +635,7 @@ public class GuiController {
 	 * to check if there is at least one upper and one lower letter
 	 * Pattern documentation: https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
 	 */
- 	private String checkPassword(String newPassword) {
+ 	public String checkPassword(String newPassword) {
  		// Password verification begins here:
  		if(newPassword.length()>=8) {
  			Pattern upperLetter = Pattern.compile("[A-Z]");
@@ -631,23 +649,23 @@ public class GuiController {
  			Matcher hasDigit = digit.matcher(newPassword);
  			Matcher hasSpecial = special.matcher(newPassword);
  			    
- 			String passwordErrors = "New password must also contain:";
+ 			String passwordErrors = "Ο νέος κωδικός θα πρέπει να περιέχει:";
  			boolean validPassword = true;
  			    
  			if (!hasUpperLetter.find()) {
- 			  	passwordErrors += "\n- at least one upper case letter";
+ 				passwordErrors += "\n- τουλάχιστον ένα κεφαλαίο χαρακτήρα";
  			  	validPassword = false;
  			}
  			if (!hasLowerLetter.find()) {
- 			   	passwordErrors += "\n- at least one lower case letter";
+ 				passwordErrors += "\n- τουλάχιστον ένα πεζό χαρακτήρα";
  			   	validPassword = false;
  			}
  			if (!hasDigit.find()) {
- 			   	passwordErrors += "\n- at least one digit number";
+ 				passwordErrors += "\n- τουλάχιστον ένα ψηφίο";
  			   	validPassword = false;
  			}
  		    if (!hasSpecial.find()) {
- 		    	passwordErrors += "\n- at least one special character";
+ 		    	passwordErrors += "\n- τουλάχιστον έναν ειδικό χαρακτήρα";
  		    	validPassword = false;
  		    }
  		    if (validPassword)
@@ -656,7 +674,17 @@ public class GuiController {
  		    	return passwordErrors;
  		}
  		else {
- 			return "New password must be at least 8 characters long!";
+ 			return "Ο νέος κωδικός πρέπει να έχει μέγεθος τουλάχιστον 8 χαρακτήρων!";
  		}
+ 	}
+ 	
+ 	public void alertFactory(String header, String content) {
+ 		Alert alert = new Alert(AlertType.WARNING);
+		
+ 		alert.setTitle(null);
+		alert.setHeaderText(header);
+		alert.setContentText(content);
+		alert.initStyle(StageStyle.UTILITY);
+		alert.showAndWait();
  	}
 }

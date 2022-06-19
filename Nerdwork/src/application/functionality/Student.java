@@ -20,8 +20,8 @@ public class Student extends User {
 	 */
 	private ArrayList<Double> courseGrades;
 	
-	public Student(String userId, String username, String displayName) {
-		super(userId, username, displayName);
+	public Student(String userId, String username, String displayName, int orientation) {
+		super(userId, username, displayName, orientation);
 		this.gpa = null;
 		courseGrades = new ArrayList<>();
 	}
@@ -46,8 +46,6 @@ public class Student extends User {
 		
 		gpa /= courseGrades.size();
 	}
-	
-	/*User Getters and Setters methods are here*/
 
 	public Double getGpa() {
 		return gpa;
