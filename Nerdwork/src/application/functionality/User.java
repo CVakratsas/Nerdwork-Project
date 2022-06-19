@@ -18,7 +18,7 @@ public abstract class User {
 	protected String displayName;
 	private String bio;
 	protected int orientation;
-	public static final String Orientation[] = {"ÅÔÕ", "ÐÓ", "ÅÔÕ-ÐÓ"};
+	public static final String Orientation[] = {"Î•Î¤Î¥", "Î Î£", "Î•Î¤Î¥-Î Î£"};
 
 	/*
 	 * The above five attributes keep track of personal Student/Professor,

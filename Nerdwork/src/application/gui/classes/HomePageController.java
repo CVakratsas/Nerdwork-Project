@@ -110,7 +110,7 @@ public class HomePageController {
 							
 							// Selected date exists in User's reserved dates
 							if (item.compareTo(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()) == 0) {
-								this.setStyle("-fx-background-color: orange");
+								this.setStyle("-fx-background-color: #B77C82");
 
 								
 								// DateCell event handler to show all User dates of the selected Date
