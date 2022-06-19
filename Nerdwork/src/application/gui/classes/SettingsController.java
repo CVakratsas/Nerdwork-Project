@@ -213,16 +213,14 @@ public class SettingsController {
 		int startBoxIndex = startChoiceBox.getSelectionModel().getSelectedIndex();
 		int endBoxIndex = endChoiceBox.getSelectionModel().getSelectedIndex();
 		
-		System.out.println(dayBoxIndex + " " + startBoxIndex + " " + endBoxIndex);
-		
 		
 		//No choices were made
 		if(dayBoxIndex == -1 && startBoxIndex == -1 && endBoxIndex == -1) {
 			timeslotChangedResponse.setText("");
 			return ;
 		}
-		
 		timeslotChangedResponse.setTextFill(Color.RED);
+		
 		
 		
 		//No day was chosen

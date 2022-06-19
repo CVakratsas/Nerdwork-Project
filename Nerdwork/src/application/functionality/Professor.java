@@ -21,20 +21,21 @@ public class Professor extends User {
 	private ArrayList<Timeslot> timeslots; // A Professor's available Timeslots
 	
 	// Constructor for getting professor information as student.
-	public Professor(String displayName, int professorId, String email, String profilePhoto, String phone, String office, float rating, int orientation) {
-		super(Integer.toString(professorId), null, displayName, orientation);
+	public Professor(String displayName, int professorId, String email, String profilePhoto, String phone, String office, float rating, int orientation, String bio) {
+		super(Integer.toString(professorId), null, displayName, orientation, bio);
 		this.professorId = professorId;
 		this.email = email;
 		this.profilePhoto = profilePhoto;
 		this.phone = phone;
 		this.office = office;
 		this.rating = rating;
+		
 		timeslots = new ArrayList<Timeslot>();
 	}
 	
 	// Constructor for professor login
 	public Professor(String userId, String username, String displayName, int professorId, int orientation) {
-		super(userId, username, displayName, orientation);
+		super(userId, username, displayName, orientation, null);
 		this.professorId = professorId;
 		timeslots = new ArrayList<Timeslot>();
 	}

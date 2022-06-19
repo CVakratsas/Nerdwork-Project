@@ -29,11 +29,12 @@ public abstract class User {
 	protected ArrayList<Timeslot> requestedAppointments;
 	private ArrayList<Timeslot> reservedAppointments; 
 	
-	public User(String userId, String username, String displayName, int orientation) {
+	public User(String userId, String username, String displayName, int orientation, String bio) {
 		this.userId = userId;
 		this.username = username;
 		this.displayName = displayName;
 		this.orientation = orientation;
+		this.bio = bio;
 		myCourses = new ArrayList<>();
 		requestedAppointments = new ArrayList<Timeslot>();
 		reservedAppointments = new ArrayList<Timeslot>();

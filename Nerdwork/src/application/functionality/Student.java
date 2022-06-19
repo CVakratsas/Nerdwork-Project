@@ -21,7 +21,7 @@ public class Student extends User {
 	private ArrayList<Double> courseGrades;
 	
 	public Student(String userId, String username, String displayName, int orientation) {
-		super(userId, username, displayName, orientation);
+		super(userId, username, displayName, orientation, null);
 		this.gpa = null;
 		courseGrades = new ArrayList<>();
 	}

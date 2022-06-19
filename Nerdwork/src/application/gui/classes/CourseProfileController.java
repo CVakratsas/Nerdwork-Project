@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import application.functionality.Course;
 import application.functionality.GuiController;
 import application.functionality.Professor;
+import application.functionality.User;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 public class CourseProfileController {
@@ -50,9 +52,11 @@ public class CourseProfileController {
 		name.setText(course.getName());
 		rating.setRating(course.getRating());
 		semester.setText(Integer.toString(course.getSemester()) + "ο Εξάμηνο");;
-		orientation.setText(Integer.toString(course.getOrientation()));
+		orientation.setText(User.Orientation[course.getOrientation()]);
 		ects.setText(Integer.toString(course.getECTS()) + " ECTS");
-		description.getChildren().add(new Label(""));
+		Text bio = new Text(""); //Sample Bio
+		bio.setFont(new Font(32));
+		description.getChildren().add(bio);
 		
 		
 		//Disables the Rating component if the User has already rated the Course
@@ -67,7 +71,7 @@ public class CourseProfileController {
 			Image img = new Image(GuiController.dbURL + p.getProfilePhoto());
 			ImageView picture = new ImageView(img);
 			
-			picture.setFitWidth(32);
+			picture.setFitWidth(28);
 			picture.setPreserveRatio(true);
 			
 			Label name = new Label(p.getDisplayName());

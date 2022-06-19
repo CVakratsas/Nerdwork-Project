@@ -129,7 +129,7 @@ public class GuiController {
 	 			allProfessors.clear();
 	 			
 		 		for (FProfessorsResponse i : fpr)
-		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating, 2));
+		 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating, 2, i.bio));
 	 		}
 	 		// allProfessors, now contains all the professors contained in the database
 			
@@ -318,16 +318,14 @@ public class GuiController {
  		
  		getAllCourses(); // Fill allCourses, if it is empty. Used for finding the courses each professor teaches.
  		
- 		if (allProfessors.size() != fpr.size()) {
- 			allProfessors.clear();
- 			
-	 		for (FProfessorsResponse i : fpr)
-	 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating, 2));
-	 		
-	 		// This part returns the courses each professor teaches.
-	 		for (Professor professor : allProfessors)
-	 			professor.getCoursesTaught(allCourses);
- 		}
+		allProfessors.clear();
+		
+ 		for (FProfessorsResponse i : fpr)
+ 			allProfessors.add(new Professor(i.name, i.id, i.email, i.profilePhoto, i.phone, i.office, i.rating, 2, i.bio));
+ 		
+ 		// This part returns the courses each professor teaches.
+ 		for (Professor professor : allProfessors)
+ 			professor.getCoursesTaught(allCourses);
  		
  		return allProfessors;
  	}
@@ -500,9 +498,9 @@ public class GuiController {
 	 	ArrayList<Timeslot> requestedAppointments = getMyAppointments();
 	 	boolean success = false;
  		
- 		if (user instanceof Student && timeslot.getStatus() == 3) {
+ 		if (user instanceof Student) {
 	 		success = controller.bookAppointment(selectedProfessor.getProfessorId(), timeslot.getStartHourTimestamp());
-	 		
+	 		System.out.println(success);
 	 		// Check if server responded correctly
 	 		if (success) 
 	 			for (Timeslot requested : requestedAppointments)
@@ -529,6 +527,7 @@ public class GuiController {
  		user.clearRequestedAppointments();
  		
  		for (FAppointmentsResponse timeslotParser : far) 
+ 			if(timeslotParser.status != 2)
  				user.addRequestedAppointment(new Timeslot(timeslotParser.id, timeslotParser.studentId, timeslotParser.professorId, timeslotParser.dateTimestamp, (timeslotParser.dateTimestamp + 1800), timeslotParser.status, timeslotParser.created_at));
  		
  		return user.getRequestedAppointments();

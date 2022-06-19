@@ -57,7 +57,9 @@ public class ProfessorProfileController {
 		phoneNumber.setText(professor.getPhone());
 		email.setText(professor.getEmail());
 		office.setText("Γραφείο " + professor.getOffice());
-		description.getChildren().add(new Text(professor.getBio()));
+		Text bio = new Text(professor.getBio());
+		bio.setFont(new Font(28));
+		description.getChildren().add(bio);
 		
 		
 		//Disables the Rating component if the User has already rated the Professor

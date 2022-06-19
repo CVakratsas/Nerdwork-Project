@@ -16,12 +16,12 @@
             <Font name="Segoe UI Bold" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="586.0" layoutY="56.0" text="Το πρόγραμμά μου" underline="true">
+      <Label layoutX="528.0" layoutY="60.0" text="Το πρόγραμμά μου" underline="true">
          <font>
             <Font name="Segoe UI" size="18.0" />
          </font>
       </Label>
-      <VBox fx:id="calendarPane" layoutX="586.0" layoutY="90.0" prefHeight="200.0" prefWidth="476.0" />
+      <VBox fx:id="calendarPane" layoutX="528.0" layoutY="94.0" prefHeight="200.0" prefWidth="476.0" />
       <ImageView fx:id="profilePicture" fitHeight="200.0" fitWidth="200.0" layoutX="123.0" layoutY="90.0">
          <image>
             <Image url="@/application/gui/icons/profile.png" />
@@ -43,12 +43,12 @@
          </font>
       </Label>
       <Separator layoutX="135.0" layoutY="390.0" prefHeight="13.0" prefWidth="172.0" />
-      <Label layoutX="461.0" layoutY="327.0" text="Περιγραφή" underline="true">
+      <Label layoutX="528.0" layoutY="316.0" text="Περιγραφή" underline="true">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <TextFlow fx:id="bio" layoutX="461.0" layoutY="364.0" prefHeight="183.0" prefWidth="726.0" />
-      <VBox fx:id="availableAppointments" layoutX="1062.0" layoutY="90.0" prefHeight="200.0" prefWidth="218.0" />
+      <TextFlow fx:id="bio" layoutX="528.0" layoutY="353.0" prefHeight="180.0" prefWidth="550.0" />
+      <VBox fx:id="availableAppointments" layoutX="1004.0" layoutY="90.0" prefHeight="200.0" prefWidth="278.0" />
    </children>
 </AnchorPane>

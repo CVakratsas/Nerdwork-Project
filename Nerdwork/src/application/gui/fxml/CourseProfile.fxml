@@ -17,7 +17,7 @@
    <items>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="335.0">
          <children>
-            <VBox layoutX="65.0" layoutY="309.0" prefHeight="111.0" prefWidth="200.0">
+            <VBox layoutX="65.0" layoutY="309.0">
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="200.0">
                      <VBox.margin>
@@ -26,7 +26,7 @@
                      <children>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/semester.jpg" />
+                              <Image url="@/application/gui/icons/calendar.png" />
                            </image>
                         </ImageView>
                         <Label fx:id="semester" text="courseSemester">
@@ -84,7 +84,7 @@
             <Rating fx:id="rating" layoutX="77.0" layoutY="260.0" onMouseClicked="#rateCourse" partialRating="true" rating="5.0" />
             <ImageView fx:id="profilePicture" fitHeight="200.0" fitWidth="200.0" layoutX="68.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icons" />
+                  <Image url="@/application/gui/icons/course.png" />
                </image>
             </ImageView>
          </children>

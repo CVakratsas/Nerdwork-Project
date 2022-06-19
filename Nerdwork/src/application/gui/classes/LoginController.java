@@ -13,8 +13,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -23,7 +21,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class LoginController {
 	
@@ -68,10 +65,6 @@ public class LoginController {
 	
 	private Scene createScene(Pane mainPane) {
 	      Scene scene = new Scene(mainPane);
-
-//	      scene.getStylesheets().setAll(
-//	          getClass().getResource("fullpackstyling.css").toExternalForm()
-//	      );
 
 	      return scene;
 	}

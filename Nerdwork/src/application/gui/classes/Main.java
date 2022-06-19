@@ -7,6 +7,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+
+/*
+ *Use cases 4 and 7 were not developed.
+ *The required libraries are not located in the repository due to file size exceding the limit of GitHub.
+ */
+
 public class Main extends Application {
 	@Override
 	public void start(Stage stage) {

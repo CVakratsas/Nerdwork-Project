@@ -12,7 +12,9 @@ import org.json.simple.parser.ParseException;
 import application.functionality.GuiController;
 import application.functionality.Professor;
 import application.functionality.Timeslot;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -72,7 +74,7 @@ public class AppointmentsController {
 					currentProfessorPicture.setImage(new Image(GuiController.dbURL + p.getProfilePhoto()));
 					currentProfessorName.setText(currentProfessor.getDisplayName());
 					currentProfessorName.setStyle("-fx-cursor: hand");
-					currentProfessorOffice.setText(currentProfessor.getOffice());
+					currentProfessorOffice.setText("Γραφείο: " + currentProfessor.getOffice());
 					
 					
 					//Loads selected Professor profile
@@ -94,7 +96,6 @@ public class AppointmentsController {
 
 	private void loadAppointments() throws IOException, ParseException {
 		appointmentList.getChildren().clear();
-		appointmentList.setSpacing(15);
 
 		ArrayList<Timeslot> timeslots = controller.getAvailableTimeslots(currentProfessor);
 
@@ -146,17 +147,20 @@ public class AppointmentsController {
 					//Creates a new Container to render all available appointments for all available dates
 					VBox appointment = new VBox();
 					appointment.setSpacing(15);
+					appointment.setAlignment(Pos.TOP_CENTER);
 					
 					
 					//Loads Date and Day
 					Label date = new Label(formatter.format(calendar.getTime()));
 					Label weekDay = new Label(Timeslot.Days[calendar.get(Calendar.DAY_OF_WEEK) - 1]);
+					date.setFont(new Font(14));
+					weekDay.setFont(new Font(16));
 					appointment.getChildren().add(date);
 					appointment.getChildren().add(weekDay);
 					
 					
 					for(Timeslot t : dayTimeslots) {
-						
+							
 						//Calculates the appointment's starting time and formats it properly
 						Date startDate = new Date(t.getStartHourTimestampMili());
 						calendar.setTime(startDate);
@@ -179,6 +183,10 @@ public class AppointmentsController {
 							case 3:
 								appointmentButton.setStyle("-fx-background-color: limegreen");
 								break;
+							case 0:
+								appointmentButton.setStyle("-fx-background-color: #FFE5B4");
+								appointmentButton.setDisable(true);
+								break;
 							default:
 								appointmentButton.setStyle("-fx-background-color: darkred");
 								appointmentButton.setDisable(true);
@@ -187,7 +195,7 @@ public class AppointmentsController {
 						
 						
 						//Button event handler to request an appointment
-						appointmentButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
+						appointmentButton.addEventHandler(ActionEvent.ACTION, (event) -> {
 							Timeslot selectedTimeslot = t;
 							try {
 								boolean response = controller.requestAppointment(currentProfessor, selectedTimeslot);
@@ -200,14 +208,18 @@ public class AppointmentsController {
 													+ " καταχωρήθηκε με επιτυχία.");
 								else
 									GuiController.getInstance().
-									alertFactory("Αποτυχημένη Καταχώρηση Ραντεβού",
+									alertFactory("Ανεπιτυχής Καταχώρηση Ραντεβού",
 													"Η καταχώρηση του ραντεβού σας με τον καθηγητή "
 													+ currentProfessor.getDisplayName()
 													+ " απέτυχε.");
+								
+								loadAppointments();
 							} catch (IOException | ParseException e) {
 								e.printStackTrace();
 							}
 						});
+						
+						
 						appointment.getChildren().add(appointmentButton);
 					}
 					
@@ -215,6 +227,9 @@ public class AppointmentsController {
 					//Lists all appointments for the day
 					appointmentList.getChildren().add(appointment);
 				}
-		}	
+
+			double spacing = appointmentList.getPrefWidth() / (Math.pow(appointmentList.getChildren().size(), 2));
+			appointmentList.setSpacing(spacing);
+		}
 	}
 }

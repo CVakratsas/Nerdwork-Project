@@ -61,3 +61,7 @@
 #upperMenuHBox {
 	-fx-background-color: #3889c4;
 }
+
+* :disabled {
+    -fx-opacity: 1;
+}

@@ -15,7 +15,9 @@ import application.functionality.Professor;
 import application.functionality.Student;
 import application.functionality.Timeslot;
 import application.functionality.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
@@ -90,8 +92,7 @@ public class HomePageController {
 	
 	
 	public void loadCalendar() throws IOException, ParseException {
-		ArrayList<Timeslot> userTimeslots;// = controller.getReservedTimeslots((Professor) user);
-		userTimeslots = controller.getRequestedAppointments();
+		ArrayList<Timeslot> userTimeslots = controller.getMyAppointments();
 		
 		ArrayList<Date> dates = new ArrayList<>();
 		
@@ -102,7 +103,7 @@ public class HomePageController {
 
 		
 		//Formats Date and converts it to system Timezone
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM HH:mm");
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
 		formatter.setTimeZone(TimeZone.getTimeZone(GuiController.Timezone));
 		
 		
@@ -121,49 +122,67 @@ public class HomePageController {
 						ArrayList<Timeslot> sTimeslots = new ArrayList<>();
 						
 						for (Date date : dates) {
+							
+							if(userTimeslots.get(dates.indexOf(date)).getStatus() == 2) {
+								continue;
+							}
+								
+							
 							if (item.compareTo(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()) == 0) {
 								sDates.add(date);
 								sTimeslots.add(userTimeslots.get(dates.indexOf(date)));
 							}
 						}
 						
+						
+						//DateCell's color
 						if(!sDates.isEmpty())
-							this.setStyle("-fx-background-color: orange");
-						
-						
+							this.setStyle("-fx-background-color: #FFE5B4");
 						
 						this.setEventHandler(MouseEvent.MOUSE_CLICKED, (e1) -> {
 							availableAppointments.getChildren().clear();
 							
 							for(Date date : sDates) {
+								
 								Label appointmentDate = new Label(formatter.format(date));
 								
-								Label username = new Label();
+								Label username = new Label("Φοιτητής");
 								if(user instanceof Student)
 									try {
 										username.setText(controller.getProfessorById(sTimeslots.get(sDates.indexOf(date)).getProfessorId()).getDisplayName());
 									} catch (IOException | ParseException e) {
 										e.printStackTrace();
 									}
-//								else
-//									try {
-//										username.setText(controller.getProfessorById(sTimeslots.get(sDates.indexOf(date)).getStudentId()).getDisplayName());
-//									} catch (IOException | ParseException e) {
-//										e.printStackTrace();
-//									}
-										
+								
 								Button cancelAppointment = new Button("X");
 								
 								
 								// Button event handler to cancel an appointment
-								cancelAppointment.addEventHandler(MouseEvent.MOUSE_CLICKED, (e2) -> {
-									Timeslot t = userTimeslots.get(dates.indexOf(date));
+								cancelAppointment.addEventHandler(ActionEvent.ACTION, (e2) -> {
+									Timeslot t = sTimeslots.get(sDates.indexOf(date));
 									
 									try {
 										boolean response = controller.rejectAppointmentRequested(t);
-										System.out.println("removed: " + response);
+										String recipientName = "Φοιτητής";
+										if(user instanceof Student)
+											recipientName = controller.getProfessorById(sTimeslots.get(sDates.indexOf(date)).getProfessorId()).getDisplayName();
+											
 										
-									} catch (IOException e) {
+										if(response)
+											GuiController.getInstance().
+											alertFactory("Επιτυχής Ακύρωση Ραντεβού",
+															"Το ραντεβού σας με τον χρήστη "
+															+ recipientName
+															+ " ακυρώθηκε.");
+										else
+											GuiController.getInstance().
+											alertFactory("Ανεπιτυχής Ακύρωση Ραντεβού",
+															"Το ραντεβού σας με τον χρήστη "
+															+ recipientName
+															+ " δεν μπορούσε να ακυρωθεί.");
+										new MenuBarsController().switchToHomePage(e2);
+										
+									} catch (IOException | ParseException e) {
 										e.printStackTrace();
 									}
 								});
@@ -171,27 +190,44 @@ public class HomePageController {
 								
 								// Button event handler to accept an appointment
 								Button acceptAppointment = new Button("✓");
-								acceptAppointment.addEventHandler(MouseEvent.MOUSE_CLICKED, (e2) -> {
-									Timeslot t = userTimeslots.get(dates.indexOf(date));
+								acceptAppointment.addEventHandler(ActionEvent.ACTION, (e2) -> {
+									Timeslot t = sTimeslots.get(sDates.indexOf(date));
 									
 									try {
 										controller.acceptAppointmentRequest(t);
+										new MenuBarsController().switchToHomePage(e2);
 									} catch (IOException e) {
 										e.printStackTrace();
 									}
 								});
 								
-								if(user instanceof Student || userTimeslots.get(dates.indexOf(date)).getStatus() == 1)
+								if(user instanceof Student || sTimeslots.get(sDates.indexOf(date)).getStatus() == 1)
 									acceptAppointment.setVisible(false);
 								
 									
 								HBox appointment = new HBox();
+								// Current Timeslot status
+								switch(sTimeslots.get(sDates.indexOf(date)).getStatus()) { 
+									case 0:
+										appointment.setStyle("-fx-background-color: #FFE5B4");
+										break;
+									case 1:
+										appointment.setStyle("-fx-background-color: #DCD0FF");
+										break;
+									case 2:
+										appointment.setStyle("-fx-background-color: #F55858");
+										break;
+								}
 								
 								appointment.getChildren().add(appointmentDate);
 								appointment.getChildren().add(username);
 								appointment.getChildren().add(cancelAppointment);
 								appointment.getChildren().add(acceptAppointment);
+								appointment.setAlignment(Pos.CENTER);
+								appointment.setSpacing(5);
+								
 								availableAppointments.getChildren().add(appointment);
+								availableAppointments.setAlignment(Pos.TOP_LEFT);
 							}
 						});
 					};
