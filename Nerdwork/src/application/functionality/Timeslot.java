@@ -14,8 +14,8 @@ import java.util.TimeZone;
 
 public class Timeslot {
 	
-	public static final String Days[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}; 
-	public static final String Months[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "December"};
+	public static final String Days[] = {"Κυριακή", "Δευτέρα", "Τρίτη", "Τετάρτη", "Πέμπτη", "Παρασκευή", "Σάββατο"}; 
+	public static final String Months[] = {"Ιανουάριος", "Φεβρουάριος", "Μάρτιος", "Απρίλιος", "Μάιος", "Ιούνιος", "Ιούλιος", "Αύγουστος", "Σεπτέμβριος", "Οκτώβριος", "Δεκέμβριος"};
 	private int id; // Appointment's unique identifier.
 	private String studentId; // Unique user database key.
 	private int professorId; // Unique porfessor identifier
