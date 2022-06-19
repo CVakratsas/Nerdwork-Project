@@ -11,7 +11,10 @@ import java.util.TimeZone;
 import org.json.simple.parser.ParseException;
 
 import application.functionality.GuiController;
+import application.functionality.Professor;
+import application.functionality.Student;
 import application.functionality.Timeslot;
+import application.functionality.User;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -19,6 +22,8 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.skin.DatePickerSkin;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -30,7 +35,10 @@ import javafx.util.Callback;
 public class HomePageController {
 	
 	private GuiController controller;
+	private User user;
 	
+	@FXML
+	private ImageView profilePicture;
 	@FXML
 	private Label displayName, email, orientation;
 	@FXML
@@ -45,6 +53,7 @@ public class HomePageController {
 		
 		// Initialize GuiController
 		controller = GuiController.getInstance();
+		user = controller.getUser();
 //		controller.setAvailableTimeslot(0, 16, 19);
 //		controller.setAvailableTimeslot(2, 6, 8);
 //		controller.setAvailableTimeslot(4, 21, 23);
@@ -56,14 +65,18 @@ public class HomePageController {
         
         
         // Initialize user's information
-        Text bioText = new Text(controller.getUser().getBio());
+		if(user instanceof Professor)
+			profilePicture.setImage(new Image(GuiController.dbURL + ((Professor) user).getProfilePhoto()));
+        
+		displayName.setText(user.getDisplayName());
+        email.setText(user.getEmail());	
+		
+        Text bioText = new Text(user.getBio());
         bioText.setFont(Font.font("Segoe UI", 16.0));
         bio.getChildren().add(bioText);
         
-        displayName.setText(controller.getUser().getDisplayName());
-        email.setText(controller.getUser().getEmail());
 
-        int orientationInt = controller.getUser().getOrientation();
+        int orientationInt = user.getOrientation();
         if(orientationInt == 0) {
         	orientation.setText("Επιστήμη και\nΤεχνολογία\nΥπολογιστών");
         }
@@ -77,9 +90,10 @@ public class HomePageController {
 	
 	
 	public void loadCalendar() throws IOException, ParseException {
-		ArrayList<Timeslot> userTimeslots = controller.getRequestedAppointments();
+		ArrayList<Timeslot> userTimeslots;// = controller.getReservedTimeslots((Professor) user);
+		userTimeslots = controller.getRequestedAppointments();
+		
 		ArrayList<Date> dates = new ArrayList<>();
-
 		
 		for (Timeslot t : userTimeslots) {// Converts User's Timeslots to LocalDates
 			Date date = new Date(t.getStartHourTimestampMili());
@@ -88,7 +102,7 @@ public class HomePageController {
 
 		
 		//Formats Date and converts it to system Timezone
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM HH:mm");
 		formatter.setTimeZone(TimeZone.getTimeZone(GuiController.Timezone));
 		
 		
@@ -103,48 +117,83 @@ public class HomePageController {
 					public void updateItem(LocalDate item, boolean empty) {
 						super.updateItem(item, empty);
 						
+						ArrayList<Date> sDates = new ArrayList<>();
+						ArrayList<Timeslot> sTimeslots = new ArrayList<>();
 						
-						// Clears available appointments tab whenever a Datecell is chosen
-						availableAppointments.getChildren().clear();
 						for (Date date : dates) {
-							
-							// Selected date exists in User's reserved dates
 							if (item.compareTo(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()) == 0) {
-								this.setStyle("-fx-background-color: orange");
-
-								
-								// DateCell event handler to show all User dates of the selected Date
-								this.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
-									
-									// Initially clears available appointments tab to avoid multiple entries
-									if(dates.indexOf(date) == 0)
-										availableAppointments.getChildren().clear();
-									
-									
-									Label appointmentDate = new Label(formatter.format(date));
-									Button cancelAppointment = new Button("X");
-									
-									
-									// Button event handler to cancel an appointment
-									cancelAppointment.addEventHandler(MouseEvent.MOUSE_CLICKED, (event2) -> {
-										Timeslot t = userTimeslots.get(dates.indexOf(date));
-										
-											try {
-												controller.rejectAppointmentRequested(t);
-											} catch (IOException e) {
-												e.printStackTrace();
-											}
-									});
-									
-									
-									HBox appointment = new HBox();
-									
-									appointment.getChildren().add(appointmentDate);
-									appointment.getChildren().add(cancelAppointment);
-									availableAppointments.getChildren().add(appointment);
-								});
+								sDates.add(date);
+								sTimeslots.add(userTimeslots.get(dates.indexOf(date)));
 							}
 						}
+						
+						if(!sDates.isEmpty())
+							this.setStyle("-fx-background-color: orange");
+						
+						
+						
+						this.setEventHandler(MouseEvent.MOUSE_CLICKED, (e1) -> {
+							availableAppointments.getChildren().clear();
+							
+							for(Date date : sDates) {
+								Label appointmentDate = new Label(formatter.format(date));
+								
+								Label username = new Label();
+								if(user instanceof Student)
+									try {
+										username.setText(controller.getProfessorById(sTimeslots.get(sDates.indexOf(date)).getProfessorId()).getDisplayName());
+									} catch (IOException | ParseException e) {
+										e.printStackTrace();
+									}
+//								else
+//									try {
+//										username.setText(controller.getProfessorById(sTimeslots.get(sDates.indexOf(date)).getStudentId()).getDisplayName());
+//									} catch (IOException | ParseException e) {
+//										e.printStackTrace();
+//									}
+										
+								Button cancelAppointment = new Button("X");
+								
+								
+								// Button event handler to cancel an appointment
+								cancelAppointment.addEventHandler(MouseEvent.MOUSE_CLICKED, (e2) -> {
+									Timeslot t = userTimeslots.get(dates.indexOf(date));
+									
+									try {
+										boolean response = controller.rejectAppointmentRequested(t);
+										System.out.println("removed: " + response);
+										
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+								});
+								
+								
+								// Button event handler to accept an appointment
+								Button acceptAppointment = new Button("✓");
+								acceptAppointment.addEventHandler(MouseEvent.MOUSE_CLICKED, (e2) -> {
+									Timeslot t = userTimeslots.get(dates.indexOf(date));
+									
+									try {
+										controller.acceptAppointmentRequest(t);
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+								});
+								
+								if(user instanceof Student || userTimeslots.get(dates.indexOf(date)).getStatus() == 1)
+									acceptAppointment.setVisible(false);
+								
+									
+								HBox appointment = new HBox();
+								
+								appointment.getChildren().add(appointmentDate);
+								appointment.getChildren().add(username);
+								appointment.getChildren().add(cancelAppointment);
+								appointment.getChildren().add(acceptAppointment);
+								availableAppointments.getChildren().add(appointment);
+							}
+						});
 					};
 				};
 			};

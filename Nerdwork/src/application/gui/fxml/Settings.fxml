@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
@@ -12,15 +13,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gui.classes.SettingsController">
+<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.gui.classes.SettingsController">
    <items>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="335.0">
          <children>
             <ImageView fx:id="profilePicture" fitHeight="200.0" fitWidth="200.0" layoutX="68.0" layoutY="51.0" pickOnBounds="true">
                <image>
-                  <Image url="@../../../../../../Desktop/gigachad-chad.gif" />
-               </image>
-            </ImageView>
+                  <Image url="@/application/gui/icons/profile.png" />
+               </image></ImageView>
             <Label fx:id="name" layoutX="82.0" layoutY="290.0" text="name">
                <font>
                   <Font name="Comic Sans MS" size="18.0" />
@@ -40,20 +40,43 @@
       </AnchorPane>
       <ScrollPane prefHeight="200.0" prefWidth="200.0">
          <content>
-            <AnchorPane prefHeight="579.0" prefWidth="937.0">
+            <AnchorPane prefHeight="578.0" prefWidth="937.0">
                <children>
-                  <Label layoutX="136.0" layoutY="50.0" text="Αλλαγή Ονόματος" textFill="#000000a6" />
-                  <TextField fx:id="nameTF" layoutX="136.0" layoutY="67.0" prefHeight="25.0" prefWidth="165.0" promptText="Όνομα Χρήστη" />
-                  <Label fx:id="nameChangedResponse" layoutX="310.0" layoutY="71.0" />
-                  <Label layoutX="138.0" layoutY="123.0" text="Αλλαγή Κωδικού Πρόσβασης" textFill="#000000a6" />
-                  <PasswordField fx:id="oldPassPF" layoutX="138.0" layoutY="140.0" prefHeight="25.0" prefWidth="165.0" promptText="Παλιός κωδικός" />
-                  <PasswordField fx:id="newPassPF" layoutX="138.0" layoutY="172.0" prefHeight="25.0" prefWidth="165.0" promptText="Νέος κωδικός" />
-                  <PasswordField fx:id="newPassRepeatPF" layoutX="138.0" layoutY="205.0" prefHeight="25.0" prefWidth="165.0" promptText="Επιβεβαίωση νέου κωδικού" />
-                  <Label fx:id="passwordChangedResponse" layoutX="312.0" layoutY="144.0" />
-                  <Label layoutX="138.0" layoutY="262.0" text="Επεξεργασία Bio" textFill="#000000a6" />
-                  <TextArea fx:id="bioTA" layoutX="138.0" layoutY="279.0" prefHeight="200.0" prefWidth="666.0" promptText="Περιγραφή" />
+                  <AnchorPane fx:id="namePane" layoutX="135.0" layoutY="53.0">
+                     <children>
+                        <Label text="Αλλαγή Ονόματος" textFill="#000000a6" />
+                        <TextField fx:id="nameTF" layoutY="15.0" prefHeight="25.0" prefWidth="165.0" promptText="Όνομα Χρήστη" />
+                        <Label fx:id="nameChangedResponse" layoutX="174.0" layoutY="19.0" wrapText="true" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="passwordPane" layoutX="135.0" layoutY="124.0">
+                     <children>
+                        <Label text="Αλλαγή Κωδικού Πρόσβασης" textFill="#000000a6" />
+                        <PasswordField fx:id="oldPassPF" layoutY="17.0" prefHeight="25.0" prefWidth="165.0" promptText="Παλιός κωδικός" />
+                        <PasswordField fx:id="newPassPF" layoutY="49.0" prefHeight="25.0" prefWidth="165.0" promptText="Νέος κωδικός" />
+                        <PasswordField fx:id="newPassRepeatPF" layoutY="81.0" prefHeight="25.0" prefWidth="165.0" promptText="Επιβεβαίωση νέου κωδικού" />
+                        <Label fx:id="passwordChangedResponse" layoutX="174.0" layoutY="21.0" wrapText="true" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="timeslotPane" layoutX="607.0" layoutY="53.0" visible="false">
+                     <children>
+                        <Label layoutX="2.0" text="Επιλογή ημέρας" textFill="#000000a6" />
+                        <ChoiceBox fx:id="dayChoiceBox" layoutY="17.0" prefWidth="100.0" />
+                        <Label layoutX="1.0" layoutY="45.0" text="Ώρα αρχής" textFill="#000000a6" />
+                        <ChoiceBox fx:id="startChoiceBox" layoutY="62.0" prefWidth="60.0" />
+                        <Label layoutX="2.0" layoutY="92.0" text="Ώρα λήξης" textFill="#000000a6" />
+                        <ChoiceBox fx:id="endChoiceBox" layoutY="109.0" prefWidth="60.0" />
+                        <Label fx:id="timeslotChangedResponse" layoutX="115.0" layoutY="21.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="bioPane" layoutX="138.0" layoutY="262.0">
+                     <children>
+                        <Label text="Επεξεργασία Bio" textFill="#000000a6" />
+                        <TextArea fx:id="bioTA" layoutY="17.0" prefHeight="200.0" prefWidth="666.0" promptText="Περιγραφή" />
+                        <Label fx:id="bioChangedResponse" layoutX="100.0" />
+                     </children>
+                  </AnchorPane>
                   <Button fx:id="saveButton" layoutX="428.0" layoutY="529.0" mnemonicParsing="false" onAction="#updateChanges" text="Αποθήκευση" />
-                  <Label fx:id="bioChangedResponse" layoutX="235.0" layoutY="262.0" />
                </children>
             </AnchorPane>
          </content>

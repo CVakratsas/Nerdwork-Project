@@ -96,7 +96,6 @@ public class AppointmentsController {
 		appointmentList.getChildren().clear();
 		appointmentList.setSpacing(15);
 
-		
 		ArrayList<Timeslot> timeslots = controller.getAvailableTimeslots(currentProfessor);
 
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -133,13 +132,14 @@ public class AppointmentsController {
 					for(Timeslot t : dayTimeslots) {
 						timeslots.remove(t);
 					}
+				
 					
-					
-					if(dayTimeslots.isEmpty()) //No appointment was found for a certain day
+					//No appointment was found for a certain day
+					if(dayTimeslots.isEmpty())
 						continue;
 					else {
 						Date startHourDate = new Date(((long) dayTimeslots.get(0).getStartHourTimestamp()) * 1000);
-						calendar.setTime(startHourDate);
+						calendar.setTime(startHourDate); //Sets current Date
 					}
 						
 					
@@ -157,8 +157,6 @@ public class AppointmentsController {
 					
 					for(Timeslot t : dayTimeslots) {
 						
-						System.out.println(t.getStatus());
-						
 						//Calculates the appointment's starting time and formats it properly
 						Date startDate = new Date(t.getStartHourTimestampMili());
 						calendar.setTime(startDate);
@@ -174,29 +172,25 @@ public class AppointmentsController {
 						String timeRange = startTime + " - " + endTime;
 						Button appointmentButton = new Button(timeRange);
 						
-						switch(t.getStatus()) { //Button Color based on Timeslot Availability
+						
+						//Button Color based on Timeslot Availability
+						switch(t.getStatus()) { 
 						
 							case 3:
-								appointmentButton.setStyle("-fx-background-color: lime");
+								appointmentButton.setStyle("-fx-background-color: limegreen");
 								break;
-							case 0:
-								appointmentButton.setStyle("-fx-background-color: yellow");
-								break;
-							case 1:
-								appointmentButton.setStyle("-fx-background-color: orange");
-								break;
-							case 2:
-								appointmentButton.setStyle("-fx-background-color: red");
+							default:
+								appointmentButton.setStyle("-fx-background-color: darkred");
+								appointmentButton.setDisable(true);
 								break;
 						}
 						
 						
+						//Button event handler to request an appointment
 						appointmentButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
 							Timeslot selectedTimeslot = t;
 							try {
 								boolean response = controller.requestAppointment(currentProfessor, selectedTimeslot);
-								System.out.println(response);
-								
 								
 								if(response)
 									GuiController.getInstance().

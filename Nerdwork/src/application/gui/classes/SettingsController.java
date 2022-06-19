@@ -6,16 +6,19 @@ import org.json.simple.parser.ParseException;
 
 import application.functionality.GuiController;
 import application.functionality.Professor;
+import application.functionality.Timeslot;
 import application.functionality.User;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -50,6 +53,16 @@ public class SettingsController {
 	@FXML
 	private Label bioChangedResponse;
 	@FXML
+	private AnchorPane timeslotPane;
+	@FXML
+	private ChoiceBox<String> dayChoiceBox;
+	@FXML
+	private ChoiceBox<String> startChoiceBox;
+	@FXML
+	private ChoiceBox<String> endChoiceBox;
+	@FXML
+	private Label timeslotChangedResponse;
+	@FXML
 	private Button saveButton;
 
 	
@@ -61,24 +74,40 @@ public class SettingsController {
 		fadeIn.setNode(nameChangedResponse);
 		passwordChangedResponse.opacityProperty().bind(nameChangedResponse.opacityProperty());
 		bioChangedResponse.opacityProperty().bind(nameChangedResponse.opacityProperty());
+		timeslotChangedResponse.opacityProperty().bind(nameChangedResponse.opacityProperty());
 	    fadeIn.setFromValue(1.0);
 	    fadeIn.setToValue(0.0);
 	    fadeIn.setCycleCount(1);
 	    fadeIn.setAutoReverse(false);
 	    
-		
+
+	    if(user instanceof Professor) {
+			profilePicture.setImage(new Image(GuiController.dbURL + ((Professor) user).getProfilePhoto()));
+			timeslotPane.setVisible(true);
+			
+			//Initialize values of Timeslot choice boxes
+			dayChoiceBox.getItems().add("");
+			startChoiceBox.getItems().add("");
+			endChoiceBox.getItems().add("");
+			
+			for(int days = 0; days < Timeslot.Days.length; days++)
+				dayChoiceBox.getItems().add(Timeslot.Days[days]);
+			
+			for(int hours = 0; hours < 24; hours++) {
+				startChoiceBox.getItems().add(Integer.toString(hours + 1));
+				endChoiceBox.getItems().add(Integer.toString(hours + 1));
+			}
+		}
+	    
+	    
+	    
 		setContentView();
 	}
-	//TODO set dates for professors
+	
 	
 	private void setContentView() throws IOException, ParseException {
 		
 		//Loads User's information
-		profilePicture.setImage(new Image("application/gui/icons/profile.png"));
-		if(user instanceof Professor)
-			profilePicture.setImage(new Image(GuiController.dbURL + ((Professor) user).getProfilePhoto()));
-			
-		
 		name.setText(user.getDisplayName());
 		email.setText(user.getEmail());
 		orientation.setText(User.Orientation[user.getOrientation()]);
@@ -87,15 +116,18 @@ public class SettingsController {
 		bioTA.setText(user.getBio());
 	}
 	
+	
 	public void updateChanges() throws IOException, ParseException {
 		changeName();
 		changePassword();
 		changeBio();
+		changeTimeslots();
 		
 		fadeIn.playFromStart();
 		
-		initialize();
+		setContentView();
 	}
+	
 	
 	public void changeName() throws IOException {
 
@@ -108,14 +140,15 @@ public class SettingsController {
 		boolean response = controller.setDisplayName(nameTF.getText());
 		
 		if(response) { //Name was Changed
-			nameChangedResponse.setText("Name changed successfully");
+			nameChangedResponse.setText("Το όνομα σας ενημερώθηκε επιτυχώς");
 			nameChangedResponse.setTextFill(Color.GREEN);
 		}	
 		else { //Name change failed. No changes were made
-			nameChangedResponse.setText("No changes were made");
+			nameChangedResponse.setText("Δεν έγινε αλλαγή");
 			nameChangedResponse.setTextFill(Color.RED);
 		}	
 	}
+	
 	
 	public void changePassword() throws IOException {
 		
@@ -151,6 +184,7 @@ public class SettingsController {
 		}
 	}
 	
+	
 	public void changeBio() throws IOException {
 		
 		//No new Bio was provided
@@ -170,7 +204,41 @@ public class SettingsController {
 		else { //Bio change was unsuccessfully
 			bioChangedResponse.setText("Η καινούργια περιγραφή είναι λανθασμένη");
 			bioChangedResponse.setTextFill(Color.RED);
+		}	
+	}
+	
+	
+	public void changeTimeslots() throws IOException, ParseException {
+		int dayBoxIndex = dayChoiceBox.getSelectionModel().getSelectedIndex();
+		int startBoxIndex = startChoiceBox.getSelectionModel().getSelectedIndex();
+		int endBoxIndex = endChoiceBox.getSelectionModel().getSelectedIndex();
+		
+		System.out.println(dayBoxIndex + " " + startBoxIndex + " " + endBoxIndex);
+		
+		
+		//No choices were made
+		if(dayBoxIndex == -1 && startBoxIndex == -1 && endBoxIndex == -1) {
+			timeslotChangedResponse.setText("");
+			return ;
 		}
 		
+		timeslotChangedResponse.setTextFill(Color.RED);
+		
+		
+		//No day was chosen
+		if(dayBoxIndex == 0)
+			timeslotChangedResponse.setText("Παρακαλώ επιλέξτε ημέρα");
+		else if(startBoxIndex == 0)
+			timeslotChangedResponse.setText("Παρακαλώ επιλέξτε Ώρα έναρξης");
+		else if(endBoxIndex == 0)
+			timeslotChangedResponse.setText("Παρακαλώ επιλέξτε Ώρα λήξης");
+		else {
+			controller.setAvailableTimeslot(dayBoxIndex - 1, startBoxIndex, endBoxIndex);
+			timeslotChangedResponse.setText("Τα ραντεβού σας ενημερώθηκαν επιτυχώς!");
+			timeslotChangedResponse.setTextFill(Color.GREEN);
+			
+			
+		}
 	}
+	
 }
