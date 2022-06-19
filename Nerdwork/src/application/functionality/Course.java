@@ -39,8 +39,6 @@ public class Course {
 		return name;
 	}
 	
-	/* Getter and Setter methods of the Course class: */
-	
 	public void setName(String name) {
 		this.name = name;
 	}

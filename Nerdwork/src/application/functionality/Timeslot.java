@@ -17,9 +17,9 @@ public class Timeslot {
 	
 	public static final String Days[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}; 
 	public static final String Months[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "December"};
-	private int id;
-	private String studentId;
-	private int professorId;
+	private int id; // Appointment's unique identifier.
+	private String studentId; // Unique user database key.
+	private int professorId; // Unique porfessor identifier
 	private long startHourTimestamp; // Milieconds since 1st January 1970 00:00:00 for startHour
 	private long endHourTimestamp; // Miliseconds since 1st January 1970 00:00:00 for endHour
 	private int status; // 0 = Not Confirmed, 1 = Confirmed, 2 = Cancelled, 3 = Available 
@@ -42,45 +42,6 @@ public class Timeslot {
 		this.endHourTimestamp = ((long)endHourTimestamp) * 1000;
 		this.status = status;
 		this.created_at = created_at;
-	}
-	
-	/*
-	 * Method used to get data contained in the Date objects, concerning 
-	 * dates, in a simpler way.
-	 * It returns a HashMap with key of the type String (month, day, hour, 
-	 * minutes) and with values of type Integer (value for each of the aforementioned
-	 * keys) and receives a Date object as parameter (the date from which to extract 
-	 * these information).
-	 */
-	public static HashMap<String, Integer> getDateInfo(Date date) {
-		Calendar calendarTimestamp = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-		HashMap<String, Integer> availableDate = new HashMap<>();
-		
-		calendarTimestamp.setTime(date);
-		
-		availableDate.put("month", calendarTimestamp.get(Calendar.MONTH) + 1);
-		availableDate.put("day", calendarTimestamp.get(Calendar.DAY_OF_MONTH));
-		availableDate.put("hour", calendarTimestamp.get(Calendar.HOUR_OF_DAY));
-		availableDate.put("minutes", calendarTimestamp.get(Calendar.MINUTE));
-		
-		return availableDate;
-	}
-	
-	/*
-	 * Method used to return the start date and end date of an appointment.
-	 * It returns a HashMap with key of the type String (startHour, endHour)
-	 * and with values of the type Date (Date objects representing the end and
-	 * start hour of the appointment) and receives no parameters.
-	 */
-	public HashMap<String, Date> getAppointment(){
-		HashMap<String, Date> appointment = new HashMap<String, Date>();
-		Date dateStartTimestamp = new Date((long)startHourTimestamp * 1000);
-		Date dateEndTimestamp = new Date((long)endHourTimestamp * 1000);
-		
-		appointment.put("startHour", dateStartTimestamp);
-		appointment.put("endHour", dateEndTimestamp);
-		
-		return appointment; 
 	}
 	
 	/*
@@ -117,10 +78,12 @@ public class Timeslot {
 		return professorId;
 	}
 	
+	/* Returns seconds since 1st January 1970 00:00:00 of startHour*/
 	public int getStartHourTimestamp() {
 		return (int)(startHourTimestamp / 1000);
 	}
-	
+
+	/* Returns seconds since 1st January 1970 00:00:00 of endHour*/
 	public int getEndHourTimestamp() {
 		return (int)(endHourTimestamp / 1000);
 	}
