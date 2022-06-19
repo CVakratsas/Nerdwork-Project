@@ -432,6 +432,7 @@ public class GuiController {
  		Date availableDateStart; // For temporary storage and parsing of data to a Date object
  		Date availableDateEnd;
 		int i = 0;
+		int weekday;
 		boolean firstAvailableDayOfWeekFound = false; // This is set to true only when the Calendar instance matches with a day contained in far.dates.
 		
  		FAvailabilityResponse far = controller.getAvailabilityDates(selectedProfessor.getProfessorId());
@@ -446,9 +447,13 @@ public class GuiController {
 		// available Timeslot objects
 		
 		while (i < 7) {
+			HashMap<String, Integer> dateToRemove = new HashMap<String, Integer>(); // The date that is already parsed into timeslots is removed.
+																					// to avoid duplicates
+			weekday = (nextAvailableDate.get(Calendar.DAY_OF_WEEK) - 1);
+			
 			for (HashMap<String, Integer> date : far.dates) {
-				if (nextAvailableDate.get(Calendar.DAY_OF_WEEK) - 1 == date.get("day")) {
-					
+				if (weekday == date.get("day")) {
+
 					firstAvailableDayOfWeekFound = true;
 					
 					nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("startHour"));
@@ -464,10 +469,13 @@ public class GuiController {
 					nextAvailableDate.set(Calendar.MILLISECOND, 0);
 
 					availableDateEnd = nextAvailableDate.getTime();
-
+					
+					dateToRemove = date;
 					selectedProfessor.addTimeslot(availableDateStart.getTime(), availableDateEnd.getTime(), requested, reserved);
 				}
 			}
+			
+			far.dates.remove(dateToRemove);
 			
 			if (firstAvailableDayOfWeekFound)
 				i++;
@@ -488,26 +496,26 @@ public class GuiController {
  	 * It receives a Professor object and a Timeslot object (selected Timeslot)
  	 * as parameters.
  	 */
-	public boolean requestAppointment(Professor selectedProfessor, Timeslot timeslot) throws IOException, ParseException {
+ 	public boolean requestAppointment(Professor selectedProfessor, Timeslot timeslot) throws IOException, ParseException {
 	 	ArrayList<Timeslot> requestedAppointments = getMyAppointments();
-		 boolean success = false;
+	 	boolean success = false;
+ 		
+ 		if (user instanceof Student && timeslot.getStatus() == 3) {
+	 		success = controller.bookAppointment(selectedProfessor.getProfessorId(), timeslot.getStartHourTimestamp());
+	 		
+	 		// Check if server responded correctly
+	 		if (success) 
+	 			for (Timeslot requested : requestedAppointments)
+	 				if (requested.getProfessorId() == selectedProfessor.getProfessorId()) 
+	 					success = false; // Student already requested.
+	 		
+	 		// Check if already requested appointment with this professor.
+	 		if (success)
+	 			selectedProfessor.addRequestedAppointment(timeslot);
+	 	}
 
-		 if (user instanceof Student) {
-		     success = controller.bookAppointment(selectedProfessor.getProfessorId(), timeslot.getStartHourTimestamp());
-
-		     // Check if server responded correctly
-		     if (success) 
-			 for (Timeslot requested : requestedAppointments)
-			     if (requested.getStatus() != 2 && requested.getProfessorId() == selectedProfessor.getProfessorId()) 
-				 success = false; // Student already requested.
-
-		     // Check if already requested appointment with this professor.
-		     if (success)
-			 selectedProfessor.addRequestedAppointment(timeslot);
-		 }
-
-		 return success;
-	     }
+ 		return success;
+ 	}
  	
  	/*
  	 * Method used to get a user's requested and cancelled appointments.
@@ -515,17 +523,17 @@ public class GuiController {
  	 * requested and cancelled appointments.
  	 * Note, that it can be used by both students and professors.
  	 */
-	public ArrayList<Timeslot> getMyAppointments() throws IOException, ParseException {
-		 ArrayList<FAppointmentsResponse> far = controller.getMyAppointments();
-
-		 user.clearRequestedAppointments();
-
-		 for (FAppointmentsResponse timeslotParser : far)
-		     if(timeslotParser.status != 2) //Canceled appointments are filtered out
-			 user.addRequestedAppointment(new Timeslot(timeslotParser.id, timeslotParser.studentId, timeslotParser.professorId, timeslotParser.dateTimestamp, (timeslotParser.dateTimestamp + 1800), timeslotParser.status, timeslotParser.created_at));
-
-		 return user.getRequestedAppointments();
-	     }
+ 	public ArrayList<Timeslot> getMyAppointments() throws IOException, ParseException {
+ 		ArrayList<FAppointmentsResponse> far = controller.getMyAppointments();
+ 		
+ 		user.clearRequestedAppointments();
+ 		
+ 		for (FAppointmentsResponse timeslotParser : far) 
+ 				user.addRequestedAppointment(new Timeslot(timeslotParser.id, timeslotParser.studentId, timeslotParser.professorId, timeslotParser.dateTimestamp, (timeslotParser.dateTimestamp + 1800), timeslotParser.status, timeslotParser.created_at));
+ 		
+ 		return user.getRequestedAppointments();
+ 	}
+ 	
  	/*
  	 * Method used by professor users to accept a request for appointment.
  	 * It returns true if the operation was successful and the server responded 
