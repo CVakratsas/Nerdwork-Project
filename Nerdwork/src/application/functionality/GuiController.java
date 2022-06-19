@@ -432,6 +432,7 @@ public class GuiController {
  		Date availableDateStart; // For temporary storage and parsing of data to a Date object
  		Date availableDateEnd;
 		int i = 0;
+		int weekday;
 		boolean firstAvailableDayOfWeekFound = false; // This is set to true only when the Calendar instance matches with a day contained in far.dates.
 		
  		FAvailabilityResponse far = controller.getAvailabilityDates(selectedProfessor.getProfessorId());
@@ -446,9 +447,13 @@ public class GuiController {
 		// available Timeslot objects
 		
 		while (i < 7) {
+			HashMap<String, Integer> dateToRemove = new HashMap<String, Integer>(); // The date that is already parsed into timeslots is removed.
+																					// to avoid duplicates
+			weekday = (nextAvailableDate.get(Calendar.DAY_OF_WEEK) - 1);
+			
 			for (HashMap<String, Integer> date : far.dates) {
-				if (nextAvailableDate.get(Calendar.DAY_OF_WEEK) - 1 == date.get("day")) {
-					
+				if (weekday == date.get("day")) {
+
 					firstAvailableDayOfWeekFound = true;
 					
 					nextAvailableDate.set(Calendar.HOUR_OF_DAY, date.get("startHour"));
@@ -464,10 +469,13 @@ public class GuiController {
 					nextAvailableDate.set(Calendar.MILLISECOND, 0);
 
 					availableDateEnd = nextAvailableDate.getTime();
-
+					
+					dateToRemove = date;
 					selectedProfessor.addTimeslot(availableDateStart.getTime(), availableDateEnd.getTime(), requested, reserved);
 				}
 			}
+			
+			far.dates.remove(dateToRemove);
 			
 			if (firstAvailableDayOfWeekFound)
 				i++;

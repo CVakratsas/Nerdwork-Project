@@ -25,12 +25,12 @@ public class Main  {
 		//System.out.println(controller.register("mpeees", "1234abcdeF!", "Mosxaris", "mp@uom.edu.gr", 1));
 		
 		System.out.println(controller.login("mpeees", "1234abcdeF!"));
-		ArrayList<Timeslot> available = controller.getAvailableTimeslots(controller.getProfessorById(9));
+		ArrayList<Timeslot> available = controller.getAvailableTimeslots(controller.getProfessorById(21));
 				
 		SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd HH:mm");
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		
-		ArrayList<Timeslot> available1 = controller.getAvailableTimeslots(controller.getProfessorById(9));
+		ArrayList<Timeslot> available1 = controller.getAvailableTimeslots(controller.getProfessorById(21));
 		System.out.println("-----------");
 		for (Timeslot timeslot : available1) {
 			Date startHour = new Date(timeslot.getStartHourTimestampMili());
@@ -41,7 +41,7 @@ public class Main  {
 				
 		System.out.println(controller.requestAppointment(controller.getProfessorById(9), available1.get(4)));
 		
-		ArrayList<Timeslot> available2 = controller.getAvailableTimeslots(controller.getProfessorById(9));
+		ArrayList<Timeslot> available2 = controller.getAvailableTimeslots(controller.getProfessorById(21));
 		System.out.println("Available-----------");
 		for (Timeslot timeslot : available1) {
 			Date startHour = new Date(timeslot.getStartHourTimestampMili());
@@ -60,7 +60,7 @@ public class Main  {
 
 		}
 		
-		ArrayList<Timeslot> reserved = controller.getReservedTimeslots(controller.getProfessorById(9));
+		ArrayList<Timeslot> reserved = controller.getReservedTimeslots(controller.getProfessorById(21));
 		System.out.println("Reserved-----------");
 		for (Timeslot timeslot : reserved) {
 			Date startHour = new Date(timeslot.getStartHourTimestampMili());
