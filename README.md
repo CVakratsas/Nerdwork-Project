@@ -52,6 +52,8 @@ In the limited time, that of a semester, in which we had to complete the softwar
 - [GitHub](https://github.com/geoxhon)
 - [LinkedIn](https://www.linkedin.com/in/georgios-chondromatidis-987a25223/)
 - [Twitter](https://twitter.com/geoxhon)
+# Certificates
+NerdWork has been certified in the context of the “Software Engineering” course as one of the best three projects in the academic year 2021-2022. The aforementioned [certificate](https://github.com/Nerdwork-Team/Nerdwork-Project/blob/master/Certificate.pdf) is signed by the Dean of the Faculty of Applied Informatics.
 # Useful Links
 1. [Indicative Functionality Presentation](https://youtu.be/bLuMnO6O-lY)
 2. [Department of Applied Informatics @ University of Macedonia](https://www.uom.gr/dai)
